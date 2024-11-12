@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Montagu+Slab:wght@300;400;700&display=swap');
+
+.sign-in {
+    background-color: #000;
+    color: #fff;
+
+    border: 0.125em solid #fff;
+    
+    font-family: 'Montagu Slab', serif;
+    font-weight: 300;
+    font-size: 1em;
+}
