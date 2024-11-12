@@ -1,9 +1,9 @@
-import Header from './header/header.jsx';
-import Footer from './footer/footer.jsx';
+import Header from './components/header.jsx';
+import Footer from './components/footer.jsx';
 
-import Home from './home/home.jsx';
-import About_Us from './about-us/about-us.jsx';
-import Sign_In from './sign-in/sign-in.jsx';
+import Home from './pages/home.jsx';
+import About_Us from './pages/about-us.jsx';
+import Sign_In from './pages/sign-in.jsx';
 
 function App() {
   let component;
@@ -27,7 +27,7 @@ function App() {
   }
 
   return (
-    <div className="container">
+    <div className="bg-white">
       {component}
     </div>
   );

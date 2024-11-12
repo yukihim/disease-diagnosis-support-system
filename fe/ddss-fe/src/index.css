@@ -1,3 +1,8 @@
-body {
-  background-color: #fff;
-}
+/* tailwind v3 bug */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
