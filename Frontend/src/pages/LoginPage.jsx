@@ -1,17 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const LoginPage = ({ onLogin }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        console.log("LoginPage mounted");
+        const rememberedUsername = localStorage.getItem("username");
+        const rememberedPassword = localStorage.getItem("password");
+        if (rememberedUsername !== null && rememberedPassword !== null) {
+            setUsername(rememberedUsername);
+            setPassword(rememberedPassword);
+            setRememberMe(true);
+        }
+    }, []);
 
     const handleLogin = () => {
         if (username === "doc" && password === "doc123") {
-        onLogin("doc");
+            onLogin("doc");
         } else if (username === "admin" && password === "admin123") {
-        onLogin("admin");
+            onLogin("admin");
         } else {
-        setError("Invalid username or password.");
+            setError("Invalid username or password.");
+        }
+
+        // Remember me functionality
+        if (rememberMe) {
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+        } else {
+            localStorage.removeItem("username");
+            localStorage.removeItem("password");
         }
     };
 
@@ -42,6 +63,16 @@ const LoginPage = ({ onLogin }) => {
                         onChange={(e) => setPassword(e.target.value)}
                         onKeyPress={handleKeyPress}
                     />
+                    <div className="flex items-center mb-4">
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                            className="mr-2"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                        />
+                        <label htmlFor="rememberMe" className="text-white">Remember Me</label>
+                    </div>
                     <button
                         className="w-full p-2 text-white bg-blue-600 rounded hover:bg-blue-700"
                         onClick={handleLogin}
