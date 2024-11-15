@@ -72,7 +72,7 @@ function App() {
 				/>
 				<Route
 					path="/settings"
-					element={<ProtectedRoute element={<SettingsPage />} allowedRoles={["admin"]} />}
+					element={<ProtectedRoute element={<SettingsPage user={user} />} allowedRoles={["admin"]} />}
 				/>
 			</Routes>
 		</div>

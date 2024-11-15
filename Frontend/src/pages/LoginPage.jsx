@@ -7,7 +7,6 @@ const LoginPage = ({ onLogin }) => {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        console.log("LoginPage mounted");
         const rememberedUsername = localStorage.getItem("username");
         const rememberedPassword = localStorage.getItem("password");
         if (rememberedUsername !== null && rememberedPassword !== null) {
