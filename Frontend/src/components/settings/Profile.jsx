@@ -4,7 +4,8 @@ import SettingSection from "./SettingSection";
 const Profile = ({ user }) => {
 	const profileInfo = {
         doc: { name: "Doc", email: "doc@gmail.com" },
-        admin: { name: "Admin", email: "admin@gmail.com" }
+        admin: { name: "Admin", email: "admin@gmail.com" },
+		receptionist: { name: "Receptionist", email: "receptionist@gmail.com" },
     };
 
     const { name, email } = profileInfo[user] || {};

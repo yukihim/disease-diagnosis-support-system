@@ -21,6 +21,8 @@ const LoginPage = ({ onLogin }) => {
             onLogin("doc");
         } else if (username === "admin" && password === "admin123") {
             onLogin("admin");
+        } else if (username === "rec" && password === "rec123") {
+            onLogin("receptionist");
         } else {
             setError("Invalid username or password.");
         }

@@ -48,15 +48,15 @@ function App() {
                 />
 				<Route
 					path="/"
-					element={<ProtectedRoute element={<OverviewPage />} allowedRoles={["doc", "admin"]} />}
+					element={<ProtectedRoute element={<OverviewPage />} allowedRoles={["doc", "admin", "receptionist"]} />}
 				/>
 				<Route
 					path="/products"
-					element={<ProtectedRoute element={<ProductsPage />} allowedRoles={["admin"]} />}
+					element={<ProtectedRoute element={<ProductsPage />} allowedRoles={["doc", "admin"]} />}
 				/>
 				<Route
 					path="/users"
-					element={<ProtectedRoute element={<UsersPage />} allowedRoles={["admin"]} />}
+					element={<ProtectedRoute element={<UsersPage />} allowedRoles={["doc", "admin"]} />}
 				/>
 				<Route
 					path="/sales"
@@ -72,7 +72,7 @@ function App() {
 				/>
 				<Route
 					path="/settings"
-					element={<ProtectedRoute element={<SettingsPage user={user} />} allowedRoles={["admin"]} />}
+					element={<ProtectedRoute element={<SettingsPage user={user} />} allowedRoles={["doc", "admin", "receptionist"]} />}
 				/>
 			</Routes>
 		</div>
