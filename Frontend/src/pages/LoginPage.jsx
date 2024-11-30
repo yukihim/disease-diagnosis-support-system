@@ -9,14 +9,21 @@ const LoginPage = ({ onLogin }) => {
     useEffect(() => {
         const rememberedUsername = localStorage.getItem("username");
         const rememberedPassword = localStorage.getItem("password");
+        const rememberedMe = localStorage.getItem("rememberMe");
         if (rememberedUsername !== null && rememberedPassword !== null) {
             setUsername(rememberedUsername);
             setPassword(rememberedPassword);
-            setRememberMe(true);
+            setRememberMe(rememberedMe);
         }
     }, []);
 
     const handleLogin = () => {
+        /*
+            Doc: doc, doc123
+            Admin: admin, admin123
+            Receptionist: rec, rec123
+        */
+        
         if (username === "doc" && password === "doc123") {
             onLogin("doc");
         } else if (username === "admin" && password === "admin123") {
@@ -31,9 +38,11 @@ const LoginPage = ({ onLogin }) => {
         if (rememberMe) {
             localStorage.setItem("username", username);
             localStorage.setItem("password", password);
+            localStorage.setItem("rememberMe", true);
         } else {
             localStorage.removeItem("username");
             localStorage.removeItem("password");
+            localStorage.setItem("rememberMe", false);
         }
     };
 

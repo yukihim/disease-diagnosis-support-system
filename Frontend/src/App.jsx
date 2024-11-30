@@ -12,6 +12,7 @@ import AnalyticsPage from "./pages/AnalyticsPage";
 import SettingsPage from "./pages/SettingsPage";
 
 import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
   	const [user, setUser] = useState(null); // State for user role
@@ -23,7 +24,7 @@ function App() {
 	};
   	const handleLogout = () => {
 		setUser(null);
-		navigate("/login");
+		navigate("/homepage");
 	};
 
   	const ProtectedRoute = ({ element, allowedRoles }) => allowedRoles.includes(user) ? element : <Navigate to="/login" replace />;
@@ -36,18 +37,23 @@ function App() {
 				<div className="absolute inset-0 backdrop-blur-sm" />
 			</div>
 
-			{user && <Sidebar userRole={user} onLogout={handleLogout} />}
+			<Sidebar userRole={user} onLogout={handleLogout} />
+			{/* {user && <Sidebar userRole={user} onLogout={handleLogout} />} */}
 			<Routes>
+				<Route
+					path="/homepage"
+					element={<HomePage />}
+				/>
 				<Route
 					path="/login"
 					element={<LoginPage onLogin={handleLogin} />}
 				/>
 				<Route
                     path="*"
-                    element={<Navigate to="/login" replace />}
+                    element={<Navigate to="/homepage" replace />}
                 />
 				<Route
-					path="/"
+					path="/overview"
 					element={<ProtectedRoute element={<OverviewPage />} allowedRoles={["doc", "admin", "receptionist"]} />}
 				/>
 				<Route
