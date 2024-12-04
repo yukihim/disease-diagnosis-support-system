@@ -5,7 +5,7 @@ import Sidebar from "./components/common/Sidebar";
 
 import OverviewPage from "./pages/OverviewPage";
 import ProductsPage from "./pages/ProductsPage";
-import UsersPage from "./pages/UsersPage";
+import PatientsPage from "./pages/PatientsPage";
 import SalesPage from "./pages/SalesPage";
 import OrdersPage from "./pages/OrdersPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
@@ -54,15 +54,15 @@ function App() {
                 />
 				<Route
 					path="/overview"
-					element={<ProtectedRoute element={<OverviewPage />} allowedRoles={["doc", "admin", "receptionist"]} />}
+					element={<ProtectedRoute element={<OverviewPage />} allowedRoles={["doc", "admin"]} />}
+				/>
+				<Route
+					path="/patients"
+					element={<ProtectedRoute element={<PatientsPage />} allowedRoles={["doc", "admin", "receptionist"]} />}
 				/>
 				<Route
 					path="/products"
 					element={<ProtectedRoute element={<ProductsPage />} allowedRoles={["doc", "admin"]} />}
-				/>
-				<Route
-					path="/users"
-					element={<ProtectedRoute element={<UsersPage />} allowedRoles={["doc", "admin"]} />}
 				/>
 				<Route
 					path="/sales"

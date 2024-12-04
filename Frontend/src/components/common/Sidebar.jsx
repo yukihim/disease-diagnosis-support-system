@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const SIDEBAR_ITEMS = [
-    { name: "Overview", icon: BarChart2, color: "#6366f1", href: "/overview", roles: ["doc", "admin", "receptionist"] },
+    { name: "Overview", icon: BarChart2, color: "#6366f1", href: "/overview", roles: ["doc", "admin"] },
+	{ name: "Patients", icon: Users, color: "#EC4899", href: "/patients", roles: ["doc", "admin", "receptionist"] },
     { name: "Products", icon: ShoppingBag, color: "#8B5CF6", href: "/products", roles: ["doc", "admin"] },
-    { name: "Users", icon: Users, color: "#EC4899", href: "/users", roles: ["doc", "admin"] },
     { name: "Sales", icon: DollarSign, color: "#10B981", href: "/sales", roles: ["admin"] },
     { name: "Orders", icon: ShoppingCart, color: "#F59E0B", href: "/orders", roles: ["admin"] },
     { name: "Analytics", icon: TrendingUp, color: "#3B82F6", href: "/analytics", roles: ["admin"] },
