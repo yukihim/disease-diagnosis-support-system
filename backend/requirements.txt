@@ -1,0 +1,11 @@
+flask
+flask-login
+flask-wtf
+oauthlib
+requests
+google-auth
+google-auth-oauthlib
+bcrypt
+gunicorn==21.2.0           # WSGI HTTP server for production
+requests==2.31.0           # HTTP requests, useful for API calls if needed
+flask-jwt-extended

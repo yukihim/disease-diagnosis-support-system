@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    ports:
+      - "5001:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    volumes:
+      - ./backend:/app
