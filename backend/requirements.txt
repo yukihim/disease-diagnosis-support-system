@@ -5,7 +5,9 @@ oauthlib
 requests
 google-auth
 google-auth-oauthlib
-bcrypt
-gunicorn==21.2.0           # WSGI HTTP server for production
-requests==2.31.0           # HTTP requests, useful for API calls if needed
-flask-jwt-extended
+gunicorn==21.2.0           		# WSGI HTTP server for production
+requests==2.31.0           		# HTTP requests, useful for API calls if needed
+flask-jwt-extended 				# JWT tokens for authentication
+sqlalchemy 				   		# ORM for database
+psycopg2-binary					# PostgreSQL database adapter
+werkzeug                        # Password hashing

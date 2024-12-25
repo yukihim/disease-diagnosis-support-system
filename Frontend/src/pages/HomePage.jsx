@@ -11,8 +11,7 @@ const OverviewPage = () => {
 					<h1>Disease Diagnose Support System</h1><br />
 					<h2>Developed by Phuong Xuong Thinh and Pham Le Quan - This system will provide direct support to the diagnosing phase of the doctor for the patients</h2><br /><hr /><br />
 				</p> */}
-
-				{/* Introduction */}
+                {/* Introduction */}
                 <section className='mb-8'>
                     <h1 className='text-3xl font-bold'>Disease Diagnose Support System</h1>
                     <p className='mt-4 text-lg'>

@@ -25,6 +25,28 @@ services:
       - NODE_ENV=development
     command: ["npm", "run", "dev"]
 
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: flask
+      POSTGRES_PASSWORD: jans-ancd=123
+      POSTGRES_DB: ProductionDatabase
+    networks:
+        - my-bridge-network
+    volumes:
+      - my-db-data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+        - my-bridge-network
+
+volumes:
+    my-db-data:
 networks:
   my-bridge-network:
     driver: bridge
