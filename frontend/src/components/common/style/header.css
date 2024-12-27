@@ -1,0 +1,72 @@
+.header {
+    width: auto;
+    height: 71px;
+
+    padding: 0px 32px;
+
+    background-color: #33cc33;
+
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+
+    img {
+        width: 50px;
+        height: 50px;
+
+        margin-right: 6px;
+    }
+
+    .emptyBox {
+        width: 759px;
+        height: 32px;
+
+        margin-right: 6px;
+    }
+
+    .rightMostBox {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: right;
+
+        width: 393px;
+        height: 40px;
+
+        img {
+            width: 40px;
+            height: 40px;
+
+            margin-right: 12px;
+        }
+
+        .name {
+            display: flex;
+            align-items: center;
+
+            width: 136px;
+            height: 16px;
+
+            font-size: 16px;
+            color: white;
+        }
+
+        button {
+            width: 89px;
+            height: 30px;
+
+            border: 1px solid #2C2C2C;
+            border-radius: 8px;
+
+            color: white;
+            background-color: #2C2C2C;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #000;
+        }
+    }
+}

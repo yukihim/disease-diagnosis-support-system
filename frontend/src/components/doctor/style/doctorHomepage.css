@@ -1,0 +1,19 @@
+.doctorHomepage {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: flex-start;
+
+    width: 100vw;
+    height: 100vh;
+
+    .mainContent {
+        display: flex;
+        flex-direction: column;
+
+        background-color: #F2F2F2;
+
+        width: 100vw;
+        height: auto;
+    }
+}
