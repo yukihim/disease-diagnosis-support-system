@@ -2,6 +2,7 @@ html,
 body {
   min-width: 900px;
   overflow-x: hidden;
+  height: 100%;
 }
 
 body {

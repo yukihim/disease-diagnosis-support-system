@@ -1,15 +1,19 @@
 // import LoginForm from '../components/auth/loginForm';
 
 import Header from '../components/common/header';
-import DoctorHomepage from '../components/doctor/doctorHomepage';
+import DoctorHomepageContent from '../components/doctor/doctorHomepageContent';
+
+import "./style/doctorHomepage.css"
 
 function ComponentTest() {
     return (
-        <div>
-            {/* <LoginForm /> */}
+        // <div>
+        //     <LoginForm />
+        // </div>
 
+        <div className="doctorHomepage">
             <Header />
-            <DoctorHomepage />
+            <DoctorHomepageContent />
         </div>
     );
 }
