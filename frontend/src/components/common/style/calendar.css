@@ -10,7 +10,6 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
 }
 
 .calendar-navigation {
@@ -48,7 +47,10 @@ li {
 
 .calendar-weekdays li {
     cursor: default;
-    font-weight: 500;
+    font-weight: normal;
+    color: #71717A;
+
+    margin-bottom: 5px;
 }
 
 .calendar-dates li {
