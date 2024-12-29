@@ -140,7 +140,7 @@
 
 .patientPassInformationSeverity {
     all: unset;
-    
+
     margin-left: 10px;
 
     width: 108px;
@@ -151,7 +151,7 @@
 
 .patientPassInformationNearestDateDiagnosed {
     all: unset;
-    
+
     margin-left: 10px;
 
     width: 143px;
@@ -162,7 +162,7 @@
 
 .patientPassInformationStatus {
     all: unset;
-    
+
     margin-left: 10px;
 
     flex: 1;
@@ -236,7 +236,7 @@
 
 .patientPassSessionHospital {
     all: unset;
-    
+
     margin-left: 10px;
 
     width: 182px;
@@ -247,7 +247,7 @@
 
 .patientPassSessionPurpose {
     all: unset;
-    
+
     margin-left: 10px;
 
     flex: 1;
@@ -410,7 +410,7 @@
 
 .PatientTestResultStatus {
     all: unset;
-    
+
     margin-left: 10px;
 
     flex: 1;
@@ -431,4 +431,200 @@
     ul {
         height: 20px;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.PatientSymptomsContainer {
+    /* margin-right: 20px; */
+
+    width: 100%;
+    height: 504px;
+
+    background-color: #fff;
+
+    border-radius: 10px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.reasonToVisit {
+    margin-top: 20px;
+
+    display: flex;
+
+    height: 50px;
+    align-items: center;
+
+    flex: 1;
+
+    justify-content: space-between;
+
+    font-size: 16px;
+
+    font-weight: bold;
+}
+
+.symptoms {
+    margin-top: 16px;
+
+    display: flex;
+
+    height: 70px;
+
+    flex-direction: column;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    .attribute_symptoms {
+        margin-bottom: 10px;
+    }
+
+    .value_symptoms {
+        height: 40px;
+        box-sizing: border-box;
+        border: 1px solid #000;
+        border-radius: 10px;
+
+        text-align: right;
+    }
+}
+
+.lastRow {
+    margin-top: 16px;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 50%;
+    gap: 10px;
+
+    font-weight: bold;
+    color: #4E4B66;
+
+    .systemRecommendation {
+        /* display: flex;
+        flex-direction: column; */
+
+        .tableHeader {
+            height: 40px;
+
+            margin-top: 10px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 33%;
+            gap: 10px;
+
+            .diseaseName {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+
+            .diseaseProbabilities {
+                grid-column-start: 3;
+            }
+        }
+
+        .value_systemRecommendation {
+            all: unset;
+
+            height: 40px;
+
+            margin-top: 10px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 33%;
+            gap: 10px;
+
+            .diseaseName {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+
+            .diseaseProbabilities {
+                grid-column-start: 3;
+            }
+        }
+
+        hr {
+            margin: 0px;
+        }
+    }
+}
+
+.recommendationBox {
+    margin-top: 10px;
+
+    height: 180px;
+
+    overflow-y: scroll;
+
+    scrollbar-width: thin;
+}
+
+.preliminaryDiagnosisInput {
+    margin-top: 10px;
+
+    width: 100%;
+    height: 200px;
+
+    box-sizing: border-box;
+    border: 1px solid #000;
+    border-radius: 10px;
+
+    padding: 10px;
+
+    resize: none;
+    font-family: inherit; /* Ensure font matches the rest of the application */
+    font-size: inherit; /* Ensure font size matches the rest of the application */
+    line-height: 1.5; /* Adjust line height for better readability */
+}
+
+
+
+
+
+
+
+
+.fifthRowButtons {
+    all: unset;
+
+    width: 185px;
+    height: 41px;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: white;
+
+    background-color: #009951;
+    cursor: pointer;
+
+    border-radius: 10px;
+}
+
+.fifthRowButtons:hover {
+    background-color: #007E3C;
 }

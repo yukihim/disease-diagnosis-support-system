@@ -6,7 +6,9 @@ import Sidebar from '../common/sidebar';
 // Doctor's Components
 import DoctorDiagnosingPatientFirstRow from './doctorDiagnosingPatientContent_rows/firstRow';
 import DoctorDiagnosingPatientSecondRow from './doctorDiagnosingPatientContent_rows/secondRow';
-import DoctorHomepageContentThirdRow from './doctorDiagnosingPatientContent_rows/thirdRow';
+import DoctorDiagnosingPatientThirdRow from './doctorDiagnosingPatientContent_rows/thirdRow';
+import DoctorDiagnosingPatientFourthRow from './doctorDiagnosingPatientContent_rows/fourthRow';
+import DoctorDiagnosingPatientFifthRow from './doctorDiagnosingPatientContent_rows/fifthRow';
 
 function DoctorDiagnosingPatientContent() {
     return (
@@ -15,7 +17,9 @@ function DoctorDiagnosingPatientContent() {
             <div className="mainContent">
                 <DoctorDiagnosingPatientFirstRow />
                 <DoctorDiagnosingPatientSecondRow />
-                <DoctorHomepageContentThirdRow />
+                <DoctorDiagnosingPatientThirdRow />
+                <DoctorDiagnosingPatientFourthRow />
+                <DoctorDiagnosingPatientFifthRow />
             </div>
         </div>
     );

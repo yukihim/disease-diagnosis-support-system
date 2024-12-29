@@ -3,6 +3,9 @@
     flex-direction: row;
 
     margin-bottom: 20px;
+
+    /* position: sticky;
+    top: 0; */
 }
 
 .secondRow {
@@ -21,4 +24,18 @@
     height: 420px;
 
     margin-bottom: 20px;
+}
+
+.fourthRow {
+    display: flex;
+    flex-direction: row;
+
+    margin-bottom: 20px;
+}
+
+.fifthRow {
+    margin-bottom: 20px;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
