@@ -57,8 +57,10 @@ li {
     position: relative;
     z-index: 1;
     cursor: pointer;
+
+    font-size: 15px;
     
-    padding: 3px 0px;
+    padding: 4.5px 0px;
 }
 
 .calendar-dates li.inactive {
