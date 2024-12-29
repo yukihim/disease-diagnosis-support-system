@@ -1,7 +1,103 @@
+import React, { useState } from 'react';
+import './style/calendar.css';
+import Chevron_Left from '../../assets/images/Chevron_Left.png';
+import Chevron_Right from '../../assets/images/Chevron_Right.png';
+
 function Calendar() {
+    const [currentDate, setCurrentDate] = useState(new Date());
+
+    const getMonthName = (date) => {
+        return date.toLocaleString('default', { month: 'long' });
+    };
+
+    const getYear = (date) => {
+        return date.getFullYear();
+    };
+
+    const getDaysInMonth = (date) => {
+        return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    };
+
+    const getFirstDayOfMonth = (date) => {
+        return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+    };
+
+    const handlePrevMonth = () => {
+        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    };
+
+    const handleNextMonth = () => {
+        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    };
+
+    const renderCalendarDates = () => {
+        const daysInMonth = getDaysInMonth(currentDate);
+        const firstDayOfMonth = getFirstDayOfMonth(currentDate);
+        const dates = [];
+
+        // Get the previous month and next month dates
+        const prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+        // const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+        const daysInPrevMonth = getDaysInMonth(prevMonth);
+
+        // Add previous month's dates
+        for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+            dates.push(
+                <li key={`prev-${i}`} className="inactive">
+                    {daysInPrevMonth - i}
+                </li>
+            );
+        }
+
+        // Add current month's dates
+        for (let i = 1; i <= daysInMonth; i++) {
+            dates.push(<li key={i}>{i}</li>);
+        }
+
+        // Add next month's dates
+        const totalDays = firstDayOfMonth + daysInMonth;
+        const remainingDays = 7 - (totalDays % 7);
+        for (let i = 1; i <= remainingDays; i++) {
+            dates.push(
+                <li key={`next-${i}`} className="inactive">
+                    {i}
+                </li>
+            );
+        }
+
+        return dates;
+    };
+
     return (
-        <div>
-            Calendar
+        <div className="calendar-container">
+            <header className="calendar-header">
+                <div className="calendar-navigation">
+                    <button id="calendar-prev" onClick={handlePrevMonth}>
+                        <img id="chevron" src={Chevron_Left} alt="Previous month" />
+                    </button>
+                </div>
+                <p className="calendar-current-date">{`${getMonthName(currentDate)} ${getYear(currentDate)}`}</p>
+                <div className="calendar-navigation">
+                    <button id="calendar-next" onClick={handleNextMonth}>
+                        <img id="chevron" src={Chevron_Right} alt="Next month" />
+                    </button>
+                </div>
+            </header>
+
+            <div className="calendar-body">
+                <ul className="calendar-weekdays">
+                    <li>Su</li>
+                    <li>Mo</li>
+                    <li>Tu</li>
+                    <li>We</li>
+                    <li>Th</li>
+                    <li>Fr</li>
+                    <li>Sa</li>
+                </ul>
+                <ul className="calendar-dates">
+                    {renderCalendarDates()}
+                </ul>
+            </div>
         </div>
     );
 }
