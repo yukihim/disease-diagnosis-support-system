@@ -5,6 +5,8 @@ import LoginForm from './components/auth/loginForm';
 import DoctorHomepage from './pages/doctor/doctorHomepage';
 import DoctorDiagnosingPatient from './pages/doctor/doctorDiagnosingPatient';
 import DoctorViewPassSession from './pages/doctor/doctorViewPassSession';
+import DoctorFinalizingDiagnosis from './pages/doctor/doctorFinalizingDiagnosis';
+
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
@@ -30,6 +32,10 @@ function App() {
 
         <Route path="/doctor/view_pass_session">
           <DoctorViewPassSession />
+        </Route>
+
+        <Route path="/doctor/finalizing_diagnosis">
+          <DoctorFinalizingDiagnosis />
         </Route>
       </Switch>
     </Router>
