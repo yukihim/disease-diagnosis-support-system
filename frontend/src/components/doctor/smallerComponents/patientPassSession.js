@@ -4,7 +4,7 @@ function PatientPassSession() {
     return (
         <div className="patientPassSessionContainer">
             <div className="containerContent">
-                <div className="containerTitle">Patient's Pass Condition</div>
+                <div className="containerTitle">Patient's Pass Session</div>
 
                 <div>
                     <div className="patientPassSessionHeader">
