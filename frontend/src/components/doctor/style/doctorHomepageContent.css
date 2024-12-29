@@ -1,3 +1,8 @@
+.firstRow {
+    display: flex;
+    flex-direction: row;
+}
+
 .doctorHomepageContent {
     display: flex;
     flex-direction: row;
@@ -18,5 +23,13 @@
         flex-grow: 1;
 
         padding: 20px 20px;
+
+        .welcomeText {
+            color: #008080;
+
+            font-weight: bold;
+
+            margin-bottom: 20px;
+        }
     }
 }
