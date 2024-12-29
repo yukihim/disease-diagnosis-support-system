@@ -1,8 +1,8 @@
 import './style/doctorPrescriptionAndProcedure.css';
 
-function ConfirmButton() {
+function ConfirmButton({ onClick }) {
     return (
-        <button className="confirmButton">
+        <button className="confirmButton" onClick={onClick}>
             Confirm
         </button>
     );

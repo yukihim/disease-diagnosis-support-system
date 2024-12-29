@@ -1,6 +1,15 @@
 import './style/doctorHomepageContent.css';
 
+import { useHistory } from 'react-router-dom';
+
 function IncomingPatient() {
+    const history = useHistory();
+
+    function handleClick() {
+        // Redirect to /doctor/diagnosis
+        history.push("/doctor/diagnosis");
+    }
+
     return (
         <div className="incomingPatientContainer">
             <div className="containerContent">
@@ -15,7 +24,7 @@ function IncomingPatient() {
                     </div>
                     
                     <div className="incomingPatientContent">
-                        <ul>
+                        <ul onClick={handleClick} style={{ cursor: 'pointer' }}>
                             <li className="incomingPatientName">Phuong Xuong Thinh</li>
                             <li className="incomingPatientGender">Male</li>
                             <li className="incomingPatientAge">18</li>

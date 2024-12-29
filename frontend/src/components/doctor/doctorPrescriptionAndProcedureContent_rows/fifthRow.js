@@ -5,13 +5,22 @@ import './style/style.css';
 import CancelButton from '../smallerComponents/cancelButton';
 import ConfirmButton from '../smallerComponents/confirmButton';
 
-function doctorPrescriptionAndProcedureContentFifthRow() {
+import { useHistory } from 'react-router-dom';
+
+function DoctorPrescriptionAndProcedureContentFifthRow() {
+    const history = useHistory();
+
+    function handleClickConfirm() {
+        // Redirect to /doctor/homepage
+        history.push("/doctor/homepage");
+    }
+    
     return (
         <div className="fifthRow">
             <CancelButton />
-            <ConfirmButton />
+            <ConfirmButton onClick={handleClickConfirm} />
         </div>
     );
 }
 
-export default doctorPrescriptionAndProcedureContentFifthRow;
+export default DoctorPrescriptionAndProcedureContentFifthRow;

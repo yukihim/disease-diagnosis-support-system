@@ -3,7 +3,7 @@ import './style/style.css';
 import Prescriptions from '../smallerComponents/prescriptions';
 import Procedure from '../smallerComponents/procedure';
 
-function doctorPrescriptionAndProcedureContentFourthRow() {
+function DoctorPrescriptionAndProcedureContentFourthRow() {
     return (
         <div className="fourthRow">
             <Prescriptions />
@@ -12,4 +12,4 @@ function doctorPrescriptionAndProcedureContentFourthRow() {
     );
 }
 
-export default doctorPrescriptionAndProcedureContentFourthRow;
+export default DoctorPrescriptionAndProcedureContentFourthRow;
