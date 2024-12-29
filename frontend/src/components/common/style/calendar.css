@@ -38,10 +38,6 @@ ul {
     text-align: center;
 }
 
-.calendar-dates {
-    margin-bottom: 20px;
-}
-
 li {
     width: calc(100% / 7);
     font-size: 1.07rem;
@@ -59,16 +55,34 @@ li {
     position: relative;
     z-index: 1;
     cursor: pointer;
-
-    margin-top: 3px;
+    
+    padding: 3px 0px;
 }
 
 .calendar-dates li.inactive {
     color: #aaa;
 }
 
-.calendar-dates li.active {
+.calendar-dates li.selected {
     color: #fff;
+    /* background: #009951; */
+
+    border-radius: 5.78px;
+}
+
+.calendar-dates li.selected::before {
+    color: #fff;
+    background: #009951;
+
+    position: absolute;
+    content: "";
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    border-radius: 5.78px;
+    transform: translate(-50%, -50%);
 }
 
 .calendar-dates li::before {
@@ -77,9 +91,9 @@ li {
     z-index: -1;
     top: 50%;
     left: 50%;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border-radius: 5.78px;
     transform: translate(-50%, -50%);
 }
 
@@ -87,7 +101,7 @@ li {
     background: #6332c5;
 }
 
-.calendar-dates li:not(.active):hover::before {
+.calendar-dates li:not(.selected):not(.inactive):hover::before {
     background: #e4e1e1;
 }
 

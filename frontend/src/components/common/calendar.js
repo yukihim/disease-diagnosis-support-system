@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style/calendar.css';
 import Chevron_Left from '../../assets/images/Chevron_Left.png';
 import Chevron_Right from '../../assets/images/Chevron_Right.png';
 
 function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    useEffect(() => {
+        setSelectedDate(new Date());
+    }, []);
 
     const getMonthName = (date) => {
         return date.toLocaleString('default', { month: 'long' });
@@ -30,6 +35,10 @@ function Calendar() {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
     };
 
+    const handleDateClick = (date) => {
+        setSelectedDate(date);
+    };
+
     const renderCalendarDates = () => {
         const daysInMonth = getDaysInMonth(currentDate);
         const firstDayOfMonth = getFirstDayOfMonth(currentDate);
@@ -51,12 +60,22 @@ function Calendar() {
 
         // Add current month's dates
         for (let i = 1; i <= daysInMonth; i++) {
-            dates.push(<li key={i}>{i}</li>);
+            const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+            const isSelected = selectedDate && selectedDate.toDateString() === date.toDateString();
+            dates.push(
+                <li
+                    key={i}
+                    className={isSelected ? 'selected' : ''}
+                    onClick={() => handleDateClick(date)}
+                >
+                    {i}
+                </li>
+            );
         }
 
         // Add next month's dates
         const totalDays = firstDayOfMonth + daysInMonth;
-        const remainingDays = 7 - (totalDays % 7);
+        const remainingDays = (totalDays % 7 === 0) ? 0 : 7 - (totalDays % 7);
         for (let i = 1; i <= remainingDays; i++) {
             dates.push(
                 <li key={`next-${i}`} className="inactive">

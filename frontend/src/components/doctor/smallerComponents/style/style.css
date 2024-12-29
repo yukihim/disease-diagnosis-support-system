@@ -27,3 +27,132 @@
 .containerContent {
     padding: 20px 20px 0px;
 }
+
+.containerTitle {
+    font-size: 16px;
+    font-weight: bold;
+
+    color: #4E4B66;
+
+    margin-bottom: 10px;
+}
+
+.incomingPatientHeader {
+    display: flex;
+
+    margin-bottom: 10px;
+
+    color: #4E4B66;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.incomingPatientName {
+    all: unset;
+
+    width: 131px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.incomingPatientGender {
+    all: unset;
+
+    margin-left: 10px;
+    
+    width: 71px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.incomingPatientAge {
+    all: unset;
+    
+    margin-left: 10px;
+
+    width: 43px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.incomingPatientCondition {
+    all: unset;
+    
+    margin-left: 10px;
+
+    width: auto; /* 99px doesnt fit */
+    height: 40px;
+
+    text-align: left;
+}
+
+.incomingPatientTestType {
+    all: unset;
+    
+    margin-left: 10px;
+
+    width: 64px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.incomingPatientStatus {
+    all: unset;
+
+    font-weight: bold;
+    
+    margin-left: 10px;
+
+    width: auto;
+    height: 40px;
+
+    text-align: left;
+}
+
+.incomingPatientContent {
+    display: flex;
+
+    flex-direction: column;
+
+    width: 385px; /* 374px */
+    height: 163px;
+
+    font-size: 12px;
+
+    margin-bottom: 10px;
+
+    overflow-y: scroll;
+}
+
+
+/* PATIENT SENT FOR PARACLINICAL CONTENT */
+.patientSentForParaclinicalTestHeader {
+    display: flex;
+
+    margin-bottom: 10px;
+
+    color: #4E4B66;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.patientSentForParaclinicalTestContent {
+    display: flex;
+
+    flex-direction: column;
+
+    width: 418px; /* 374px */
+    height: 163px;
+
+    font-size: 12px;
+
+    margin-bottom: 10px;
+
+    overflow-y: scroll;
+}
