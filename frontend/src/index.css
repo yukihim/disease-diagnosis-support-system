@@ -1,6 +1,7 @@
 html,
 body {
   min-width: 900px;
+  overflow-y: hidden;
   overflow-x: hidden;
   height: 100%;
 }

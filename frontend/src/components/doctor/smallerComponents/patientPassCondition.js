@@ -2,82 +2,48 @@ import './style/doctorDiagnosingPatientContent.css';
 
 function PatientPassCondition() {
     return (
-        <div className="patientInformationContainer">
+        <div className="patientPassInformationContainer">
             <div className="containerContent">
                 <div className="containerTitle">Patient's Pass Condition</div>
 
-                <div className="patientInformationFirstRow">
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">Name:</div>
-                            <div className="value">Pham Phuong Le Xuong Thinh</div>
-                        </div>
+                <div>
+                    <div className="patientPassInformationHeader">
+                        <div className="patientPassInformationCondition">Condition</div>
+                        <div className="patientPassInformationSeverity">Severity</div>
+                        <div className="patientPassInformationNearestDateDiagnosed">Nearest Date Diagnosed</div>
+                        <div className="patientPassInformationStatus">Status</div>
                     </div>
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">Age:</div>
-                            <div className="value">22</div>
-                        </div>
-                    </div>
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">Gender:</div>
-                            <div className="value">Male</div>
-                        </div>
-                    </div>
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">Phone number:</div>
-                            <div className="value">0798012792</div>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="patientInformationSecondRow">
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">SSN:</div>
-                            <div className="value">079283868386</div>
-                        </div>
-                    </div>
-                    <div className="box2">
-                        <div className="boxDetails">
-                            <div className="attribute">Health Insurance Number:</div>
-                            <div className="value">0798012792</div>
-                        </div>
-                    </div>
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">Job:</div>
-                            <div className="value">Student</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="patientInformationThirdRow">
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">Address:</div>
-                            <div className="value">168 Ly Thuong Kiet Street</div>
-                        </div>
-                    </div>
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">District:</div>
-                            <div className="value">D. 10</div>
-                        </div>
-                    </div>
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">City:</div>
-                            <div className="value">Ho Chi Minh City</div>
-                        </div>
-                    </div>
-                    <div className="box1">
-                        <div className="boxDetails">
-                            <div className="attribute">Country:</div>
-                            <div className="value">Viet Nam</div>
-                        </div>
+                    <div className="patientPassInformationContent">
+                        <hr />
+                        <ul>
+                            <li className="patientPassInformationCondition">Diabetes</li>
+                            <li className="patientPassInformationSeverity">Moderate</li>
+                            <li className="patientPassInformationNearestDateDiagnosed">2020-03-15</li>
+                            <li className="patientPassInformationStatus">Under Control</li>
+                        </ul>
+                        <hr />
+                        <ul>
+                            <li className="patientPassInformationCondition">Diabetes</li>
+                            <li className="patientPassInformationSeverity">Moderate</li>
+                            <li className="patientPassInformationNearestDateDiagnosed">2019-03-15</li>
+                            <li className="patientPassInformationStatus">Under Control</li>
+                        </ul>
+                        <hr />
+                        <ul>
+                            <li className="patientPassInformationCondition">Hypertension</li>
+                            <li className="patientPassInformationSeverity">Severe</li>
+                            <li className="patientPassInformationNearestDateDiagnosed">2018-06-22</li>
+                            <li className="patientPassInformationStatus">Active</li>
+                        </ul>
+                        <hr />
+                        <ul>
+                            <li className="patientPassInformationCondition">Asthma</li>
+                            <li className="patientPassInformationSeverity">Mild</li>
+                            <li className="patientPassInformationNearestDateDiagnosed">2015-09-10</li>
+                            <li className="patientPassInformationStatus">Resolved</li>
+                        </ul>
+                        <hr />
                     </div>
                 </div>
             </div>

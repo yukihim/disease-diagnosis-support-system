@@ -1,3 +1,8 @@
+.secondRow {
+    display: flex;
+    gap: 20px;
+}
+
 .containerContent {
     height: 100%;
 
@@ -83,4 +88,272 @@
     text-align: right;
 
     font-size: 14px;
+}
+
+
+
+
+
+
+
+
+.patientPassInformationContainer {
+    /* margin-right: 20px; */
+
+    width: 50%;
+    height: 245px;
+
+    background-color: #fff;
+
+    border-radius: 10px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.patientPassInformationHeader {
+    display: flex;
+
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    height: auto;
+
+    color: #4E4B66;
+
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.patientPassInformationCondition {
+    all: unset;
+
+    width: 123px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.patientPassInformationSeverity {
+    all: unset;
+    
+    margin-left: 10px;
+
+    width: 108px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.patientPassInformationNearestDateDiagnosed {
+    all: unset;
+    
+    margin-left: 10px;
+
+    width: 143px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.patientPassInformationStatus {
+    all: unset;
+    
+    margin-left: 10px;
+
+    flex: 1;
+
+    height: 40px;
+
+    text-align: left;
+}
+
+.patientPassInformationContent {
+    color: #09090B;
+
+    height: 120px;
+
+    overflow-y: scroll;
+
+    scrollbar-width: thin;
+
+    ul {
+        height: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.patientPassSessionContainer {
+    /* margin-right: 20px; */
+
+    flex: 1;
+
+    height: 245px;
+
+    background-color: #fff;
+
+    border-radius: 10px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.patientPassSessionHeader {
+    display: flex;
+
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    height: auto;
+
+    color: #4E4B66;
+
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.patientPassSessionSessionDate {
+    all: unset;
+
+    width: 123px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.patientPassSessionHospital {
+    all: unset;
+    
+    margin-left: 10px;
+
+    width: 182px;
+    height: 40px;
+
+    text-align: left;
+}
+
+.patientPassSessionPurpose {
+    all: unset;
+    
+    margin-left: 10px;
+
+    flex: 1;
+
+    height: 40px;
+
+    text-align: left;
+}
+
+.patientPassSessionContent {
+    color: #09090B;
+
+    height: 120px;
+
+    overflow-y: scroll;
+
+    scrollbar-width: thin;
+
+    ul {
+        height: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.patientVitalSignsAndPhysicalMeasurementsContainer {
+    /* margin-right: 20px; */
+
+    width: 50%;
+    height: 420px;
+
+    background-color: #fff;
+
+    border-radius: 10px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.vitalSignsAndPhysicalMeasurementsContent {
+    height: 280px;
+
+    justify-content: space-between;
+
+    .attributeAndValue {
+        display: flex;
+        justify-content: space-between;
+
+        height: 40px;
+
+        margin-bottom: 15px;
+    }
+}
+
+.titleAndEdit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* margin-top: 20px; */
+    margin-bottom: 20px;
+
+    height: 60px;
+
+    color: #4E4B66;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    .containerTitle {
+        margin-bottom: 0px;
+
+        width: 50%;
+        align-self: flex-start;
+    }
+
+    .editButton {
+        margin-bottom: 0px;
+
+        width: 122px;
+        height: 40px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        text-align: center;
+
+        background-color: #009951;
+
+        color: white;
+
+        font-weight: normal;
+        border-radius: 10px;
+
+        cursor: pointer;
+    }
+
+    .editButton:hover {
+        background-color: #007E3C;
+    }
 }
