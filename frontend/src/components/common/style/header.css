@@ -53,6 +53,11 @@
         }
 
         button {
+            display: flex;
+            align-self: center;
+            align-items: center;
+            justify-content: center;
+
             width: 89px;
             height: 30px;
 
