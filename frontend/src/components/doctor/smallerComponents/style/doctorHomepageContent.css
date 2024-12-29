@@ -209,7 +209,7 @@
 }
 
 .containerTitle {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
 
     color: #4E4B66;
@@ -219,7 +219,7 @@
 
 .seeAll {
     color: #008080;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 
@@ -313,10 +313,10 @@
 
 /* MONITORING INPATIENT CONTENT */
 .monitoringInpatientContainer {
-    margin-right: 20px;
+    /* margin-right: 20px; */
 
     width: 881px;
-    height: auto;
+    height: 410px;
 
     background-color: #fff;
 
@@ -360,7 +360,7 @@
     margin-right: 20px;
 
     width: 295px;
-    height: auto;
+    height: 410px;
 
     background-color: #fff;
 
