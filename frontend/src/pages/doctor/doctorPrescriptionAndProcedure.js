@@ -1,13 +1,13 @@
-import "./style/doctorHomepage.css"
+import "./style/doctorFinalizingDiagnosis.css"
 
 import Header from '../../components/common/header';
-import DoctorHomepageContent from '../../components/doctor/doctorHomepageContent';
+import DoctorPrescriptionAndProcedureContent from '../../components/doctor/doctorPrescriptionAndProcedureContent';
 
 function DoctorPrescriptionAndProcedure() {
     return (
-        <div className="doctorHomepage">
+        <div className="doctorFinalizingDiagnosis">
             <Header />
-            <DoctorHomepageContent />
+            <DoctorPrescriptionAndProcedureContent />
         </div>
     );
 }

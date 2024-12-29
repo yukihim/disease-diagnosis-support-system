@@ -6,7 +6,7 @@ import DoctorHomepage from './pages/doctor/doctorHomepage';
 import DoctorDiagnosingPatient from './pages/doctor/doctorDiagnosingPatient';
 import DoctorViewPassSession from './pages/doctor/doctorViewPassSession';
 import DoctorFinalizingDiagnosis from './pages/doctor/doctorFinalizingDiagnosis';
-
+import DoctorPrescriptionAndProcedure from './pages/doctor/doctorPrescriptionAndProcedure';
 
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
@@ -36,6 +36,10 @@ function App() {
 
         <Route path="/doctor/finalizing_diagnosis">
           <DoctorFinalizingDiagnosis />
+        </Route>
+
+        <Route path="/doctor/precription_and_procedure">
+          <DoctorPrescriptionAndProcedure />
         </Route>
       </Switch>
     </Router>
