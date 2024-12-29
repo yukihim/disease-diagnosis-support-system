@@ -1,11 +1,11 @@
-import './style/doctorHomepageContent.css';
+import './style/style.css';
 
 // Common Components
 import Sidebar from '../common/sidebar';
 
 // Doctor's Components
-import DoctorHomepageContentFirstRow from './firstRow';
-import DoctorHomepageContentSecondRow from './secondRow';
+import DoctorHomepageContentFirstRow from './doctorHomepageContent_rows/firstRow';
+import DoctorHomepageContentSecondRow from './doctorHomepageContent_rows/secondRow';
 
 function DoctorHomepageContent() {
     return (
@@ -15,7 +15,6 @@ function DoctorHomepageContent() {
                 <div className="welcomeText">Welcome Doctor abc</div>
 
                 <DoctorHomepageContentFirstRow />
-
                 <DoctorHomepageContentSecondRow />
             </div>
         </div>

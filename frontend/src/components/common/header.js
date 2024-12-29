@@ -1,11 +1,18 @@
 import './style/header.css';
 import Logo from '../../assets/images/Logo.png';
 
-// import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import UserPFP from '../../assets/images/Sample_User_PFP.png';
 
 function Header() {
+    const history = useHistory();
+
+    const handleSignOut = () => {
+        // Perform any signout logic here (e.g., clearing tokens, etc.)
+        history.push('/login');
+    };
+
     return (
         <header className="header">
             <img src={Logo} alt="Logo" className="header__logo" />
@@ -15,7 +22,7 @@ function Header() {
                 <div className="name">
                     Doctor abc
                 </div>
-                <button>Sign out</button>
+                <button onClick={handleSignOut}>Sign out</button>
             </div>
         </header>
     );

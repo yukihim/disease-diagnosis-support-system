@@ -1,23 +1,41 @@
 import './App.css';
 
+import LoginForm from './components/auth/loginForm';
+
+import DoctorHomepage from './pages/doctor/doctorHomepage';
+import DoctorDiagnosingPatient from './pages/doctor/doctorDiagnosingPatient';
+
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/login" />
+        </Route>
+        
+        <Route path="/login">
+          <LoginForm />
+        </Route>
+
+        <Route path="/doctor/homepage">
+          <DoctorHomepage />
+        </Route>
+
+        <Route path="/doctor/diagnosis">
+          <DoctorDiagnosingPatient />
+        </Route>
+
+        {/* <Route path="/">
+          <LoginForm />
+        </Route>
+
+        <Route path="/">
+          <LoginForm />
+        </Route> */}
+      </Switch>
+    </Router>
   );
 }
 

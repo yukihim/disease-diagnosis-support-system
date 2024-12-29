@@ -1,4 +1,4 @@
-import './style/style.css';
+import './style/doctorHomepageContent.css';
 
 function PatientSentForParaclinicalTest() {
     return (

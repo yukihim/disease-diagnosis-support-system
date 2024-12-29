@@ -1,5 +1,7 @@
-import MonitoringInpatient from './smallerComponents/monitoringInpatient';
-import TodaysAppointment from './smallerComponents/todaysAppointment';
+import MonitoringInpatient from '../smallerComponents/monitoringInpatient';
+import TodaysAppointment from '../smallerComponents/todaysAppointment';
+
+import './style/style.css';
 
 function DoctorHomepageContentSecondRow() {
     return (

@@ -28,19 +28,3 @@
         }
     }
 }
-
-.firstRow {
-    display: flex;
-    flex-direction: row;
-
-    margin-bottom: 20px;
-}
-
-.secondRow {
-    display: flex;
-    flex-direction: row;
-
-    height: 400px;
-
-    margin-bottom: 20px;
-}
