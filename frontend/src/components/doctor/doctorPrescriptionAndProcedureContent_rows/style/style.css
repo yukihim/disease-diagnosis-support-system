@@ -1,3 +1,12 @@
+.thirdRow {
+    display: flex;
+    flex-direction: row;
+
+    height: auto;
+
+    margin-bottom: 20px;
+}
+
 .fourthRow {
     display: flex;
     flex-direction: row;

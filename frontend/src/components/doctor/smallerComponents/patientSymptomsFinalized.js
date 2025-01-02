@@ -1,14 +1,6 @@
 import './style/doctorDiagnosingPatientContent.css';
 
-function PatientSymptomsFinalizing({ symptoms, preDiagnosis, finalDiagnosis, setFinalDiagnosis }) {
-    const handleOnchange = (e) => {
-        setFinalDiagnosis(e.target.value);
-
-        if (e.target.value === "") {
-            setFinalDiagnosis(preDiagnosis);
-        }
-    }
-    
+function PatientSymptomsFinalized({ symptoms, finalDiagnosis }) {
     return (
         <div className="PatientSymptomsFinalizingContainer">
             <div className="containerContent">
@@ -21,11 +13,11 @@ function PatientSymptomsFinalizing({ symptoms, preDiagnosis, finalDiagnosis, set
 
                 <div className="symptoms">
                     <div className="attribute_symptoms">Final diagnosis:</div>
-                    <input className="value_symptoms" value={finalDiagnosis} onChange={handleOnchange} placeholder={preDiagnosis ? preDiagnosis : "Input your Final Diagnosis"} />
+                    <input className="value_symptoms" value={finalDiagnosis} readOnly />
                 </div>
             </div>
         </div>
     );
 }
 
-export default PatientSymptomsFinalizing;
+export default PatientSymptomsFinalized;

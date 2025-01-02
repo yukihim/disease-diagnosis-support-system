@@ -5,10 +5,10 @@ import './style/style.css';
 
 import PatientSymptomsFinalizing from '../smallerComponents/patientSymptomsFinalizing';
 
-function DoctorFinalizingDiagnosisContentThirdRow() {
+function DoctorFinalizingDiagnosisContentThirdRow({ symptoms, preDiagnosis, finalDiagnosis, setFinalDiagnosis }) {
     return (
         <div className="thirdRow">
-            <PatientSymptomsFinalizing />
+            <PatientSymptomsFinalizing symptoms={symptoms} preDiagnosis={preDiagnosis} finalDiagnosis={finalDiagnosis} setFinalDiagnosis={setFinalDiagnosis} />
         </div>
     );
 }

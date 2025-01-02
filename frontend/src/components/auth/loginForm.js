@@ -45,9 +45,26 @@ function LoginForm() {
         }
     };
 
+    function handleSubmitDemo() {
+        if(email === 'doctor' && password === 'test') {
+            history.push('/doctor/homepage');
+        }
+    }
+
     return (
         <div className="loginPage">
-            <form className="loginForm" onSubmit={handleSubmit}>
+            {/* <form className="loginForm" onSubmit={handleSubmit}>
+                <div className="logoContainer">
+                    <img src={Logo} alt="Logo" />
+                </div>
+                <label>Email/Username:</label>
+                <input type="text" name="email" value={email} onChange={handleEmailChange} placeholder="Enter Email/Username..." />
+                <label>Password:</label>
+                <input type="password" name="password" value={password} onChange={handlePasswordChange} placeholder="Enter Password..." />
+                {error && <p className="error">{error}</p>}
+                <button type="submit">Login</button>
+            </form> */}
+            <form className="loginForm" onSubmit={handleSubmitDemo}>
                 <div className="logoContainer">
                     <img src={Logo} alt="Logo" />
                 </div>

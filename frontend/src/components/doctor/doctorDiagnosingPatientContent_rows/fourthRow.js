@@ -2,10 +2,10 @@ import PatientSymptoms from '../smallerComponents/patientSymptoms';
 
 import './style/style.css';
 
-function DoctorHomepageContentFourthRow() {
+function DoctorHomepageContentFourthRow({ symptoms, setSymptoms, preDiagnosis, setPreDiagnosis }) {
     return (
         <div className="fourthRow">
-            <PatientSymptoms />
+            <PatientSymptoms symptoms={symptoms} setSymptoms={setSymptoms} preDiagnosis={preDiagnosis} setPreDiagnosis={setPreDiagnosis}/>
         </div>
     );
 }

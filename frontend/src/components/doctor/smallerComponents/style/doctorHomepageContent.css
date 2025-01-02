@@ -357,9 +357,10 @@
 
 /* TODAYS APPOINTMENT CONTENT */
 .todaysAppointmentContainer {
-    margin-right: 20px;
+    /* margin-right: 20px; */
 
-    width: 295px;
+    /* width: 295px; */
+    flex: 1;
     height: 410px;
 
     background-color: #fff;
@@ -389,7 +390,8 @@
 
     flex-direction: column;
 
-    width: 271px;
+    /* width: 271px; */
+    flex: 1;
     height: 310px; /* 270px */
 
     font-size: 12px;
@@ -397,9 +399,11 @@
     margin-bottom: 10px;
 
     overflow-y: scroll;
-    scrollbar-width: thin;
+    scrollbar-width: none;
 
     .todaysAppointmentContentRow {
+        justify-content: space-between;
+
         margin-bottom: 24px;
     }
 }

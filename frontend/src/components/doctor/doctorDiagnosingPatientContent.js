@@ -10,7 +10,7 @@ import DoctorDiagnosingPatientThirdRow from './doctorDiagnosingPatientContent_ro
 import DoctorDiagnosingPatientFourthRow from './doctorDiagnosingPatientContent_rows/fourthRow';
 import DoctorDiagnosingPatientFifthRow from './doctorDiagnosingPatientContent_rows/fifthRow';
 
-function DoctorDiagnosingPatientContent() {
+function DoctorDiagnosingPatientContent({ symptoms, setSymptoms, preDiagnosis, setPreDiagnosis }) {
     return (
         <div className="doctorHomepageContent">
             <Sidebar />
@@ -18,7 +18,7 @@ function DoctorDiagnosingPatientContent() {
                 <DoctorDiagnosingPatientFirstRow />
                 <DoctorDiagnosingPatientSecondRow />
                 <DoctorDiagnosingPatientThirdRow />
-                <DoctorDiagnosingPatientFourthRow />
+                <DoctorDiagnosingPatientFourthRow symptoms={symptoms} setSymptoms={setSymptoms} preDiagnosis={preDiagnosis} setPreDiagnosis={setPreDiagnosis} />
                 <DoctorDiagnosingPatientFifthRow />
             </div>
         </div>
