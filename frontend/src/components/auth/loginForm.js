@@ -1,3 +1,4 @@
+// File: src/components/LoginForm.js
 import './style/loginForm.css';
 import Logo from '../../assets/images/Logo.png';
 import React, { useState } from 'react';
@@ -17,7 +18,7 @@ function LoginForm() {
         setError('');
 
         try {
-            const response = await fetch('/login', {
+            const response = await fetch('http://localhost:5000/Authentication/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,10 +28,17 @@ function LoginForm() {
 
             if (response.ok) {
                 const data = await response.json();
-                // Store the token in localStorage or context
-                localStorage.setItem('token', data.access_token);
-                // Redirect based on user role
+                console.log('Response data:', data);
+                
+                // Store the token for later use
+                localStorage.setItem('access_token', data.access_token);
+                console.log("Token saved:", localStorage.getItem('access_token'));
+
+                // Retrieve the role from the response
                 const role = data.role;
+                console.log('User role:', role);
+                
+                // Redirect based on the user role
                 if (role === 'doctor') {
                     history.push('/doctor/homepage');
                 } else {
@@ -39,8 +47,10 @@ function LoginForm() {
             } else {
                 const errorData = await response.json();
                 setError(errorData.error || 'Login failed');
+                console.error('Login error:', errorData);
             }
-        } catch (error) {
+        } catch (err) {
+            console.error('Error during login:', err);
             setError('An error occurred. Please try again.');
         }
     };
@@ -52,9 +62,21 @@ function LoginForm() {
                     <img src={Logo} alt="Logo" />
                 </div>
                 <label>Email/Username:</label>
-                <input type="text" name="email" value={email} onChange={handleEmailChange} placeholder="Enter Email/Username..." />
+                <input
+                    type="text"
+                    name="email"
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="Enter Email/Username..."
+                />
                 <label>Password:</label>
-                <input type="password" name="password" value={password} onChange={handlePasswordChange} placeholder="Enter Password..." />
+                <input
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    placeholder="Enter Password..."
+                />
                 {error && <p className="error">{error}</p>}
                 <button type="submit">Login</button>
             </form>
