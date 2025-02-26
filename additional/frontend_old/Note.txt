@@ -1,0 +1,6 @@
+Doctor: Incoming patient (Name, age, gender), Patient sent to paraclical test (Name, paraclical test name), Inpatient (Name, age, gender)
+
+Receptionist: Check in patients (Name, gender, gender, ehr, symptoms, doc room)
+
+Paracli: Incoming patient (Name, age, gender, paraclical test name), Medical Device (Status) -> (Test, result)
+
