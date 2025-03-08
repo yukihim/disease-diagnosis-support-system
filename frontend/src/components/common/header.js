@@ -13,20 +13,43 @@ function Header() {
 
     const handleSignOut = async () => {
         try {
-            const response = await fetch('http://localhost:5000/Authentication/logout', {
-                method: 'POST',
-                credentials: 'include', // Important: This enables cookies to be sent with the request
-            });
-
-            if (response.ok) {
-                // The cookie is cleared by the server
+            // Get token from localStorage
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                console.log('No token found. Redirecting to login.');
+                localStorage.removeItem('token'); // Clear it just to be sure
                 history.push('/login');
-            } else {
-                const errorData = await response.json();
-                console.error('Logout error:', errorData);
+                return;
             }
+    
+            // Include the JWT token in the Authorization header
+            const response = await fetch('http://localhost:5001/authentication/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            // First check if the response is OK before trying to read the body
+            if (response.ok) {
+                // Only try to parse JSON if we got a successful response
+                const data = await response.json();
+                console.log('Logout successful:', data.message);
+            } else {
+                console.error('Logout failed with status:', response.status);
+                // Don't try to read the response body again if it's not OK
+            }
+    
+            // Always clear the token and redirect regardless of server response
+            localStorage.removeItem('token');
+            history.push('/login');
         } catch (err) {
             console.error('Error during logout:', err);
+            // Even if there's an exception, clear the token and redirect
+            localStorage.removeItem('token');
+            history.push('/login');
         }
     };
 
