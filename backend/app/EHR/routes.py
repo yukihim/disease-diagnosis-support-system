@@ -48,7 +48,7 @@ def retrieve():
 @app.route('/pass_session', methods=['POST'])
 @jwt_required()
 @check_role(['receptionist'])
-def pass_session():
+def pass_session_route():
     try:
         session_id = request.json.get('session_id')
         ans = pass_session.pass_session(session_id)

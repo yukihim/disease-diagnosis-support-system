@@ -1,12 +1,16 @@
 from flask import Blueprint
 from flask_jwt_extended import get_jwt
+
 app = Blueprint('authentication', __name__)
 
 from . import routes
-
 url_prefix = '/authentication'
 
 allow_role = 'all'
+
+
+
+
 
 
 def check_role(allow_role):
@@ -21,5 +25,3 @@ def check_role(allow_role):
                 raise Exception('Permission denied')
         return inner
     return decorator
-
-

@@ -33,7 +33,6 @@ def login():
 @app.route('/logout', methods=['POST'])
 @jwt_required()
 def logout():
-
     return jsonify({'message': 'Logout success'}), 200
 
 

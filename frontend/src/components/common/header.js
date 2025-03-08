@@ -2,7 +2,6 @@ import './style/header.css';
 import Logo from '../../assets/images/Logo.png';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
 import UserPFP from '../../assets/images/Sample_User_PFP.png';
 
 function Header() {
@@ -13,27 +12,14 @@ function Header() {
     }
 
     const handleSignOut = async () => {
-        // Perform any signout logic here (e.g., clearing tokens, etc.)
         try {
-            const access_token = localStorage.getItem('access_token'); // Assuming the token is stored in localStorage
             const response = await fetch('http://localhost:5000/Authentication/logout', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${access_token}`,
-                },
+                credentials: 'include', // Important: This enables cookies to be sent with the request
             });
 
             if (response.ok) {
-                const data = await response.json();
-                console.log('Response data:', data);
-
-                console.log(data.access_token);
-                
-                // Clear the token from localStorage
-                localStorage.removeItem('access_token');
-                
-                // Redirect to the login page
+                // The cookie is cleared by the server
                 history.push('/login');
             } else {
                 const errorData = await response.json();

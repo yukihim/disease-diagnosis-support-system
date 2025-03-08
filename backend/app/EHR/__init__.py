@@ -1,7 +1,6 @@
 from flask import Blueprint
-
-app = Blueprint('EHR', __name__)
-
 from . import routes
 
+
+app = Blueprint('EHR', __name__)
 url_prefix = '/EHR'

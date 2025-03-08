@@ -4,6 +4,11 @@ import Logo from '../../assets/images/Logo.png';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+const role_landing_page = {
+    'doctor': '/doctor/homepage',
+    'admin': '/admin/homepage',
+}
+
 function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,41 +18,71 @@ function LoginForm() {
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setError('');
+
+    //     try {
+    //         const response = await fetch('http://localhost:5000/authentication/login', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ username: email, password }),
+    //         });
+
+    //         const data = await response.json();
+    //         console.log('Response status:', response.status);
+    //         console.log('Response data:', data);
+            
+    //         if (response.status === 200) {
+    //             // With HTTP-only cookies, we don't store the token in localStorage anymore
+    //             // We just need the role for redirection
+    //             const role = data.role;
+    //             console.log('User role:', role);
+    
+    //             // Redirect based on the user role
+    //             history.push(role_landing_page[role]);
+    //         } else if (response.status === 400) {
+    //             setError('Wrong username or password. Please check your credentials.');
+    //             console.error('Authentication error:', data);
+    //         }
+    //     } catch (err) {
+    //         console.error('Error during login:', err);
+    //         setError('An error occurred. Please try again.');
+    //     }
+    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
+    
         try {
-            const response = await fetch('http://localhost:5000/Authentication/login', {
+            const response = await fetch('http://localhost:5001/authentication/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username: email, password }),
             });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Response data:', data);
+    
+            const data = await response.json();
+            console.log('Response status:', response.status);
+            console.log('Response data:', data);
+            
+            if (response.status === 200) {
+                // Store the token in localStorage (or you could use HTTP-only cookies instead)
+                localStorage.setItem('token', data.access_token);
                 
-                // Store the token for later use
-                localStorage.setItem('access_token', data.access_token);
-                console.log("Token saved:", localStorage.getItem('access_token'));
-
-                // Retrieve the role from the response
-                const role = data.role;
+                // Decode the JWT token to get the role
+                const tokenPayload = JSON.parse(atob(data.access_token.split('.')[1]));
+                const role = tokenPayload.role;
                 console.log('User role:', role);
-                
+    
                 // Redirect based on the user role
-                if (role === 'doctor') {
-                    history.push('/doctor/homepage');
-                } else {
-                    history.push(`/${role}/homepage`);
-                }
-            } else {
-                const errorData = await response.json();
-                setError(errorData.error || 'Login failed');
-                console.error('Login error:', errorData);
+                history.push(role_landing_page[role]);
+            } else if (response.status === 400) {
+                setError('Wrong username or password. Please check your credentials.');
+                console.error('400 - Authentication error:', data);
             }
         } catch (err) {
             console.error('Error during login:', err);

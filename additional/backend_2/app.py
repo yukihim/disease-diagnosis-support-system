@@ -7,7 +7,12 @@ app = Flask(__name__)
 app.config.from_object('config.Config')
 
 # Enable CORS for all routes
-CORS(app)
+CORS(app, resources={
+    r"/Authentication/*": {
+        "origins": "http://localhost:3000",
+        "supports_credentials": True
+    }
+})
 
 db = SQLAlchemy(app)
 
@@ -17,7 +22,7 @@ API_URL = '/static/swagger.yaml'  # Adjust path if necessary
 swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
-    config={'app_name': "DDSS API"}
+    config={'app_name': "AsiDoc_API"}
 )
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
