@@ -1,0 +1,36 @@
+.availableDoctorsTableContentWrapper {
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: scroll;
+    gap: 10px;
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.availableDoctorsTableContentCell {
+    width: 100%;
+    height: auto;
+    min-height: 50px;
+    max-height: 50px;
+
+    gap: 15px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.availableDoctorsTableContentCell:hover {
+    text-decoration: underline;
+
+    border-radius: 30px;
+
+    box-shadow: 0px 4px 4px rgba(0, 0, 128, 0.6);
+}

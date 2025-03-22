@@ -1,77 +1,77 @@
 .header {
-    width: auto;
-    height: 71px;
-
-    padding: 0px 32px;
+    width: 100%;
+    height: auto;
 
     background-color: #009951;
 
-    display: flex;
-    align-items: center;
+    .headerContent {
+        width: 100%;
 
-    justify-content: space-between;
-
-    img {
-        width: 50px;
-        height: 50px;
-
-        margin-right: 6px;
-    }
-
-    .emptyBox {
-        width: 759px;
-        height: 32px;
-
-        margin-right: 6px;
-    }
-
-    .rightMostBox {
         display: flex;
-        flex-direction: row;
         align-items: center;
-        justify-content: right;
+        justify-content: space-between;
+        
+        margin: 11px 34px;
 
-        width: 393px;
-        height: 71px;
-
-        img {
-            width: 40px;
-            height: 40px;
-
-            margin-right: 12px;
+        .headerLogo {
+            width: 50px;
+            height: 50px;
         }
 
-        .name {
+        .rightMostBox {
+            width: 291px;
+            height: auto;
+
             display: flex;
+            flex-direction: row;
             align-items: center;
+            justify-content: flex-end;
 
-            width: 136px;
-            height: 16px;
+            /* space between 12px */
+            gap: 12px;
+    
+            .headerUserPFP{
+                width: 40px;
+                height: 40px;
+            }
+    
+            .name {
+                display: flex;
+                align-items: center;
+    
+                width: 136px;
+                height: 16px;
+    
+                font-size: 16px;
+                color: white;
+            }
+    
+            .signOutButton {
+                display: flex;
+                align-self: center;
+                align-items: center;
+                justify-content: center;
+    
+                width: 91px;
+                height: auto;
+                padding: 8px;
+                border-radius: 8px;
+    
+                color: #008080;
+                background-color: rgba(217,219,233,1);
+    
+                cursor: pointer;
+            }
+    
+            .signOutButton:hover {
+                /* Add text underline */
+                text-decoration: underline;
 
-            font-size: 16px;
-            color: white;
-        }
+                border: 1px solid #008080;
 
-        button {
-            display: flex;
-            align-self: center;
-            align-items: center;
-            justify-content: center;
-
-            width: 89px;
-            height: 30px;
-
-            border: 1px solid #2C2C2C;
-            border-radius: 8px;
-
-            color: white;
-            background-color: #2C2C2C;
-
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #000;
+                /* Add a bit of transparency */
+                background-color: rgba(217,219,233,0.6);
+            }
         }
     }
 }

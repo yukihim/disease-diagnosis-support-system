@@ -1,0 +1,12 @@
+.componentPagination {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+    max-height: 24px;
+
+    gap: 10px;
+}

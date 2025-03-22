@@ -1,4 +1,6 @@
 .calendar-container {
+    grid-column: span 1;
+
     background: #fff;
     width: 271px;
     border-radius: 10px;

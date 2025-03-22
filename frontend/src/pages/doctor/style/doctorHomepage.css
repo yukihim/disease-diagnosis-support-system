@@ -4,4 +4,7 @@
 
     height: 100%;
     width: 100%;
+
+    min-height: 832px;
+    min-width: 1280px;
 }

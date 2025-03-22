@@ -1,0 +1,20 @@
+.overviewText {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: rgba(0, 128, 128, 0.5);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* SemiBold */
+    font-size: 14px;
+    text-align: center;
+
+    max-width: 110px;
+    max-height: 45px;
+}
+
+.redText {
+    color: rgba(240, 62, 62, 0.5);
+}

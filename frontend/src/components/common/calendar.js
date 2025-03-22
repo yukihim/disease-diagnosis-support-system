@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './style/calendar.css';
-import Chevron_Left from '../../assets/images/Chevron_Left.png';
-import Chevron_Right from '../../assets/images/Chevron_Right.png';
+// import Chevron_Left from '../../assets/images/Chevron_Left.png';
+// import Chevron_Right from '../../assets/images/Chevron_Right.png';
+
+import PrevButton from './prevButton';
+import NextButton from './nextButton';
 
 function Calendar() {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -91,15 +94,11 @@ function Calendar() {
         <div className="calendar-container">
             <header className="calendar-header">
                 <div className="calendar-navigation">
-                    <button id="calendar-prev" onClick={handlePrevMonth}>
-                        <img id="chevron" src={Chevron_Left} alt="Previous month" />
-                    </button>
+                    <PrevButton onClick={handlePrevMonth} />
                 </div>
                 <p className="calendar-current-date">{`${getMonthName(currentDate)} ${getYear(currentDate)}`}</p>
                 <div className="calendar-navigation">
-                    <button id="calendar-next" onClick={handleNextMonth}>
-                        <img id="chevron" src={Chevron_Right} alt="Next month" />
-                    </button>
+                    <NextButton onClick={handleNextMonth} />
                 </div>
             </header>
 

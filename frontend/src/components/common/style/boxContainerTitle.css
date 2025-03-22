@@ -1,0 +1,20 @@
+.boxContainerTitle {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 21px;
+    vertical-align: middle;
+
+    color: #4E4B66;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* SemiBold */
+    font-size: 14px;
+    text-align: left; /* Assuming left alignment */
+}
+
+.greenTitle {
+    color: #008080;
+}

@@ -1,25 +1,23 @@
-// File: src/components/doctorHomepage.js
-import "./style/doctorHomepage.css";
-import Header from '../../components/common/header';
-import DoctorHomepageContent from '../../components/doctor/doctorHomepageContent';
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import PageLayout from '../../components/common/pageLayout';
+import IncomingPatient from '../../components/doctor/smallerComponents/incomingPatient/incomingPatient';
+import PatientSentForParaclinicalTest from '../../components/doctor/smallerComponents/patientSentForParaclinicalTest/patientSentForParaclinicalTest';
+import Calendar from '../../components/common/calendar';
+import MonitoringInpatient from '../../components/doctor/smallerComponents/monitoringInpatient/monitoringInpatient';
+import TodaysAppointment from '../../components/doctor/smallerComponents/todaysAppointment/todaysAppointment';
 
 function DoctorHomepage() {
-    const history = useHistory();
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            history.push('/login'); // Redirect to login if token is missing
-        }
-    }, [history]);
-
     return (
-        <div className="doctorHomepage">
-            <Header />
-            <DoctorHomepageContent />
-        </div>
+        <PageLayout requiredRole="doctor">
+            {/* First row */}
+            <IncomingPatient />
+            <PatientSentForParaclinicalTest />
+            <Calendar />
+            
+            {/* Second row */}
+            <MonitoringInpatient />
+            <TodaysAppointment />
+        </PageLayout>
     );
 }
 

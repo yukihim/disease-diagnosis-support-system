@@ -1,44 +1,167 @@
 .sidebar {
+    width: 53px;
+    height: 100% - 76px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-items: center;
+
+    padding: 8px 0px;
+    gap: 10px;
+
+    border: 0px solid #D9DBE9;
+    border-width: 0px 1px 0px 0px;
+    border-bottom-right-radius: 10px;
 
     background-color: #fff;
 
-    border: 0px solid #D9DBE9;
+    transition: 0.5s;
 
-    border-width: 0px 1px 0px 0px;
+    .iconHolder {
+        width: 27px;
+        height: 27px;
 
-    width: 54px;
-    height: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-    border-bottom-right-radius: 10px;
+    .stateIconHolder {
+        width: auto;
+        height: auto;
 
-    .bigContainer {
-        all: unset;
+        opacity: 1;
+        visibility: visible;
 
-        padding: 8px 0px;
+        padding: 8px;
+        border-radius: 10px;
 
-        .sidebarContainer {
-            all: unset;
-    
-            width: 40px;
-            height: 40px;
-    
-            margin-bottom: 8px;
-    
-            display: flex;
-            align-items: center;
-            justify-content: center;
-    
-            border-radius: 10px;
-    
-            img {
-                all: unset;
-    
-                width: 20px;
-                height: 20px;
-            }
+        transition: width 0.5s, opacity 0.5s, visibility 0.5s;
+    }
+
+    .expandStateIconHolder {
+        /* width: 174px; */
+        width: auto;
+        height: auto;
+
+        opacity: 0;
+        visibility: hidden;
+
+        display: none;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+
+        gap: 10px;
+        padding: 8px;
+        border-radius: 10px;
+
+        transition: width 0.5s, opacity 0.5s, visibility 0.5s;
+    }
+
+
+    .brandingLogoHolder {
+        width: 137px;
+        height: 70px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        gap: 10px;
+        padding: 10px;
+        border-radius: 10px;
+
+        background-color: rgba(37, 85, 105, 0.88);
+
+        .brandLogo {
+            width: 50px;
+            height: 50px;
+        }
+
+        .asidocText {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700; /* "Bold" in CSS */
+            font-style: italic; /* Italic style */
+            font-size: 16px; /* 16px font size */
+            text-decoration: underline; /* Underline text */
+            color: #9FD6BE; /* Text color */
         }
     }
+}
+
+.sidebar:hover {
+    /* width: auto; */
+    width: 173px;
+
+    padding: 8px 6px;
+}
+
+.sidebar:hover .stateIconHolder {
+    display: none;
+
+    opacity: 0;
+    visibility: hidden;
+}
+
+.sidebar:hover .expandStateIconHolder {
+    display: flex;
+
+    width: 158px;
+    height: auto;
+
+    opacity: 1;
+    visibility: visible;
+}
+
+/*
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 128, 128, 0.35);
+*/
+/* Hover effect only for inactive tabs */
+.sidebar:hover .inactive-tab:hover,
+.sidebar.expanded .inactive-tab:hover {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 128, 128, 0.35);
+}
+
+.tabContentText {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    /* CSS equivalent of "Semibold" */
+    font-size: 13px;
+    color: #4E4B66;
+    /* Default text color */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.sidebar.expanded {
+    width: 173px;
+    padding: 8px 6px;
+}
+
+.sidebar.expanded .stateIconHolder {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.sidebar.expanded .expandStateIconHolder {
+    display: flex;
+    width: 158px;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
 }

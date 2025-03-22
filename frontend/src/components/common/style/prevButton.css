@@ -1,0 +1,14 @@
+.prevButtonWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    width: auto;
+    height: auto;
+}
+
+.prevButtonIcon {
+    width: 22px;
+    height: 22px;
+}

@@ -1,0 +1,22 @@
+.webpageTitle {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+    vertical-align: middle;
+
+    justify-content: space-between;
+}
+
+.welcomeText {
+    width: auto;
+    height: auto;
+
+    color: #008080;
+    font-weight: 600;
+    font-size: 20px;
+
+    display: flex;
+    align-items: center;
+}

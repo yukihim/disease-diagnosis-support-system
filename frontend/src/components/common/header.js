@@ -4,68 +4,72 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import UserPFP from '../../assets/images/Sample_User_PFP.png';
 
-function Header() {
-    const history = useHistory();
+function Header({ userName, userRole }) {
+  const history = useHistory();
 
-    const handleIconClick = () => {
-        history.push('/doctor/homepage');
+  // Format the role to display with first letter capitalized
+  const formattedRole = userRole ? userRole.charAt(0).toUpperCase() + userRole.slice(1) : '';
+
+  // When clicking the logo, navigate to your role’s homepage.
+  const handleIconClick = () => {
+    const role = userRole || localStorage.getItem('userrole');
+    if (role) {
+      history.push(`/${role.toLowerCase()}/homepage`);
+    } else {
+      console.warn('No user role found, redirecting to login');
+      history.push('/login');
     }
+  };
 
-    const handleSignOut = async () => {
+  // Sign out clears stored data and navigates to login.
+  const handleSignOut = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
         try {
-            // Get token from localStorage
-            const token = localStorage.getItem('token');
-            
-            if (!token) {
-                console.log('No token found. Redirecting to login.');
-                localStorage.removeItem('token'); // Clear it just to be sure
-                history.push('/login');
-                return;
+          const response = await fetch('http://localhost:5001/authentication/logout', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
             }
-    
-            // Include the JWT token in the Authorization header
-            const response = await fetch('http://localhost:5001/authentication/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-    
-            // First check if the response is OK before trying to read the body
-            if (response.ok) {
-                // Only try to parse JSON if we got a successful response
-                const data = await response.json();
-                console.log('Logout successful:', data.message);
-            } else {
-                console.error('Logout failed with status:', response.status);
-                // Don't try to read the response body again if it's not OK
-            }
-    
-            // Always clear the token and redirect regardless of server response
-            localStorage.removeItem('token');
-            history.push('/login');
-        } catch (err) {
-            console.error('Error during logout:', err);
-            // Even if there's an exception, clear the token and redirect
-            localStorage.removeItem('token');
-            history.push('/login');
+          });
+          if (response.ok) {
+            console.log('Logout successful');
+          } else {
+            console.warn('Logout API returned error:', response.status);
+          }
+        } catch (apiError) {
+          console.error('API call failed:', apiError);
         }
-    };
+      }
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      localStorage.removeItem('userrole');
+      history.push('/login');
+    }
+  };
 
-    return (
-        <header className="header">
-            <img src={Logo} alt="Logo" className="header__logo" onClick={handleIconClick} />
-            <div className="emptyBox"></div>
-            <div className="rightMostBox">
-                <img src={UserPFP} alt="User PFP" className="header__userPFP" />
-                <div className="name">
-                    Doctor abc
-                </div>
-                <button onClick={handleSignOut}>Sign out</button>
-            </div>
-        </header>
-    );
+  return (
+    <header className="header">
+      <div className="headerContent">
+        <div onClick={handleIconClick} style={{ cursor: 'pointer' }}>
+          <img src={Logo} alt="Logo" className="headerLogo" />
+        </div>
+        <div className="rightMostBox">
+          <img src={UserPFP} alt="User PFP" className="headerUserPFP" />
+          <div className="name">
+            {formattedRole && `${formattedRole}: `}
+            {userName || 'User'}
+          </div>
+          <button className="signOutButton" type="button" onClick={handleSignOut}>
+            Sign out
+          </button>
+        </div>
+      </div>
+    </header>
+  );
 }
 
 export default Header;

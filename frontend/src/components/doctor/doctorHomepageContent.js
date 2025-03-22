@@ -3,9 +3,16 @@ import './style/style.css';
 // Common Components
 import Sidebar from '../common/sidebar';
 
-// Doctor's Components
-import DoctorHomepageContentFirstRow from './doctorHomepageContent_rows/firstRow';
-import DoctorHomepageContentSecondRow from './doctorHomepageContent_rows/secondRow';
+
+// First row
+import IncomingPatient from './smallerComponents/incomingPatient/incomingPatient';
+import PatientSentForParaclinicalTest from './smallerComponents/patientSentForParaclinicalTest/patientSentForParaclinicalTest';
+import Calendar from './../common/calendar';
+
+
+// Second row
+import MonitoringInpatient from './smallerComponents/monitoringInpatient/monitoringInpatient';
+import TodaysAppointment from './smallerComponents/todaysAppointment/todaysAppointment';
 
 function DoctorHomepageContent() {
     return (
@@ -14,8 +21,17 @@ function DoctorHomepageContent() {
             <div className="mainContent">
                 <div className="welcomeText">Welcome Doctor abc</div>
 
-                <DoctorHomepageContentFirstRow />
-                <DoctorHomepageContentSecondRow />
+                {/* <DoctorHomepageContentFirstRow />
+                <DoctorHomepageContentSecondRow /> */}
+
+                {/* First row */}
+                <IncomingPatient />
+                <PatientSentForParaclinicalTest />
+                <Calendar />
+                
+                {/* Second row */}
+                <MonitoringInpatient />
+                <TodaysAppointment />
             </div>
         </div>
     );

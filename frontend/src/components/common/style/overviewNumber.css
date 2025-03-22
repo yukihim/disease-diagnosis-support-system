@@ -1,0 +1,17 @@
+.overviewNumber {
+    color: #008080;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400; /* SemiBold */
+    font-size: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    min-height: 45px;
+}
+
+.redNumber {
+    color: #F03E3E;
+}

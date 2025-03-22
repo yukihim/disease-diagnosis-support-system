@@ -1,0 +1,22 @@
+.button {
+    width: auto;
+    height: auto;
+    background-color: #008080;
+
+    padding: 12px 10px;
+
+    border-radius: 8px;
+
+    /* Drop shadow */
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.button:hover {
+    background-color: rgba(0, 128, 128, 0.6);
+
+    cursor: pointer;
+}
+
+.button:hover .buttonText {
+    text-decoration: underline;
+}

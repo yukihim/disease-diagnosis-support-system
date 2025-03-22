@@ -15,7 +15,7 @@ demo_user_name = [
         'role':'nurse'
     },
     {
-        'username':'receptionist',
+        'username':'receptionist1',
         'password': generate_password_hash('test'),
         'role':'receptionist'
     },

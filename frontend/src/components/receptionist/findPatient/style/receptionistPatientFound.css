@@ -1,0 +1,10 @@
+.receptionistPatientFound {
+    width: 100%;
+    height: auto;
+    max-height: initial;
+    min-height: initial;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
