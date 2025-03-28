@@ -1,10 +1,25 @@
-.receptionistPatientFound {
+.receptionistPatientFoundBox {
     width: 100%;
-    height: auto;
+    height: 100%;
     max-height: initial;
     min-height: initial;
 
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+
+.receptionistPatientFoundTitle {
+    width: 100%;
+    height: 41px;
+
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.receptionistPatientFoundContent {
+    width: 100%;
+    height: 100%;
+
+    min-height: initial;
 }

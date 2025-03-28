@@ -3,11 +3,23 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 334px;
-    height: 291px;
+    /* width: 334px;
+    height: 291px; */
     padding: 20px;
     gap: 10px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+
+    box-sizing: border-box;
+}
+
+.boxContainer.receptionistPatientFoundBox {
+    height: 100%;
+}
+
+.boxContainer.bigBox {
+    /* grid span 1*/
+    grid-column: span 2;
+    width: 100%;
 }

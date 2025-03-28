@@ -76,14 +76,6 @@ function PageLayout({ children, requiredRole = null, useGrid = true, className =
           </ButtonText>
         </Button>
       );
-    } else if (role === 'doctor') {
-      return (
-        <Button>
-          <ButtonText>
-            View patient records
-          </ButtonText>
-        </Button>
-      );
     } else if (role === 'nurse') {
       return (
         <Button>

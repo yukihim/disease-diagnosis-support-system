@@ -32,6 +32,15 @@
     align-items: center;
 }
 
+.tableContent.tableContentPatientFound {
+    min-height: 61px;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #09090B;
+}
+
 .tableContentCell {
     font-family: 'Poppins', sans-serif;
     font-size: 13px;

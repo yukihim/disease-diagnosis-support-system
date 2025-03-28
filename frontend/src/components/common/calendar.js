@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './style/calendar.css';
-// import Chevron_Left from '../../assets/images/Chevron_Left.png';
-// import Chevron_Right from '../../assets/images/Chevron_Right.png';
 
 import PrevButton from './prevButton';
 import NextButton from './nextButton';

@@ -8,9 +8,11 @@ import LoginForm from './components/auth/loginForm';
 import ReceptionistLandingPage from './pages/receptionist/receptionistLandingPage';
 import ReceptionistCalendar from './pages/receptionist/receptionistCalendar';
 import ReceptionistFindPatient from './pages/receptionist/receptionistFindPatient';
+import ReceptionistPatientCheckin from './pages/receptionist/receptionistPatientCheckin';
 
 
-import DoctorHomepage from './pages/doctor/doctorHomepage';
+// import DoctorHomepage from './pages/doctor/doctorHomepage';
+import DoctorLandingPage from './pages/doctor/doctorLandingPage';
 import DoctorDiagnosingPatient from './pages/doctor/doctorDiagnosingPatient';
 import DoctorViewPassSession from './pages/doctor/doctorViewPassSession';
 import DoctorFinalizingDiagnosis from './pages/doctor/doctorFinalizingDiagnosis';
@@ -39,10 +41,13 @@ function App() {
         <Route path="/receptionist/find_patient">
           <ReceptionistFindPatient />
         </Route>
+        <Route path="/receptionist/patient_checkin">
+          <ReceptionistPatientCheckin />
+        </Route>
 
 
         <Route path="/doctor/homepage">
-          <DoctorHomepage />
+          <DoctorLandingPage />
         </Route>
         <Route path="/doctor/diagnosis">
           <DoctorDiagnosingPatient />

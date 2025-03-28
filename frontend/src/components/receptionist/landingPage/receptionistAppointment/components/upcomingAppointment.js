@@ -2,7 +2,7 @@ import React from 'react';
 import './style/upcomingAppointment.css';
 
 import OverviewNumber from '../../../../common/overviewNumber';
-import OverviewTextAppointmentOverview from './overviewTextAppointmentOverview';
+import OverviewTextBig from '../../../../common/overviewTextBig';
 
 function UpcomingAppointment() {
     return (
@@ -10,9 +10,9 @@ function UpcomingAppointment() {
             <OverviewNumber>
                 12
             </OverviewNumber>
-            <OverviewTextAppointmentOverview>
+            <OverviewTextBig>
                 Upcoming Appointments
-            </OverviewTextAppointmentOverview>
+            </OverviewTextBig>
         </div>
     );
 }

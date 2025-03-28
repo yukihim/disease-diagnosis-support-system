@@ -1,14 +1,19 @@
 .calendar-container {
-    grid-column: span 1;
-
-    background: #fff;
-    width: 271px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 334px;
+    height: 291px;
+    padding: 20px;
+    gap: 10px;
+    background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    padding: 10px 12px 12px 12px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 header {
+    width: 100%;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -27,6 +32,11 @@ header {
 }
 
 .calendar-body {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
 }
 
@@ -53,6 +63,14 @@ li {
     color: #71717A;
 
     margin-bottom: 5px;
+}
+
+.calendar-dates {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
 }
 
 .calendar-dates li {

@@ -1,0 +1,13 @@
+.dropDownBox {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.dropDownBox:focus {
+    border-color: #1890ff;
+}

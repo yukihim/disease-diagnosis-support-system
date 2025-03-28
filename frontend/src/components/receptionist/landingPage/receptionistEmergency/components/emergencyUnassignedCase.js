@@ -2,7 +2,7 @@ import React from 'react';
 import './style/emergencyUnassignedCase.css';
 
 import OverviewNumber from '../../../../common/overviewNumber';
-import OverviewText from './overviewText';
+import OverviewText from '../../../../common/overviewText';
 
 function EmergencyUnassignedCase() {
     return (

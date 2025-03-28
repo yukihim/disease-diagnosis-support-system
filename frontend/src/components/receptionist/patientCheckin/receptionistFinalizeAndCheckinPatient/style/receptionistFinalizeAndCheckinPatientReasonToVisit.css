@@ -1,0 +1,27 @@
+.receptionistFinalizeAndCheckinPatientReasonToVisit {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.reasonInput {
+    border-radius: 10px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 1);
+}
+
+.reasonInput::placeholder {
+    /* This color applies only to the placeholder */
+    color: rgba(0, 0, 0, 0.3);
+}

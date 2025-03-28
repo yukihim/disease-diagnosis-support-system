@@ -2,27 +2,9 @@ import React from 'react';
 
 import TableContent from '../../../common/tableContent';
 
-const pastAppointmentTableHeader = [
-    { name: 'Name', width: '130px' },
-    { name: 'Time', width: '70px' },
-    { name: 'Status', width: '80px' },
-];
-
-const pastAppointmentTableDummyData = [
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Unchecked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Unchecked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-];
-
-function ReceptionistTodaysPastAppointmentContent() {
+function ReceptionistTodaysPastAppointmentContent({ pastAppointmentTableHeader, pastAppointmentTableData }) {
     const headers = pastAppointmentTableHeader;
-    const data = pastAppointmentTableDummyData;
+    const data = pastAppointmentTableData;
 
     return (
         <TableContent>

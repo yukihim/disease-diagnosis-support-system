@@ -1,7 +1,7 @@
 import React from 'react';
+
 import PageLayout from '../../components/common/pageLayout';
 
-// Import receptionist landingpage components
 import ReceptionistPatientIndentification from '../../components/receptionist/findPatient/receptionistPatientIndentification';
 import ReceptionistPatientFound from '../../components/receptionist/findPatient/receptionistPatientFound';
 
@@ -15,8 +15,11 @@ function ReceptionistFindPatient() {
     }
 
     return (
-        <PageLayout role="receptionist" useGrid={false}>
-            <ReceptionistPatientIndentification onChangeSSN={onChangeSSN} onChangeHealthInsuranceNumber={onChangeHealthInsuranceNumber} />
+        <PageLayout requiredRole="receptionist" useGrid={false}>
+            <ReceptionistPatientIndentification 
+                onChangeSSN={onChangeSSN}
+                onChangeHealthInsuranceNumber={onChangeHealthInsuranceNumber}
+            />
             <ReceptionistPatientFound />
         </PageLayout>
     );

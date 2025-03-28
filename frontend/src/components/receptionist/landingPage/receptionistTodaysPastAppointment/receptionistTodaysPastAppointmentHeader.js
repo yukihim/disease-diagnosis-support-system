@@ -2,14 +2,8 @@ import React from 'react';
 
 import TableHeader from '../../../common/tableHeader';
 
-const emergencyTableHeader = [
-    { name: 'Name', width: '130px' },
-    { name: 'Time', width: '70px' },
-    { name: 'Status', width: '80px' }
-];
-
-function ReceptionistTodaysPastAppointmentHeader() {
-    const headers = emergencyTableHeader;
+function ReceptionistTodaysPastAppointmentHeader({ pastAppointmentTableHeader }) {
+    const headers = pastAppointmentTableHeader;
     
     return (
         <TableHeader>
