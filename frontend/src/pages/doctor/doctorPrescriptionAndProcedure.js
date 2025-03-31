@@ -1,26 +1,37 @@
-// // File: src/components/doctorPrescriptionAndProcedure.js
-// import "./style/doctorFinalizingDiagnosis.css"; // Ensure the CSS file is correct or create a separate one if needed.
-// import Header from '../../components/common/header';
-// import DoctorPrescriptionAndProcedureContent from '../../components/doctor/doctorPrescriptionAndProcedureContent';
-// import React, { useEffect } from 'react';
-// import { useHistory } from 'react-router-dom';
+// import React from 'react';
+// import "./style/doctorPrescriptionAndProcedure.css";
+
+// import PageLayout from '../../components/common/pageLayout';
+
+// import DoctorPatientInformation from '../../components/doctor/diagnosingPatient/doctorPatientInformation';
+// import PatientPassSessions from '../../components/common/PatientPassSessions/patientPassSessions';
+// import DoctorPatientVitalSignsAndPhysicalMeasurements from '../../components/doctor/diagnosingPatient/doctorPatientVitalSignsAndPhysicalMeasurements';
+// import DoctorPatientParaclinicalTestResult from '../../components/doctor/diagnosingPatient/doctorPatientParaclinicalTestResult';
+// // import DoctorPatientDiagnosing from '../../components/doctor/diagnosingPatient/doctorPatientDiagnosing';
 
 // function DoctorPrescriptionAndProcedure() {
-//     const history = useHistory();
-
-//     useEffect(() => {
-//         const token = localStorage.getItem('token');
-//         if (!token) {
-//             history.push('/login');
-//         }
-//     }, [history]);
-
 //     return (
-//         <div className="doctorFinalizingDiagnosis">
-//             <Header />
-//             <DoctorPrescriptionAndProcedureContent />
-//         </div>
+//         <PageLayout requiredRole="doctor" useGrid={false}>
+//             {/* Patient Information Card */}
+//             <DoctorPatientInformation />
+
+//             {/* Patient's Pass Sessions Card */}
+//             <PatientPassSessions role="doctor" />
+
+//             {/* Patient's Vital Signs and Physical Measurements Card */}
+//             {/* Patient's Paraclinical Test Result Card */}
+//             <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", gap: "20px" }}>
+//                 <DoctorPatientVitalSignsAndPhysicalMeasurements />
+//                 <DoctorPatientParaclinicalTestResult />
+//             </div>
+
+//             {/* Patient's Symptoms */}
+//             {/* <DoctorPatientDiagnosing /> */}
+
+//             {/* Prescriptions & Procedure */}
+//         </PageLayout>
 //     );
 // }
 
 // export default DoctorPrescriptionAndProcedure;
+

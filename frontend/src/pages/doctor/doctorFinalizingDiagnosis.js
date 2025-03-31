@@ -1,24 +1,34 @@
-// // File: src/components/doctorFinalizingDiagnosis.js
-// import React, { useEffect } from 'react';
-// import { useHistory } from 'react-router-dom';
-// import "./style/doctorFinalizingDiagnosis.css";
+import React from 'react';
+import "./style/doctorFinalizingDiagnosis.css";
 
-// function DoctorFinalizingDiagnosis() {
-//     const history = useHistory();
+import PageLayout from '../../components/common/pageLayout';
 
-//     useEffect(() => {
-//         const token = localStorage.getItem('token');
-//         if (!token) {
-//             history.push('/login');
-//         }
-//     }, [history]);
+import DoctorPatientInformation from '../../components/doctor/diagnosingPatient/doctorPatientInformation';
+import PatientPassSessions from '../../components/common/PatientPassSessions/patientPassSessions';
+import DoctorPatientVitalSignsAndPhysicalMeasurements from '../../components/doctor/diagnosingPatient/doctorPatientVitalSignsAndPhysicalMeasurements';
+import DoctorPatientParaclinicalTestResult from '../../components/doctor/diagnosingPatient/doctorPatientParaclinicalTestResult';
+import DoctorFinalizingDiagnosisForPatient from '../../components/doctor/finalizingDiagnosis/doctorFinalizingDiagnosisForPatient';
 
-//     return (
-//         <div className="doctorFinalizingDiagnosis">
-//             <Header />
-//             <DoctorFinalizingDiagnosisContent />
-//         </div>
-//     );
-// }
+function DoctorFinalizingDiagnosis() {
+    return (
+        <PageLayout requiredRole="doctor" useGrid={false}>
+            {/* Patient Information Card */}
+            <DoctorPatientInformation />
 
-// export default DoctorFinalizingDiagnosis;
+            {/* Patient's Pass Sessions Card */}
+            <PatientPassSessions role="doctor" />
+
+            {/* Patient's Vital Signs and Physical Measurements Card */}
+            {/* Patient's Paraclinical Test Result Card */}
+            <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", gap: "20px" }}>
+                <DoctorPatientVitalSignsAndPhysicalMeasurements />
+                <DoctorPatientParaclinicalTestResult />
+            </div>
+
+            {/* Finalizing Diagnosis */}
+            <DoctorFinalizingDiagnosisForPatient />
+        </PageLayout>
+    );
+}
+
+export default DoctorFinalizingDiagnosis;

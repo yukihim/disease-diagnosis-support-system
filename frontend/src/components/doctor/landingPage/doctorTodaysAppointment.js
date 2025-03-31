@@ -44,7 +44,7 @@ function DoctorTodaysAppointment() {
         <BoxContainer>
             {/* Design emergency component here */}
             <BoxContainerTitle>
-                Patient Sent For Paraclinical Test
+                Today's Appointment
             </BoxContainerTitle>
 
             <BoxContainerContent>

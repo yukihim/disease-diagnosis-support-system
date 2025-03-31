@@ -1,20 +1,9 @@
 import React, { useState } from 'react';
 import './style/receptionistPatientInformationForm.css';
 
-import SpecificInformationItemWrapper from './components/specificInformationItemWrapper';
+import SpecificInformationItemWrapper from '../../../common/specificInformationItemWrapper';
 
-const initialPatientInformation = {
-    "Name": "Phuong Xuong Thinh",
-    "DOB": "01/01/2000",
-    "Gender": "Male",
-    "Phone Number": "0123456789",
-    "SSN": "123-45-6789",
-    "Health Insurance Code": "123456789",
-    "Job": "Student",
-    "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam",
-};
-
-function ReceptionistPatientInformationForm({ isEditing }) {
+function ReceptionistPatientInformationForm({ initialPatientInformation, isEditing }) {
     const [patientInfo, setPatientInfo] = useState({...initialPatientInformation});
     
     const handleChange = (field, value) => {

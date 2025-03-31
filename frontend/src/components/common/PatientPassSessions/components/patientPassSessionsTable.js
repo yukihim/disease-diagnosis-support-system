@@ -1,26 +1,10 @@
 import React from 'react';
 
-import TableContent from '../../../common/tableContent';
+import TableContent from '../../tableContent';
 
-const patientPassSessionsTableHeader = [
-    { name: 'Session Date', width: '200px' },
-    { name: 'Session Type', width: '200px' },
-    { name: 'Person In Charged', width: '200px' },
-    { name: 'Department', width: '200px' },
-    { name: 'Result', width: '200px' }
-];
-
-const patientPassSessionsTableDummyData = [
-    { sessionDate: '2024-12-01', sessionType: 'Consultation', pIC: 'Dr. Smith', department: 'City General Hospital', result: 'Medication Prescribed' },
-    { sessionDate: '2024-12-01', sessionType: 'Consultation', pIC: 'Dr. Smith', department: 'City General Hospital', result: 'Medication Prescribed' },
-    { sessionDate: '2024-12-01', sessionType: 'Consultation', pIC: 'Dr. Smith', department: 'City General Hospital', result: 'Medication Prescribed' },
-    { sessionDate: '2024-12-01', sessionType: 'Consultation', pIC: 'Dr. Smith', department: 'City General Hospital', result: 'Medication Prescribed' },
-    { sessionDate: '2024-12-01', sessionType: 'Consultation', pIC: 'Dr. Smith', department: 'City General Hospital', result: 'Medication Prescribed' },
-];
-
-function ReceptionistPatientPassSessionsTable({ onClickSession }) {
+function ReceptionistPatientPassSessionsTable({ patientPassSessionsTableHeader, patientPassSessionsTableData, onClickSession }) {
     const headers = patientPassSessionsTableHeader;
-    const data = patientPassSessionsTableDummyData;
+    const data = patientPassSessionsTableData;
 
     return (
         <TableContent>

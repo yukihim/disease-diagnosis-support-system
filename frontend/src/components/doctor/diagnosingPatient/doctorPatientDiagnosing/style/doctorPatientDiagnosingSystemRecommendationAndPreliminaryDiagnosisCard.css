@@ -1,0 +1,14 @@
+.doctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosisCard {
+    width: 100%;
+    height: 100%;
+
+    min-height: 214px;
+    max-height: 214px;
+
+    display: flex;
+    flex-direction: row;
+    
+    gap: 20px;
+
+    justify-content: space-between;
+}

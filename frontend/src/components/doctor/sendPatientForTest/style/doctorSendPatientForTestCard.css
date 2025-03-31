@@ -1,0 +1,28 @@
+.doctorSendPatientForTestCardBox {
+    width: 100%;
+    height: auto;
+    max-height: initial;
+    min-height: initial;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    position: sticky;
+    top: 0;
+}
+
+.doctorSendPatientForTestCard {
+    width: 100%;
+    height: 41px;
+
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.doctorSendPatientForTestCardContent {
+    width: 100%;
+    height: auto;
+
+    min-height: initial;
+}

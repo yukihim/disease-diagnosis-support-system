@@ -19,9 +19,9 @@ const incomingPatientTableHeader = [
 
 const incomingPatientTableDummyData = [
     { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Front Desk' },
-    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Paraclinic' },
-    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Paraclinic' },
-    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Front Desk' },
+    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'Paraclinic' },
+    { name: 'Phuong Xuong C', sex: 'Male', age: '22', from: 'Paraclinic' },
+    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'Front Desk' },
     { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Front Desk' },
 ];
 
@@ -33,11 +33,12 @@ function DoctorIncomingPatient() {
     function onClickIncomingPatient(patient) {
         // Navigate to the next page with patient information
         history.push({
-            pathname: '/receptionist/patient_checkin',
-            state: { 
-                patientSSN: patient.ssn,
-                patientHealthInsuranceCode: patient.healthInsuranceCode,
-                patientName: patient.patientName
+            pathname: '/doctor/diagnosis',
+            state: {
+                patientName: patient.name,
+                patientSex: patient.sex,
+                patientAge: patient.age,
+                patientFrom: patient.from
             }
         });
     }

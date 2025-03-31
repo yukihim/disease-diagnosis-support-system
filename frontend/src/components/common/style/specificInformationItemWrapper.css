@@ -5,9 +5,50 @@
     border-bottom: 1px solid #f0f0f0;
 }
 
+.specificInformationItemWrapper.vitalSignsAndPhysicalMeasurement {
+    width: 100%;
+
+    justify-content: space-between;
+
+    align-items: none;
+    border-bottom: 1px solid #8d8686;
+
+    .item {
+        min-width: 230px;
+    }
+
+    .itemValue {
+        width: auto;
+    }
+}
+
+.specificInformationItemWrapper.patientParaclinicalTestResult {
+    width: 100%;
+
+    justify-content: space-between;
+
+    align-items: none;
+    border-bottom: 1px solid #8d8686;
+
+    .item {
+        min-width: 230px;
+    }
+
+    .itemValue {
+        width: auto;
+    }
+}
+
+.itemAndDoubleDotWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
 .item {
     width: auto;
     min-width: 150px;
+    max-width: 150px;
     color: #4E4B66;
     font-weight: 600;
     font-size: 14px;

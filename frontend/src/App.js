@@ -14,19 +14,15 @@ import ReceptionistPatientCheckin from './pages/receptionist/receptionistPatient
 // import DoctorHomepage from './pages/doctor/doctorHomepage';
 import DoctorLandingPage from './pages/doctor/doctorLandingPage';
 import DoctorDiagnosingPatient from './pages/doctor/doctorDiagnosingPatient';
-import DoctorViewPassSession from './pages/doctor/doctorViewPassSession';
+import DoctorSendPatientForTest from './pages/doctor/doctorSendPatientForTest';
+// import DoctorViewPassSession from './pages/doctor/doctorViewPassSession';
 import DoctorFinalizingDiagnosis from './pages/doctor/doctorFinalizingDiagnosis';
-import DoctorPrescriptionAndProcedure from './pages/doctor/doctorPrescriptionAndProcedure';
+// import DoctorPrescriptionAndProcedure from './pages/doctor/doctorPrescriptionAndProcedure';
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
-          <Redirect to="/login" />
-        </Route>
-        
-
         <Route path="/login">
           <LoginForm />
         </Route>
@@ -52,14 +48,27 @@ function App() {
         <Route path="/doctor/diagnosis">
           <DoctorDiagnosingPatient />
         </Route>
-        <Route path="/doctor/view_pass_session">
-          <DoctorViewPassSession />
+        <Route path="/doctor/send_patient_for_test">
+          <DoctorSendPatientForTest />
         </Route>
+        {/* <Route path="/doctor/view_pass_session">
+          <DoctorViewPassSession />
+        </Route> */}
         <Route path="/doctor/finalizing_diagnosis">
           <DoctorFinalizingDiagnosis />
         </Route>
-        <Route path="/doctor/precription_and_procedure">
+        {/* <Route path="/doctor/precription_and_procedure">
           <DoctorPrescriptionAndProcedure />
+        </Route> */}
+
+
+
+
+
+
+
+        <Route path="*">
+          <Redirect to="/login" />
         </Route>
       </Switch>
     </Router>

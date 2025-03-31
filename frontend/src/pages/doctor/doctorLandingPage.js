@@ -12,10 +12,19 @@ import DoctorTodaysAppointment from '../../components/doctor/landingPage/doctorT
 function DoctorLandingPage() {
     return (
         <PageLayout requiredRole="doctor">
+            {/* Incoming Patient Card */}
             <DoctorIncomingPatient />
+
+            {/* Patient Sent for Paraclinical Test Card */}
             <DoctorPatientSentForParaclinicalTest />
+
+            {/* Calendar */}
             <Calendar />
+
+            {/* Inpatient Monitoring Card */}
             <DoctorInpatientMonitoring />
+
+            {/* Today's Appointment Card */}
             <DoctorTodaysAppointment />
         </PageLayout>
     );

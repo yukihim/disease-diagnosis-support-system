@@ -11,7 +11,7 @@ function ReceptionistFinalizeAndCheckinPatientReasonToVisit() {
             <HuggedText text="Reason to visit:" font_size="14px" font_weight="600" color="#000000" />
             <textarea
                 className="reasonInput"
-                placeholder="Reason to visit: I have a fever, dry cough, and difficulty breathing. "
+                placeholder="Reason to visit: I have a fever, dry cough, and difficulty breathing."
                 value={reason}
                 onChange={e => setReason(e.target.value)}
                 rows={4}

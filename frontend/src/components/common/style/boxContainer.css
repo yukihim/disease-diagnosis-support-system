@@ -18,6 +18,11 @@
     height: 100%;
 }
 
+.boxContainer.doctorFinalizingDiagnosisForPatientBox {
+    min-height: 400px;
+    height: 100%;
+}
+
 .boxContainer.bigBox {
     /* grid span 1*/
     grid-column: span 2;
