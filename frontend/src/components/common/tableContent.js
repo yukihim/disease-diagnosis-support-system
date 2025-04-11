@@ -1,9 +1,9 @@
 import React from 'react';
 import './style/tableContent.css';
 
-function TableContent({ children }) {
+function TableContent({ className='', children }) {
     return (
-        <div className="tableContentWrapper">
+        <div className={`tableContentWrapper ${className}`}>
             {children}
         </div>
     );

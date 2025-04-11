@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import './style/doctorFinalizingDiagnosisForPatient.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -10,10 +10,13 @@ import DoctorPatientDiagnosingReasonToVisit from '../diagnosingPatient/doctorPat
 import DoctorFinalizingDiagnosisForPatientSymptoms from './doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientSymptoms';
 import DoctorFinalizingDiagnosisForPatientDiagnosisRecommendation from './doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientDiagnosisRecommendation';
 import DoctorFinalizingDiagnosisForPatientFinalDiagnosis from './doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientFinalDiagnosis';
-import DoctorFinalizingDiagnosisForPatientEndDiagnosisSessionButtons from './doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientEndDiagnosisSessionButtons';
+import DoctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons from './doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons';
 
 function DoctorFinalizingDiagnosisForPatient() {
     const history = useHistory();
+    
+    const location = useLocation();
+    const patientData = location.state || {};
     
     const [patientReasonToVisit, setpatientReasonToVisit] = useState("");
     const [patientSymptoms, setPatientSymptoms] = useState("");
@@ -102,8 +105,10 @@ function DoctorFinalizingDiagnosisForPatient() {
 
     // Handler for "Send for Test" button
     const onClickFinalizeDiagnosis = () => {
-        alert("End Session For Patient");
-        history.push("/doctor/homepage");
+        history.push({
+            pathname: '/doctor/precription_and_procedure',
+            state: patientData,
+        });
     };
     
     return (
@@ -122,11 +127,11 @@ function DoctorFinalizingDiagnosisForPatient() {
                 {/* Diagnosis Recommendation */}
                 <DoctorFinalizingDiagnosisForPatientDiagnosisRecommendation patientDiagnosisRecommendation={patientDiagnosisRecommendation} />
 
-                {/* Final Diagnosis */}
+                {/* Finalizing Diagnosis */}
                 <DoctorFinalizingDiagnosisForPatientFinalDiagnosis doctorFinalizingDiagnosisForPatientFinalDiagnosis={finalDiagnosis} setDoctorFinalizingDiagnosisForPatientFinalDiagnosis={setFinalDiagnosis} />
                 
                 {/* End Diagnosis Session Button */}
-                <DoctorFinalizingDiagnosisForPatientEndDiagnosisSessionButtons onClickFinalizeDiagnosis={onClickFinalizeDiagnosis} />
+                <DoctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons onClickFinalizeDiagnosis={onClickFinalizeDiagnosis} />
             </BoxContainerContent>
         </BoxContainer>
     );

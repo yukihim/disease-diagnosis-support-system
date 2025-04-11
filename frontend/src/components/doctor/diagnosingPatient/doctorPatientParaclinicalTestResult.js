@@ -4,6 +4,7 @@ import './style/doctorPatientParaclinicalTestResult.css';
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
+
 import DropDownBox from '../../common/dropDownBox';
 
 import DoctorPatientParaclinicalTestResultCard from './doctorPatientParaclinicalTestResult/doctorPatientParaclinicalTestResultCard';
@@ -28,10 +29,10 @@ function DoctorPatientParaclinicalTestResult() {
                     testName: "Complete Blood Count",
                     dateTime: "2023-03-29 09:15 AM",
                     testFields: [
-                        { key: "White Blood Cell Count", label: "WBC", value: "7.5 x10^9/L", normalRange: "4.5-11.0 x10^9/L" },
+                        { key: "White Blood Cell Count", label: "WBC", value: "12.0 x10^9/L", normalRange: "4.5-11.0 x10^9/L" },
                         { key: "Red Blood Cell Count", label: "RBC", value: "4.9 x10^12/L", normalRange: "4.5-5.5 x10^12/L" },
                         { key: "Hemoglobin", label: "Hgb", value: "14.2 g/dL", normalRange: "13.5-17.5 g/dL" },
-                        { key: "Hematocrit", label: "Hct", value: "42%", normalRange: "41-50%" }
+                        { key: "Hematocrit", label: "Hct", value: "32%", normalRange: "41-50%" }
                     ]
                 },
                 {
@@ -41,17 +42,20 @@ function DoctorPatientParaclinicalTestResult() {
                         { key: "Total Bilirubin", label: "TBIL", value: "0.8 mg/dL", normalRange: "0.3-1.0 mg/dL" },
                         { key: "Alanine Aminotransferase", label: "ALT", value: "30 U/L", normalRange: "7-56 U/L" },
                         { key: "Aspartate Aminotransferase", label: "AST", value: "28 U/L", normalRange: "5-40 U/L" },
-                        { key: "Alkaline Phosphatase", label: "ALP", value: "70 U/L", normalRange: "44-147 U/L" }
+                        { key: "Alkaline Phosphatase", label: "ALP", value: "43 U/L", normalRange: "44-147 U/L" }
                     ]
                 }
             ];
-            
-            setTestResults(mockData);
-            // Reset selected test to first one when data refreshes
-            setSelectedTestIndex(0);
+
+            // Simulate network delay
+            setTimeout(() => {
+                setTestResults(mockData);
+                // Reset selected test to first one when data refreshes
+                setSelectedTestIndex(0);
+                setIsLoading(false);
+            }, 500);
         } catch (error) {
             console.error('Error fetching test results:', error);
-        } finally {
             setIsLoading(false);
         }
     };
@@ -59,12 +63,17 @@ function DoctorPatientParaclinicalTestResult() {
     useEffect(() => {
         fetchTestResults();
         
-        // Set up interval to fetch data every 5 seconds
-        const intervalId = setInterval(() => {
+        // Set up interval to fetch data every 5 seconds - only for doctor view
+        let intervalId;
+        intervalId = setInterval(() => {
             fetchTestResults();
+            console.log('fetchTestResults');
         }, 5000);
         
-        return () => clearInterval(intervalId);
+        // Clean up interval on component unmount
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
     }, []);
 
     // Generate options for dropdown

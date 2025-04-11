@@ -1,0 +1,20 @@
+.eventCell {
+    padding: 10px;
+
+    box-sizing: border-box;
+}
+
+.eventCell:hover {
+    background-color: #F2F2F2;
+
+    text-decoration: underline;
+    
+    cursor: pointer;
+
+    border-radius: 20px;
+
+    box-sizing: border-box;
+    box-shadow: 0 4px 4px 0 rgba(0, 128, 128, 0.6);
+
+    transform: translateY(-1px);
+}

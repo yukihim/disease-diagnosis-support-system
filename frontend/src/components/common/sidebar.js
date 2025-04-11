@@ -19,7 +19,8 @@ const tabData = {
     'receptionist': ['homepage', 'calendar'],
     'nurse': ['homepage', 'calendar'],
     'doctor': ['homepage', 'calendar'],
-    'paraclinical technician': ['homepage', 'calendar']
+    'paraclinical': ['homepage', 'calendar'],
+    'admin': ['homepage', 'calendar'],
 };
 
 function Sidebar({ userRole }) {

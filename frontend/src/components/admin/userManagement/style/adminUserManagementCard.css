@@ -1,0 +1,87 @@
+.adminUserManagementCardBox {
+    width: 100%;
+    height: auto;
+    max-height: initial;
+    min-height: initial;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    grid-column: span 1;
+    grid-row: span 2;
+}
+
+.adminUserManagementCardTitle {
+    width: 100%;
+    height: 41px;
+
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.adminUserManagementCardContent {
+    width: 100%;
+    height: auto;
+
+    /* Enhanced text wrapping */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all; /* This will force breaks within words */
+    hyphens: auto;
+    white-space: pre-wrap; /* Preserves spaces but allows wrapping */
+    
+    /* Ensure content doesn't overflow */
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Button styling */
+.adminUserManagementCardContent button {
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Normal button style */
+.btn-change {
+    background-color: #008080;
+    color: white;
+}
+
+.btn-change:hover {
+    text-decoration: underline;
+    background-color: rgba(0, 128, 128, 0.8);
+    transform: translateY(-1px);
+}
+
+/* Delete button style - different color to indicate destructive action */
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    text-decoration: underline;
+    background-color: #c0392b;
+    transform: translateY(-1px);
+}

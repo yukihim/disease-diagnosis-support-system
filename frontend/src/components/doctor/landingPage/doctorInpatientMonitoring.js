@@ -28,7 +28,7 @@ const inpatientMonitoringTableDummyData = [
     { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', room: 'Room C4-305', admissionDate: '16/12/2024', condition: 'Heart Surgery', status: 'Normal' },
 ];
 
-function DoctorInpatientMonitoring() {
+function DoctorInpatientMonitoring({ userRole }) {
     const history = useHistory();
 
     const inpatientMonitoringCount = 12;
@@ -36,11 +36,10 @@ function DoctorInpatientMonitoring() {
     function onClickInpatientMonitoring(patient) {
         // Navigate to the next page with patient information
         history.push({
-            pathname: '/receptionist/patient_checkin',
+            pathname: '/doctor/inpatient_monitoring',
             state: { 
-                patientSSN: patient.name,
-                patientHealthInsuranceCode: patient.healthInsuranceCode,
-                patientName: patient.patientName
+                patientName: patient.name,
+                userRole: userRole,
             }
         });
     }

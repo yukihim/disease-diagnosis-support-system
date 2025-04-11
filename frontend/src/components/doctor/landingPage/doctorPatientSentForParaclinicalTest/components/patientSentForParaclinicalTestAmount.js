@@ -12,7 +12,7 @@ function PatientSentForParaclinicalTestAmount({ patientSentForParaclinicalTestCo
             <OverviewNumber>
                 {patientSentForParaclinicalTestCount}
             </OverviewNumber>
-            <OverviewTextBig>
+            <OverviewTextBig className="noWidthLimit">
                 {textContent}
             </OverviewTextBig>
         </div>

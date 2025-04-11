@@ -20,10 +20,10 @@ function ReceptionistPatientPassSessionsTable({ patientPassSessionsTableHeader, 
                         <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[2].width }}>
                             {row.pIC}
                         </div>
-                        <div className="tableContentCell" style={{ width: headers[1].width, minWidth: headers[1].width }}>
+                        <div className="tableContentCell" style={{ width: headers[1].width, minWidth: headers[3].width }}>
                             {row.department}
                         </div>
-                        <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[2].width }}>
+                        <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[4].width }}>
                             {row.result}
                         </div>
                     </div>

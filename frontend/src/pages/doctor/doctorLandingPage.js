@@ -13,19 +13,19 @@ function DoctorLandingPage() {
     return (
         <PageLayout requiredRole="doctor">
             {/* Incoming Patient Card */}
-            <DoctorIncomingPatient />
+            <DoctorIncomingPatient role="doctor" />
 
-            {/* Patient Sent for Paraclinical Test Card */}
-            <DoctorPatientSentForParaclinicalTest />
+            {/* Today's Appointment Card */}
+            <DoctorTodaysAppointment />
 
             {/* Calendar */}
             <Calendar />
 
-            {/* Inpatient Monitoring Card */}
-            <DoctorInpatientMonitoring />
+            {/* Patient Sent for Paraclinical Test Card */}
+            <DoctorPatientSentForParaclinicalTest />
 
-            {/* Today's Appointment Card */}
-            <DoctorTodaysAppointment />
+            {/* Inpatient Monitoring Card */}
+            <DoctorInpatientMonitoring userRole="doctor" />
         </PageLayout>
     );
 }

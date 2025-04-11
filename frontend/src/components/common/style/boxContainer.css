@@ -28,3 +28,10 @@
     grid-column: span 2;
     width: 100%;
 }
+
+.boxContainer.bigBoxForParaclinic {
+    /* grid span 1*/
+    grid-column: span 3;
+    grid-row: span 2;
+    width: 100%;
+}

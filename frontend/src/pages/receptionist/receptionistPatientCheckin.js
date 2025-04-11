@@ -3,7 +3,7 @@ import PageLayout from '../../components/common/pageLayout';
 
 // Import receptionist patient check in components
 import ReceptionistPatientInformation from '../../components/receptionist/patientCheckin/receptionistPatientInformation';
-import PatientPassSessions from '../../components/common/PatientPassSessions/patientPassSessions';
+import PatientPassSessions from '../../components/common/patientPassSessions/patientPassSessions';
 import ReceptionistFinalizeAndCheckinPatient from '../../components/receptionist/patientCheckin/receptionistFinalizeAndCheckinPatient';
 
 function ReceptionistPatientCheckin() {

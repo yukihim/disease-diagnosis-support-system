@@ -1,7 +1,7 @@
 import React from 'react';
 import './style/specificInformationItemWrapper.css';
 
-function SpecificInformationItemWrapper({ className, item, itemValue, isEditing, onChange }) {
+function SpecificInformationItemWrapper({ className, item, itemValue, normalRange, isEditing, onChange }) {
     return (
         <div className={`specificInformationItemWrapper ${className}`}>
             <div className="itemAndDoubleDotWrapper">
@@ -20,6 +20,11 @@ function SpecificInformationItemWrapper({ className, item, itemValue, isEditing,
                     itemValue
                 )}
             </div>
+            {
+                normalRange ? (
+                    <div className='doubleDot'>{normalRange}</div>
+                ) : null
+            }
         </div>
     );
 }

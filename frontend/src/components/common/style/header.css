@@ -13,11 +13,6 @@
         
         margin: 11px 34px;
 
-        .headerLogo {
-            width: 50px;
-            height: 50px;
-        }
-
         .rightMostBox {
             width: 291px;
             height: auto;
@@ -61,6 +56,8 @@
                 background-color: rgba(217,219,233,1);
     
                 cursor: pointer;
+
+                transition: all 0.2s ease;
             }
     
             .signOutButton:hover {
@@ -71,7 +68,20 @@
 
                 /* Add a bit of transparency */
                 background-color: rgba(217,219,233,0.6);
+
+                transform: translateY(-1px);
             }
         }
     }
+}
+
+.headerLogo {
+    width: 50px;
+    height: 50px;
+
+    transition: all 0.2s ease;
+}
+
+.headerLogo:hover {
+    transform: translateY(-1px);
 }

@@ -5,35 +5,45 @@ import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 
-import DoctorIncomingPatientOverview from './doctorIncomingPatient/doctorIncomingPatientOverview';
-import DoctorIncomingPatientPagination from './doctorIncomingPatient/doctorIncomingPatientPagination';
-import DoctorIncomingPatientTableHeader from './doctorIncomingPatient/doctorIncomingPatientTableHeader';
-import DoctorIncomingPatientTableContent from './doctorIncomingPatient/doctorIncomingPatientTableContent';
+import IncomingPatientOverview from '../../common/incomingPatient/incomingPatientOverview';
+import IncomingPatientPagination from '../../common/incomingPatient/incomingPatientPagination';
+import IncomingPatientTableHeader from '../../common/incomingPatient/incomingPatientTableHeader';
+import IncomingPatientTableContent from '../../common/incomingPatient/incomingPatientTableContent';
 
 const incomingPatientTableHeader = [
-    { name: 'Name', width: '130px' },
+    { name: 'Name', width: '150px' },
     { name: 'Sex', width: '50px' },
     { name: 'Age', width: '30px' },
-    { name: 'From', width: '100px' }
+    { name: 'From', width: '100px' },
+    { name: 'State', width: '150px' },
+    { name: 'Note', width: '150px' }
 ];
 
 const incomingPatientTableDummyData = [
-    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Front Desk' },
-    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'Paraclinic' },
-    { name: 'Phuong Xuong C', sex: 'Male', age: '22', from: 'Paraclinic' },
-    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'Front Desk' },
-    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Front Desk' },
+    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Paraclinic', state: 'Back from test', note: 'Patient needs urgent care' },
+    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'Paraclinic', state: 'Back from test', note: 'No note' },
+    { name: 'Phuong Xuong C', sex: 'Male', age: '22', from: 'Front Desk', state: 'Sending for test', note: 'Testing blood' },
+    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'Front Desk', state: 'Nurse measured', note: 'No note' },
+    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'Front Desk', state: 'New patient', note: 'No note' },
 ];
 
-function DoctorIncomingPatient() {
+function DoctorIncomingPatient({ role }) {
     const history = useHistory();
 
     const incomingPatientCount = 12;
 
     function onClickIncomingPatient(patient) {
+        let pathnameUrl='';
+
+        if (role === 'doctor') {
+            pathnameUrl = '/doctor/diagnosis';
+        } else if (role === 'nurse') {
+            pathnameUrl = '/nurse/add_patient_measurements';
+        }
+
         // Navigate to the next page with patient information
         history.push({
-            pathname: '/doctor/diagnosis',
+            pathname: pathnameUrl,
             state: {
                 patientName: patient.name,
                 patientSex: patient.sex,
@@ -44,7 +54,7 @@ function DoctorIncomingPatient() {
     }
 
     return (
-        <BoxContainer>
+        <BoxContainer className='bigBox'>
             {/* Design emergency component here */}
             <BoxContainerTitle>
                 Incoming Patient
@@ -52,16 +62,16 @@ function DoctorIncomingPatient() {
 
             <BoxContainerContent>
                 {/* Overview */}
-                <DoctorIncomingPatientOverview incomingPatientCount={incomingPatientCount} />
+                <IncomingPatientOverview incomingPatientCount={incomingPatientCount} />
 
                 {/* Pagination */}
-                <DoctorIncomingPatientPagination />
+                <IncomingPatientPagination />
 
                 {/* Table header */}
-                <DoctorIncomingPatientTableHeader incomingPatientTableHeader={incomingPatientTableHeader} />
+                <IncomingPatientTableHeader incomingPatientTableHeader={incomingPatientTableHeader} />
 
                 {/* Table content */}
-                <DoctorIncomingPatientTableContent incomingPatientTableHeader={incomingPatientTableHeader} incomingPatientTableData={incomingPatientTableDummyData} onClickIncomingPatient={onClickIncomingPatient} />
+                <IncomingPatientTableContent incomingPatientTableHeader={incomingPatientTableHeader} incomingPatientTableData={incomingPatientTableDummyData} onClickIncomingPatient={onClickIncomingPatient} />
             </BoxContainerContent>
         </BoxContainer>
     );

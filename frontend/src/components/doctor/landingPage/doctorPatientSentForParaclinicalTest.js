@@ -11,16 +11,17 @@ import DoctorPatientSentForParaclinicalTestTableHeader from './doctorPatientSent
 import DoctorPatientSentForParaclinicalTestTableContent from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestTableContent';
 
 const patientSentForParaclinicalTestTableHeader = [
-    { name: 'Name', width: '130px' },
-    { name: 'Test', width: '150px' }
+    { name: 'Name', width: '150px' },
+    { name: 'Test', width: '100px' },
+    { name: 'State', width: '150px' }
 ];
 
 const patientSentForParaclinicalTestTableDummyData = [
-    { name: 'Phuong Xuong Thinh', test: 'Blood Test' },
-    { name: 'Phuong Xuong Thinh', test: 'Blood Test' },
-    { name: 'Phuong Xuong Thinh', test: 'Blood Test' },
-    { name: 'Phuong Xuong Thinh', test: 'Blood Test' },
-    { name: 'Phuong Xuong Thinh', test: 'Blood Test' },
+    { name: 'Phuong Xuong Thinh', test: 'Blood Test', state: 'Waiting for result' },
+    { name: 'Phuong Xuong Thinh', test: 'Blood Test', state: 'On-going' },
+    { name: 'Phuong Xuong Thinh', test: 'Blood Test', state: 'On-going' },
+    { name: 'Phuong Xuong Thinh', test: 'Blood Test', state: 'Waiting for test' },
+    { name: 'Phuong Xuong Thinh', test: 'Blood Test', state: 'Waiting for test' },
 ];
 
 function DoctorPatientSentForParaclinicalTest() {
@@ -30,17 +31,17 @@ function DoctorPatientSentForParaclinicalTest() {
 
     function onClickPatientSentForParaclinicalTest(patient) {
         // Navigate to the next page with patient information
-        history.push({
-            pathname: '/receptionist/patient_checkin',
-            state: { 
-                patientSSN: patient.name,
-                patientHealthInsuranceCode: patient.test
-            }
-        });
+        // history.push({
+        //     pathname: '/receptionist/patient_checkin',
+        //     state: { 
+        //         patientSSN: patient.name,
+        //         patientHealthInsuranceCode: patient.test
+        //     }
+        // });
     }
 
     return (
-        <BoxContainer>
+        <BoxContainer className='bigBox'>
             {/* Design emergency component here */}
             <BoxContainerTitle>
                 Patient Sent For Paraclinical Test

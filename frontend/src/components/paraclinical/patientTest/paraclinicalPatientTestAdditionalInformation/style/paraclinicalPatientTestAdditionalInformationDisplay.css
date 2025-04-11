@@ -1,0 +1,16 @@
+.paraclinicalPatientTestAdditionalInformationDisplay {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-between; */
+
+    gap: 10px;
+
+    grid-column: span 1;
+}
+
+.paraclinicalPatientTestAdditionalInformationDisplay.spanFull {
+    grid-column: span 3;
+}

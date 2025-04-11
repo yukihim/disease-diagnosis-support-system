@@ -13,3 +13,7 @@
     max-width: 232px;
     max-height: 21px;
 }
+
+.overviewTextBig.noWidthLimit {
+    max-width: initial;
+}

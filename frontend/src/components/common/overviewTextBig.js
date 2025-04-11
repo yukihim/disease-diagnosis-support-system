@@ -1,9 +1,9 @@
 import React from 'react';
 import './style/overviewTextBig.css';
 
-function OverviewTextBig({ children }) {
+function OverviewTextBig({ children, className }) {
     return (
-        <div className="overviewTextBig">
+        <div className={`overviewTextBig ${className}`}>
             {children}
         </div>
     );

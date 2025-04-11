@@ -1,0 +1,90 @@
+.cardBox {
+    width: 100%;
+    height: auto;
+    max-height: initial;
+    min-height: initial;
+    min-width: 242px;
+
+    /* Grid item properties */
+    grid-column: span 1;  /* Take up exactly 1 column */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    gap: 20px;
+
+    /* Add some constraints */
+    overflow: hidden;     /* Prevent content from breaking layout */
+}
+
+/* .cardBox.bloodSugar {
+    background-color: #F8DEBD;
+}
+
+.cardBox.heartRate {
+    background-color: #FBF0F3;
+}
+
+.cardBox.bloodPressure {
+    background-color: #D0FBFF;
+}
+
+.cardBox.bodyTemperature {
+    background-color: #F8BDBD;
+}
+
+.cardBox.respiratoryRate {
+    background-color: #F7C2FF;
+} */
+
+.cardTitle {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    gap: 20px;
+    justify-content: left;
+
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.cardContent {
+    width: 100%;
+    height: auto;
+
+    min-height: initial;
+    min-width: 100px;
+}
+
+.measurementStats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: auto;
+}
+
+.measurementValue {
+    min-width: 153px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.measurementStatus {
+    width: 100px;
+    height: 30px;
+    background-color: #F2F2F2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+}

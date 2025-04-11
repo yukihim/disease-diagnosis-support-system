@@ -48,9 +48,30 @@ function PageLayout({ children, requiredRole = null, useGrid = true, className =
       setUserRole(role);
 
       // Enforce required role (if provided)
-      if (requiredRole && role.toLowerCase() !== requiredRole.toLowerCase()) {
-        console.warn(`Access denied: Required role ${requiredRole}, but user has role ${role}`);
-        history.push(`/${role.toLowerCase()}/homepage`);
+      // if (requiredRole && role.toLowerCase() !== requiredRole.toLowerCase()) {
+      //   console.warn(`Access denied: Required role ${requiredRole}, but user has role ${role}`);
+      //   history.push(`/${role.toLowerCase()}/homepage`);
+      // }
+      if (requiredRole) {
+        // Check if requiredRole is an array
+        if (Array.isArray(requiredRole)) {
+          // Check if user's role is in the allowed roles array
+          const userRoleLower = role.toLowerCase();
+          const isAllowed = requiredRole.some(
+            allowedRole => allowedRole.toLowerCase() === userRoleLower
+          );
+          
+          if (!isAllowed) {
+            console.warn(`Access denied: Required roles [${requiredRole.join(', ')}], but user has role ${role}`);
+            history.push(`/${role.toLowerCase()}/homepage`);
+          }
+        } else {
+          // Original single role check
+          if (role.toLowerCase() !== requiredRole.toLowerCase()) {
+            console.warn(`Access denied: Required role ${requiredRole}, but user has role ${role}`);
+            history.push(`/${role.toLowerCase()}/homepage`);
+          }
+        }
       }
     } catch (error) {
       console.error('Error processing authentication:', error);
@@ -76,15 +97,16 @@ function PageLayout({ children, requiredRole = null, useGrid = true, className =
           </ButtonText>
         </Button>
       );
-    } else if (role === 'nurse') {
-      return (
-        <Button>
-          <ButtonText>
-            Patient vitals
-          </ButtonText>
-        </Button>
-      );
     }
+    // else if (role === 'nurse') {
+    //   return (
+    //     <Button>
+    //       <ButtonText>
+    //         Patient vitals
+    //       </ButtonText>
+    //     </Button>
+    //   );
+    // }
     
     // For any other role, return null or a default button
     return null;

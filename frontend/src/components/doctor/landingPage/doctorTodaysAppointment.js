@@ -11,7 +11,7 @@ import DoctorTodaysAppointmentTableHeader from './doctorTodaysAppointment/doctor
 import DoctorTodaysAppointmentTableContent from './doctorTodaysAppointment/doctorTodaysAppointmentTableContent';
 
 const todaysAppointmentTableHeader = [
-    { name: 'Name', width: '130px' },
+    { name: 'Name', width: '150px' },
     { name: 'Time', width: '70px' },
     { name: 'Condition', width: '80px' },
 ];

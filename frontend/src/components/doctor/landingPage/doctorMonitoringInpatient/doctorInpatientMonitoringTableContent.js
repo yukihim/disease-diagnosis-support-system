@@ -1,9 +1,8 @@
 import React from 'react';
-import './style/doctorInpatientMonitoringTableContent.css';
 
 import TableContent from '../../../common/tableContent';
 
-function DoctorInpatientMonitoringTableContent({ inpatientMonitoringTableHeader, inpatientMonitoringTableData, onClickPatientSentForParaclinicalTest }) {
+function DoctorInpatientMonitoringTableContent({ inpatientMonitoringTableHeader, inpatientMonitoringTableData, onClickInpatientMonitoring }) {
     const headers = inpatientMonitoringTableHeader;
     const data = inpatientMonitoringTableData;
 
@@ -11,7 +10,7 @@ function DoctorInpatientMonitoringTableContent({ inpatientMonitoringTableHeader,
         <TableContent>
             {data.length > 0 ? (
                 data.map((row, index) => (
-                    <div key={index} className="tableContent doctorInpatientMonitoringTableContent" onClick={() => onClickPatientSentForParaclinicalTest(row)}>
+                    <div key={index} className="tableContent" onClick={() => onClickInpatientMonitoring(row)}>
                         <div className="tableContentCell" style={{ width: headers[0].width, minWidth: headers[0].width }}>
                             {row.name}
                         </div>

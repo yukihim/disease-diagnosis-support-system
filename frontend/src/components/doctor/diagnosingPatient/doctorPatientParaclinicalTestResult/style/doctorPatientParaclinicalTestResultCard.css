@@ -8,3 +8,48 @@
 
     gap: 10px;
 }
+
+/* Value status styling */
+.patientParaclinicalTestResult.below .itemValue {
+    color: #f0ad4e; /* Yellow */
+}
+
+.patientParaclinicalTestResult.above .itemValue {
+    color: #d9534f; /* Orange/Red */
+}
+
+/* Legend styling */
+.resultLegend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.colorIndicator {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+}
+
+.colorIndicator.normal {
+    background-color: #333; /* Default text color */
+}
+
+.colorIndicator.below {
+    background-color: #f0ad4e; /* Yellow */
+}
+
+.colorIndicator.above {
+    background-color: #d9534f; /* Orange/Red */
+}

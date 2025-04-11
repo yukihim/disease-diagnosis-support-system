@@ -24,3 +24,92 @@
     /* max-height: 441px; */
     min-height: initial;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Add these styles to your existing CSS file */
+.nurse-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.edit-button, .save-button, .cancel-button {
+    padding: 5px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+.edit-button {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.save-button {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #45a049;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+    border: 1px solid #da190b;
+}
+
+.edit-button:hover, .save-button:hover, .cancel-button:hover {
+    opacity: 0.9;
+}
+
+.edit-button:disabled, .save-button:disabled, .cancel-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.editable-vitals-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+}
+
+.vital-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.vital-input-group label {
+    font-weight: 500;
+    color: #333;
+}
+
+.vital-input-group input {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.vital-input-group input:focus {
+    outline: none;
+    border-color: #4285f4;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}

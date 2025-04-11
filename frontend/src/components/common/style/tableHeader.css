@@ -12,6 +12,9 @@
 }
 
 .tableHeaderCell {
+    padding-left: 10px;
+    box-sizing: border-box;
+    
     height: 50px;
     display: flex;
     align-items: center;
@@ -20,4 +23,9 @@
     font-size: 13px;
     font-weight: 600;
     color: #4E4B66;
+}
+
+.tableHeader.tableHeaderGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 }

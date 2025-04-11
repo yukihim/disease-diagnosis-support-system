@@ -18,6 +18,9 @@ function DoctorPatientSentForParaclinicalTestTableContent({ patientSentForParacl
                         <div className="tableContentCell" style={{ width: headers[1].width, minWidth: headers[1].width }}>
                             {row.test}
                         </div>
+                        <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[2].width }}>
+                            {row.state}
+                        </div>
                     </div>
                 ))
             ) : (

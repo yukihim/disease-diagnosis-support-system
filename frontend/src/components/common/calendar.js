@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import './style/calendar.css';
 
+import Button from './button';
+import ButtonText from './buttonText';
+
 import PrevButton from './prevButton';
 import NextButton from './nextButton';
 
-function Calendar() {
+function Calendar({ onDateSelect }) {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(currentDate);
 
     useEffect(() => {
-        setSelectedDate(new Date());
-    }, []);
+        const today = new Date();
+        // setSelectedDate(today);
+        
+        // Call the parent component's handler with the initial date
+        if (onDateSelect) {
+            onDateSelect(today);
+        }
+    }); // Empty dependency array means this runs once on mount
 
     const getMonthName = (date) => {
         return date.toLocaleString('default', { month: 'long' });
@@ -38,6 +47,10 @@ function Calendar() {
 
     const handleDateClick = (date) => {
         setSelectedDate(date);
+        // Call the parent component's handler with the selected date
+        if (onDateSelect) {
+            onDateSelect(date);
+        }
     };
 
     const renderCalendarDates = () => {
@@ -88,15 +101,31 @@ function Calendar() {
         return dates;
     };
 
+    // Add this function with your other handlers
+    const handleTodayClick = () => {
+        const today = new Date();
+        setCurrentDate(new Date(today));
+        setSelectedDate(today);
+        if (onDateSelect) {
+            onDateSelect(today);
+        }
+    };
+
     return (
         <div className="calendar-container">
             <header className="calendar-header">
-                <div className="calendar-navigation">
-                    <PrevButton onClick={handlePrevMonth} />
-                </div>
-                <p className="calendar-current-date">{`${getMonthName(currentDate)} ${getYear(currentDate)}`}</p>
-                <div className="calendar-navigation">
-                    <NextButton onClick={handleNextMonth} />
+                <Button onClick={handleTodayClick}>
+                    <ButtonText>Today</ButtonText>
+                </Button>
+
+                <div className="calendar-header-title">
+                    <div className="calendar-navigation">
+                        <PrevButton onClick={handlePrevMonth} />
+                    </div>
+                    <p className="calendar-current-date">{`${getMonthName(currentDate)} ${getYear(currentDate)}`}</p>
+                    <div className="calendar-navigation">
+                        <NextButton onClick={handleNextMonth} />
+                    </div>
                 </div>
             </header>
 

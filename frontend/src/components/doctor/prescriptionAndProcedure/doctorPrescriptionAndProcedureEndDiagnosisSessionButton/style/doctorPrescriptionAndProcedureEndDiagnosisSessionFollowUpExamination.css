@@ -1,0 +1,103 @@
+/* .doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: row;
+
+    gap: 10px;
+}
+
+.inputDate {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+
+    width: 100%;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.date-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.inputDate {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    box-sizing: border-box;
+}
+
+.inputDate:focus {
+    outline: none;
+    border-color: #3f51b5;
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+}
+
+.inputDate:hover {
+    border-color: #999;
+}
+
+.inputDate:not(:placeholder-shown) + .date-label,
+.inputDate:focus + .date-label {
+    display: none;
+}
+
+.date-label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #757575;
+    pointer-events: none;
+}
+
+/* Custom styling for the date input */
+.inputDate::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    padding: 4px;
+    background-color: transparent;
+}
+
+/* For better appearance on Firefox */
+.inputDate::-moz-calendar-picker-indicator {
+    cursor: pointer;
+}
+
+/* Label appears only when the date input is empty */
+.inputDate:not([value=""]) + .date-label {
+    display: none;
+}

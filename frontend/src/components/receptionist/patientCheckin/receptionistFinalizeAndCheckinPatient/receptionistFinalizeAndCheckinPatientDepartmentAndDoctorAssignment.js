@@ -1,10 +1,11 @@
 import React from 'react';
 import './style/receptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment.css';
 
-import ChooseBox from './components/chooseBox';
+import ChooseBox from '../../../common/chooseBox';
 
 function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment() {
-    const [selectedValue, setSelectedValue] = React.useState("");
+    const [selectedDepartment, setSelectedDepartment] = React.useState("");
+    const [selectedDoctor, setSelectedDoctor] = React.useState("");
     
     return (
         <div className="receptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment">
@@ -16,8 +17,8 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment() {
                     { label: 'Lão - Nội', value: 'dept2' },
                     { label: 'Cấp cứu hồi sức', value: 'dept3' },
                 ]}
-                selectedValue={selectedValue}
-                setSelectedValue={setSelectedValue}
+                selectedValue={selectedDepartment}
+                setSelectedValue={setSelectedDepartment}
             />
 
             {/* Doctor */}
@@ -28,8 +29,8 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment() {
                     { label: 'Dr. B', value: 'doc2' },
                     { label: 'Dr. C', value: 'doc3' },
                 ]}
-                selectedValue={selectedValue}
-                setSelectedValue={setSelectedValue}
+                selectedValue={selectedDoctor}
+                setSelectedValue={setSelectedDoctor}
             />
         </div>
     );

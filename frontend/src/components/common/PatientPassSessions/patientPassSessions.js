@@ -25,12 +25,8 @@ const patientPassSessionsTableDummyData = [
     { sessionDate: '2024-12-01', sessionType: 'Consultation', pIC: 'Dr. Smith', department: 'City General Hospital', result: 'Medication Prescribed' },
 ];
 
-function PatientPassSessions({ role }) {
-    const onClickSession = (session) => {
-        console.log(session);
-    };
-
-    console.log(role);
+function PatientPassSessions({ role, onClickSession }) {
+    console.log(role)
 
     return (
         <BoxContainer className='patientPassSessionsBox'>

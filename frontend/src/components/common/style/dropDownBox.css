@@ -6,6 +6,8 @@
     background-color: #fff;
     outline: none;
     transition: border-color 0.3s ease;
+
+    width: 100%;
 }
 
 .dropDownBox:focus {

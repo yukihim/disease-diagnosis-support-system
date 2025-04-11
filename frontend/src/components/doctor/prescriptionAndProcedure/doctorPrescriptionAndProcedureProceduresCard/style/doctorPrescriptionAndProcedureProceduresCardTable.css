@@ -1,0 +1,60 @@
+.prescriptionRow {
+    width: 100%;
+    align-items: center;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Override the hover effect for this specific component */
+.prescriptionRow:hover {
+    /* Define your desired hover effect, or remove it altogether */
+    text-decoration: none;
+    cursor: default;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.prescriptionInput {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.prescriptionInput:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.removeCell {
+    width: 30px;
+    min-width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.removeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+}
+
+.removeButton:hover {
+    background-color: #ff5252;
+}
