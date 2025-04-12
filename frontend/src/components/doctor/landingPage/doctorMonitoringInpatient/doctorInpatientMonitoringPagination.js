@@ -5,14 +5,18 @@ import PrevButton from '../../../common/prevButton';
 import NextButton from '../../../common/nextButton';
 import PaginationText from '../../../common/paginationText';
 
-function DoctorInpatientMonitoringPagination() {
+function DoctorInpatientMonitoringPagination({ currentPage, totalPages, onPageChange }) {
     return (
         <ComponentPagination>
-            <PrevButton />
+            <PrevButton 
+                onClick={() => onPageChange(currentPage - 1)}
+            />
             <PaginationText>
-                01/01
+                {String(currentPage).padStart(2, '0')}/{String(totalPages || 1).padStart(2, '0')}
             </PaginationText>
-            <NextButton />
+            <NextButton 
+                onClick={() => onPageChange(currentPage + 1)}
+            />
         </ComponentPagination>
     );
 }

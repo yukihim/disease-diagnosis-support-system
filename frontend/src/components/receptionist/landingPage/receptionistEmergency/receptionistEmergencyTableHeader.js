@@ -2,13 +2,7 @@ import React from 'react';
 
 import TableHeader from '../../../common/tableHeader';
 
-const emergencyTableHeader = [
-    { name: 'Case', width: '130px' },
-    { name: 'Time', width: '70px' },
-    { name: 'Dept', width: '80px' }
-];
-
-function ReceptionistEmergencyTableHeader() {
+function ReceptionistEmergencyTableHeader({ emergencyTableHeader }) {
     const headers = emergencyTableHeader;
     
     return (

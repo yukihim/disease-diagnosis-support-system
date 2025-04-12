@@ -2,23 +2,9 @@ import React from 'react';
 
 import TableContent from '../../../common/tableContent';
 
-const appointmentTableHeader = [
-    { name: 'Name', width: '150px' },
-    { name: 'Time', width: '70px' },
-    { name: 'Dept', width: '80px' }
-];
-
-const appointmentTableDummyData = [
-    { name: 'Lê Văn A', time: '10:00 AM', dept: 'Lão - Nội' },
-    { name: 'Nguyễn Thị Văn A', time: '10:00 AM', dept: 'Lão - Nội' },
-    { name: 'Lê Văn B', time: '10:00 AM', dept: 'Lão - Nội' },
-    { name: 'Nguyễn Thị Văn B', time: '10:00 AM', dept: 'Lão - Nội' },
-    { name: 'Lê Văn C', time: '10:00 AM', dept: 'Lão - Nội' },
-];
-
-function ReceptionistAppointmentTableContent() {
+function ReceptionistAppointmentTableContent({ appointmentTableHeader, appointmentTableData }) {
     const headers = appointmentTableHeader;
-    const data = appointmentTableDummyData;
+    const data = appointmentTableData;
 
     return (
         <TableContent>

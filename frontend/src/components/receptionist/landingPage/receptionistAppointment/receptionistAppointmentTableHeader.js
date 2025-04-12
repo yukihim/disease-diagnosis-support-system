@@ -2,13 +2,7 @@ import React from 'react';
 
 import TableHeader from '../../../common/tableHeader';
 
-const appointmentTableHeader = [
-    { name: 'Name', width: '150px' },
-    { name: 'Time', width: '70px' },
-    { name: 'Dept', width: '80px' }
-];
-
-function ReceptionistAppointmentTableHeader() {
+function ReceptionistAppointmentTableHeader({ appointmentTableHeader }) {
     const headers = appointmentTableHeader;
 
     return (

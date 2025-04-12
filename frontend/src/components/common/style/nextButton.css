@@ -6,6 +6,15 @@
 
     width: auto;
     height: auto;
+
+    transition: all 0.2s ease;
+}
+
+.nextButtonWrapper:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 100px;
+
+    transform: translateY(-2px);
 }
 
 .nextButtonIcon {

@@ -29,8 +29,8 @@ const doctorsTableDummyData = [
 ];
 
 
-function ReceptionistAvailableDoctorContent() {
-    const data = doctorsTableDummyData;
+function ReceptionistAvailableDoctorContent({ doctorsTableData }) {
+    const data = doctorsTableData;
     
     return (
         <div className="availableDoctorsTableContentWrapper">

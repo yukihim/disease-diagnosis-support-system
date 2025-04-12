@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import BoxContainer from '../../common/boxContainer';
@@ -16,7 +16,7 @@ const incomingPatientTableHeader = [
     { name: 'Age', width: '30px' },
     { name: 'From', width: '100px' },
     { name: 'State', width: '150px' },
-    { name: 'Note', width: '150px' }
+    { name: 'Note', width: '250px' }
 ];
 
 const incomingPatientTableDummyData = [
@@ -35,12 +35,33 @@ const incomingPatientTableDummyData = [
     { name: 'Phuong Xuong C', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'Testing blood' },
     { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
     { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
+    { name: 'Phuong Xuong C', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'Testing blood' },
+    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
+    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
 ];
 
 function ParaclinicalIncomingPatient() {
     const history = useHistory();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [displayData, setDisplayData] = useState([]);
+    
+    // Pagination settings
+    const ROWS_PER_PAGE = 15;
+    const totalRecords = incomingPatientTableDummyData.length;
+    const totalPages = Math.ceil(totalRecords / ROWS_PER_PAGE);
 
-    const incomingPatientCount = 12;
+    // Update displayed data when page changes
+    useEffect(() => {
+        const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ROWS_PER_PAGE, totalRecords);
+        setDisplayData(incomingPatientTableDummyData.slice(startIndex, endIndex));
+    }, [currentPage]);
+
+    function handlePageChange(newPage) {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    }
 
     function onClickIncomingPatient(patient) {
         let pathnameUrl='/paraclinical/paraclinical_patient_test';
@@ -66,16 +87,20 @@ function ParaclinicalIncomingPatient() {
 
             <BoxContainerContent>
                 {/* Overview */}
-                <IncomingPatientOverview incomingPatientCount={incomingPatientCount} />
+                <IncomingPatientOverview incomingPatientCount={totalRecords} />
 
                 {/* Pagination */}
-                <IncomingPatientPagination />
+                <IncomingPatientPagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
 
                 {/* Table header */}
                 <IncomingPatientTableHeader incomingPatientTableHeader={incomingPatientTableHeader} />
 
                 {/* Table content */}
-                <IncomingPatientTableContent incomingPatientTableHeader={incomingPatientTableHeader} incomingPatientTableData={incomingPatientTableDummyData} onClickIncomingPatient={onClickIncomingPatient} />
+                <IncomingPatientTableContent incomingPatientTableHeader={incomingPatientTableHeader} incomingPatientTableData={displayData} onClickIncomingPatient={onClickIncomingPatient} />
             </BoxContainerContent>
         </BoxContainer>
     );

@@ -19,7 +19,7 @@ function Calendar({ onDateSelect }) {
         if (onDateSelect) {
             onDateSelect(today);
         }
-    }); // Empty dependency array means this runs once on mount
+    }, []); // Empty dependency array means this runs once on mount
 
     const getMonthName = (date) => {
         return date.toLocaleString('default', { month: 'long' });

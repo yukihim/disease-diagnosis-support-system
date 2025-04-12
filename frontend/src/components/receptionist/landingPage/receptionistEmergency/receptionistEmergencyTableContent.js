@@ -2,21 +2,9 @@ import React from 'react';
 
 import TableContent from '../../../common/tableContent';
 
-const emergencyTableHeader = [
-    { name: 'Case', width: '130px' },
-    { name: 'Time', width: '70px' },
-    { name: 'Dept', width: '80px' }
-];
-
-const emergencyTableDummyData = [
-    { case: 'Car Accident', time: '10:00 AM', dept: 'Lão - Nội' },
-    { case: 'Car Accident', time: '10:00 AM', dept: 'Unassigned' },
-    { case: 'Car Accident', time: '10:00 AM', dept: 'Unassigned' },
-];
-
-function ReceptionistEmergencyTableContent() {
+function ReceptionistEmergencyTableContent({ emergencyTableHeader, emergencyTableData }) {
     const headers = emergencyTableHeader;
-    const data = emergencyTableDummyData;
+    const data = emergencyTableData;
 
     return (
         <TableContent>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import BoxContainer from '../../../common/boxContainer';
@@ -39,8 +39,26 @@ const userTableDummyData = [
 
 function AdminMonitorUsers() {
     const history = useHistory();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [displayData, setDisplayData] = useState([]);
+    
+    // Pagination settings
+    const ROWS_PER_PAGE = 15;
+    const totalRecords = userTableDummyData.length;
+    const totalPages = Math.ceil(totalRecords / ROWS_PER_PAGE);
 
-    const userCount = 12;
+    // Update displayed data when page changes
+    useEffect(() => {
+        const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ROWS_PER_PAGE, totalRecords);
+        setDisplayData(userTableDummyData.slice(startIndex, endIndex));
+    }, [currentPage]);
+
+    function handlePageChange(newPage) {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    }
 
     function onClickUser(user) {
         let pathnameUrl='/admin/user_management';
@@ -66,16 +84,20 @@ function AdminMonitorUsers() {
 
             <BoxContainerContent>
                 {/* Overview */}
-                <UsersOverview userCount={userCount} />
+                <UsersOverview userCount={totalRecords} />
 
                 {/* Pagination */}
-                <UsersPagination />
+                <UsersPagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
 
                 {/* Table header */}
                 <UsersTableHeader userTableHeader={userTableHeader} />
 
                 {/* Table content */}
-                <UsersTableContent userTableHeader={userTableHeader} userTableData={userTableDummyData} onClickUser={onClickUser} />
+                <UsersTableContent userTableHeader={userTableHeader} userTableData={displayData} onClickUser={onClickUser} />
             </BoxContainerContent>
         </BoxContainer>
     );

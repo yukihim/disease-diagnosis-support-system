@@ -34,7 +34,10 @@
 
     box-sizing: border-box;
 
+    padding: 10px 0px;
     transition: all 0.2s ease;
+
+    flex: 0 0 auto; /* Don't grow or shrink */
 }
 
 .tableContent.tableContentGrid {

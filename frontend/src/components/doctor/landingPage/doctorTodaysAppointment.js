@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import BoxContainer from '../../common/boxContainer';
@@ -18,16 +18,40 @@ const todaysAppointmentTableHeader = [
 
 const todaysAppointmentTableDummyData = [
     { name: 'Lê Văn A', time: '07:00 AM', condition: 'Blood Sugar' },
-    { name: 'Lê Văn A', time: '07:00 AM', condition: 'Blood Sugar' },
-    { name: 'Lê Văn A', time: '07:00 AM', condition: 'Blood Sugar' },
-    { name: 'Lê Văn A', time: '07:00 AM', condition: 'Blood Sugar' },
-    { name: 'Lê Văn A', time: '07:00 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn B', time: '07:10 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn C', time: '07:20 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn D', time: '07:30 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn E', time: '07:40 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn F', time: '07:50 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn G', time: '08:00 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn H', time: '08:10 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn I', time: '08:20 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn J', time: '08:30 AM', condition: 'Blood Sugar' },
+    { name: 'Lê Văn K', time: '08:40 AM', condition: 'Blood Sugar' },
 ];
 
 function DoctorTodaysAppointment() {
     const history = useHistory();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [displayData, setDisplayData] = useState([]);
 
-    const todaysAppointmentAmountCount = 12;
+    // Pagination settings
+    const ROWS_PER_PAGE = 5;
+    const totalRecords = todaysAppointmentTableDummyData.length;
+    const totalPages = Math.ceil(totalRecords / ROWS_PER_PAGE);
+
+    // Update displayed data when page changes
+    useEffect(() => {
+        const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
+        const endIndex = Math.min(startIndex + ROWS_PER_PAGE, totalRecords);
+        setDisplayData(todaysAppointmentTableDummyData.slice(startIndex, endIndex));
+    }, [currentPage]);
+
+    function handlePageChange(newPage) {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    }
 
     function onClickTodaysAppointment(patient) {
         // Navigate to the next page with patient information
@@ -49,16 +73,20 @@ function DoctorTodaysAppointment() {
 
             <BoxContainerContent>
                 {/* Overview */}
-                <DoctorTodaysAppointmentOverview todaysAppointmentAmountCount={todaysAppointmentAmountCount} />
+                <DoctorTodaysAppointmentOverview todaysAppointmentAmountCount={totalRecords} />
 
                 {/* Pagination */}
-                <DoctorTodaysAppointmentPagination />
+                <DoctorTodaysAppointmentPagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
 
                 {/* Table header */}
                 <DoctorTodaysAppointmentTableHeader todaysAppointmentTableHeader={todaysAppointmentTableHeader} />
 
                 {/* Table content */}
-                <DoctorTodaysAppointmentTableContent todaysAppointmentTableHeader={todaysAppointmentTableHeader} todaysAppointmentTableData={todaysAppointmentTableDummyData} onClickTodaysAppointment={onClickTodaysAppointment} />
+                <DoctorTodaysAppointmentTableContent todaysAppointmentTableHeader={todaysAppointmentTableHeader} todaysAppointmentTableData={displayData} onClickTodaysAppointment={onClickTodaysAppointment} />
             </BoxContainerContent>
         </BoxContainer>
     );
