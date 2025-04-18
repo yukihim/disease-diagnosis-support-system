@@ -1,12 +1,20 @@
 import React from 'react';
 import './style/receptionistAppointmentOverview.css';
 
-import UpcomingAppointment from './components/upcomingAppointment';
+import OverviewNumber from '../../../common/overviewNumber';
+import OverviewTextBig from '../../../common/overviewTextBig';
 
-function ReceptionistAppointmentOverview() {
+function ReceptionistAppointmentOverview({ upcomingCount }) {
+    const appointmentText = upcomingCount > 1 ? 'Upcoming Appointments' : 'Upcoming Appointment';
+
     return (
         <div className="receptionistAppointmentOverview">
-            <UpcomingAppointment />
+            <OverviewNumber>
+                {upcomingCount}
+            </OverviewNumber>
+            <OverviewTextBig>
+                {appointmentText}
+            </OverviewTextBig>
         </div>
     );
 }

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 
 import ReceptionistAppointmentClock from './receptionistAppointment/receptionistAppointmentClock';
-import ReceptionistAppointmentOverview from './receptionistAppointment/receptionistAppointmentOverview';
+import ReceptionistAppointmentOverview from './receptionistAppointment/receptionistAppointmentOverview'; // Ensure this is imported
 import ReceptionistAppointmentPagination from './receptionistAppointment/receptionistAppointmentPagination';
 import ReceptionistAppointmentTableHeader from './receptionistAppointment/receptionistAppointmentTableHeader';
 import ReceptionistAppointmentTableContent from './receptionistAppointment/receptionistAppointmentTableContent';
@@ -23,23 +23,36 @@ const appointmentTableDummyData = [
     { name: 'Lê Văn B', time: '10:00 AM', dept: 'Lão - Nội' },
     { name: 'Nguyễn Thị Văn B', time: '10:00 AM', dept: 'Lão - Nội' },
     { name: 'Lê Văn C', time: '10:00 AM', dept: 'Lão - Nội' },
+    { name: 'Nguyễn Thị Văn C', time: '11:00 AM', dept: 'Lão - Ngoại' },
+    { name: 'Lê Văn D', time: '11:00 AM', dept: 'Lão - Ngoại' },
 ];
+
+const ROWS_PER_PAGE_OPTIONS = [2, 4, 6]; // Define options for rows per page
 
 function ReceptionistAppointment() {
     const [currentPage, setCurrentPage] = useState(1);
     const [displayData, setDisplayData] = useState([]);
-    
-    // Pagination settings
-    const ROWS_PER_PAGE = 2;
-    const totalRecords = appointmentTableDummyData.length;
-    const totalPages = Math.ceil(totalRecords / ROWS_PER_PAGE);
+    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
 
-    // Update displayed data when page changes
+    // Calculate counts (can be memoized if data changes)
+    const upcomingAppointmentCount = appointmentTableDummyData.length; // Simple count for now
+
+    // Calculate total pages based on current rowsPerPage
+    const totalPages = useMemo(() => {
+        return Math.ceil(appointmentTableDummyData.length / rowsPerPage);
+    }, [rowsPerPage]);
+
+    // Update displayed data when page or rowsPerPage changes
     useEffect(() => {
-        const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
-        const endIndex = Math.min(startIndex + ROWS_PER_PAGE, totalRecords);
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = Math.min(startIndex + rowsPerPage, appointmentTableDummyData.length);
         setDisplayData(appointmentTableDummyData.slice(startIndex, endIndex));
-    }, [currentPage]);
+    }, [currentPage, rowsPerPage]);
+
+    // Reset to first page when rowsPerPage changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [rowsPerPage]);
 
     function handlePageChange(newPage) {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -47,24 +60,29 @@ function ReceptionistAppointment() {
         }
     }
 
+    function handleRowsPerPageChange(newRowsPerPage) {
+        setRowsPerPage(newRowsPerPage);
+    }
+
     return (
         <BoxContainer>
             <BoxContainerTitle>
                 Appointment Overview
-
-                {/* Clock */}
                 <ReceptionistAppointmentClock />
             </BoxContainerTitle>
 
             <BoxContainerContent>
-                {/* Overview */}
-                <ReceptionistAppointmentOverview />
+                {/* Overview - Pass the count */}
+                <ReceptionistAppointmentOverview upcomingCount={upcomingAppointmentCount} />
 
                 {/* Pagination */}
-                <ReceptionistAppointmentPagination 
+                <ReceptionistAppointmentPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
+                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+                    currentRowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleRowsPerPageChange}
                 />
 
                 {/* Table header */}

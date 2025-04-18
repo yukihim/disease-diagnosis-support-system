@@ -240,7 +240,8 @@
 
 
 import './style/loginForm.css';
-import Logo from '../../assets/images/Logo.png';
+// import Logo from '../../assets/images/Logo.png';
+import Logo from '../../assets/logos/logo152.png';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -304,7 +305,7 @@ function LoginForm() {
     <div className="loginPage">
       <form className="loginForm" onSubmit={handleSubmit}>
         <div className="logoContainer">
-          <img src={Logo} alt="Logo" />
+          <img className="logo" src={Logo} alt="Logo" />
         </div>
         <label>Email/Username:</label>
         <input

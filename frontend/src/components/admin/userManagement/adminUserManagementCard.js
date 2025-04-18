@@ -1,10 +1,20 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import emailjs from '@emailjs/browser';
 import './style/adminUserManagementCard.css';
 
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
+
+
+// --- IMPORTANT ---
+// Store these securely, ideally via environment variables
+const EMAILJS_SERVICE_ID = 'service_1hcvss7';
+const EMAILJS_TEMPLATE_ID = 'template_ivgz5qi'; // Template configured for deletion notification
+const EMAILJS_PUBLIC_KEY = 'Gk5db20IwPdzTF_mh';
+// --- ----------- ---
+
 
 function AdminUserManagementCard() {
     const history = useHistory();
@@ -42,9 +52,23 @@ function AdminUserManagementCard() {
         }
         
         // TODO: Add your password update logic here
-        // For example: updatePassword(newPassword);
-        
-        alert("Password changed successfully");
+        // --- Send Email using EmailJS ---
+        const templateParams = {
+            subject: 'Account Password Update Notification',
+            userName: 'User',
+            message: 'Your password has been updated.',
+            receiverEmail: 'quan.phamarthur66@hcmut.edu.vn',
+            senderName: 'Admin',
+        };
+
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+            .then((response) => {
+               console.log('SUCCESS! EmailJS Response:', response.status, response.text);
+               alert("Password changed successfully");
+            }, (error) => {
+               console.error('FAILED... EmailJS Error:', error);
+               alert("Password changed successfully, but failed to send notification email. Please check console for details.");
+            });
     }
 
     const onClickDelete = () => {
@@ -52,12 +76,29 @@ function AdminUserManagementCard() {
         const isConfirmed = window.confirm("Are you sure you want to delete this account?");
         
         if (isConfirmed) {
-            // User clicked "OK"
-            // Add your account deletion logic here
             alert("Account deletion confirmed");
-            // TODO: Implement actual deletion functionality
 
-            history.push('/admin/homepage');
+            // --- Send Email using EmailJS ---
+            const templateParams = {
+                subject: 'Account Deletion Notification',
+                userName: 'User',
+                message: 'An account has been deleted from the system.',
+                receiverEmail: 'quan.phamarthur66@hcmut.edu.vn',
+                senderName: 'Admin',
+            };
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+                .then((response) => {
+                   console.log('SUCCESS! EmailJS Response:', response.status, response.text);
+                   alert("Account deleted and notification email sent successfully.");
+                   // Proceed with redirecting only after successful deletion AND email attempt
+                   history.push('/admin/homepage');
+                }, (error) => {
+                   console.error('FAILED... EmailJS Error:', error);
+                   alert("Account deleted, but failed to send notification email. Please check console for details.");
+                   // Decide if you still want to redirect even if email fails
+                   history.push('/admin/homepage');
+                });
         } else {
             // User clicked "Cancel"
             alert("Account deletion cancelled");
@@ -72,7 +113,7 @@ function AdminUserManagementCard() {
 
             <BoxContainerContent className='adminUserManagementCardContent'>
                 {/* Change Username Button */}
-                <button className="btn-change" onClick={onClickChangeUsername}>Change Username</button>
+                {/* <button className="btn-change" onClick={onClickChangeUsername}>Change Username</button> */}
 
                 {/* Change Password Button */}
                 <button className="btn-change" onClick={onClickChangePassword}>Change Password</button>

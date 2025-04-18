@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import './App.css';
 
 
+import Homepage from './pages/homepage/homepage';
+
+
 import LoginForm from './components/auth/loginForm';
 
 
@@ -45,6 +48,9 @@ function App() {
   return (
     <Router>
       <Switch>
+        <Route exact path="/">
+          <Homepage />
+        </Route>
         <Route path="/login">
           <LoginForm />
         </Route>
@@ -126,7 +132,7 @@ function App() {
 
 
         <Route path="*">
-          <Redirect to="/login" />
+          <Redirect to="/" />
         </Route>
       </Switch>
     </Router>

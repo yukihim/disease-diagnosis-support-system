@@ -4,14 +4,16 @@ import './style/emergencyAssignedCase.css';
 import OverviewNumber from '../../../../common/overviewNumber';
 import OverviewText from '../../../../common/overviewText';
 
-function EmergencyAssignedCase() {
+// Accept count as a prop
+function EmergencyAssignedCase({ count }) {
+    const caseText = count === 1 ? 'Assigned Case' : 'Assigned Case(s)';
     return (
         <div className="emergencyAssignedCase">
             <OverviewNumber>
-                1
+                {count} {/* Display the count prop */}
             </OverviewNumber>
             <OverviewText>
-                Assigned Case(s)
+                {caseText} {/* Use dynamic text */}
             </OverviewText>
         </div>
     );

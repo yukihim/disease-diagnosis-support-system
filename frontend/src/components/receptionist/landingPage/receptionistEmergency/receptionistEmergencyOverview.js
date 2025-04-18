@@ -4,11 +4,13 @@ import './style/receptionistEmergencyOverview.css';
 import EmergencyUnassignedCase from './components/emergencyUnassignedCase';
 import EmergencyAssignedCase from './components/emergencyAssignedCase';
 
-function ReceptionistEmergencyOverview() {
+// Accept counts as props
+function ReceptionistEmergencyOverview({ unassignedCount, assignedCount }) {
     return (
         <div className="receptionistEmergencyOverview">
-            <EmergencyUnassignedCase />
-            <EmergencyAssignedCase />
+            {/* Pass counts to sub-components */}
+            <EmergencyUnassignedCase count={unassignedCount} />
+            <EmergencyAssignedCase count={assignedCount} />
         </div>
     );
 }

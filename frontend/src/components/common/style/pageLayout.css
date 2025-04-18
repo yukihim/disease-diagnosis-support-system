@@ -28,7 +28,8 @@
 
     background-color: #F2F2F2;
     /* background: linear-gradient(45deg, #E6F0FF , #E0F2F2); */
-    background: linear-gradient(45deg, #E6F0FF 20%, rgba(0, 128, 128, 0.5) 50%, #F5F5F5 80%);
+    /* background: linear-gradient(45deg, #E6F0FF 20%, rgba(0, 128, 128, 0.5) 50%, #F5F5F5 80%); */
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4efef 100%);
 }
 
 .containter {

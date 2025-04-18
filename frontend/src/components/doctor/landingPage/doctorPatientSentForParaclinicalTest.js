@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Import useMemo
 import { useHistory } from 'react-router-dom';
 
 import BoxContainer from '../../common/boxContainer';
@@ -6,7 +6,7 @@ import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 
 import DoctorPatientSentForParaclinicalTestOverview from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestOverview';
-import DoctorPatientSentForParaclinicalTestPagination from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestPagination';
+import DoctorPatientSentForParaclinicalTestPagination from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestPagination'; // Ensure this is imported
 import DoctorPatientSentForParaclinicalTestTableHeader from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestTableHeader';
 import DoctorPatientSentForParaclinicalTestTableContent from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestTableContent';
 
@@ -28,21 +28,32 @@ const patientSentForParaclinicalTestTableDummyData = [
     { name: 'Phuong Xuong H', test: 'Blood Test', state: 'Waiting for test' },
 ];
 
+const ROWS_PER_PAGE_OPTIONS = [3, 5, 7]; // Define options for rows per page
+
 function DoctorPatientSentForParaclinicalTest() {
     const [currentPage, setCurrentPage] = useState(1);
     const [displayData, setDisplayData] = useState([]);
+    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[1]); // Default to 5 (index 1)
 
-    // Pagination settings
-    const ROWS_PER_PAGE = 5;
+    // Calculate total count
     const totalRecords = patientSentForParaclinicalTestTableDummyData.length;
-    const totalPages = Math.ceil(totalRecords / ROWS_PER_PAGE);
 
-    // Update displayed data when page changes
+    // Calculate total pages based on current rowsPerPage
+    const totalPages = useMemo(() => {
+        return Math.ceil(totalRecords / rowsPerPage);
+    }, [totalRecords, rowsPerPage]); // Recalculate when count or rowsPerPage changes
+
+    // Update displayed data when page or rowsPerPage changes
     useEffect(() => {
-        const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
-        const endIndex = Math.min(startIndex + ROWS_PER_PAGE, totalRecords);
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = Math.min(startIndex + rowsPerPage, totalRecords);
         setDisplayData(patientSentForParaclinicalTestTableDummyData.slice(startIndex, endIndex));
-    }, [currentPage]);
+    }, [currentPage, rowsPerPage, totalRecords]); // Add rowsPerPage and totalRecords dependency
+
+    // Reset to first page when rowsPerPage changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [rowsPerPage]); // Reset page if rowsPerPage changes
 
     function handlePageChange(newPage) {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -50,11 +61,17 @@ function DoctorPatientSentForParaclinicalTest() {
         }
     }
 
+    // --- Handle Rows Per Page Change ---
+    function handleRowsPerPageChange(newRowsPerPage) {
+        setRowsPerPage(newRowsPerPage);
+        // setCurrentPage(1) is handled by the useEffect hook
+    }
+
     function onClickPatientSentForParaclinicalTest(patient) {
         // Navigate to the next page with patient information
         // history.push({
         //     pathname: '/receptionist/patient_checkin',
-        //     state: { 
+        //     state: {
         //         patientSSN: patient.name,
         //         patientHealthInsuranceCode: patient.test
         //     }
@@ -65,7 +82,6 @@ function DoctorPatientSentForParaclinicalTest() {
 
     return (
         <BoxContainer className='bigBox'>
-            {/* Design emergency component here */}
             <BoxContainerTitle>
                 Patient Sent For Paraclinical Test
             </BoxContainerTitle>
@@ -74,11 +90,14 @@ function DoctorPatientSentForParaclinicalTest() {
                 {/* Overview */}
                 <DoctorPatientSentForParaclinicalTestOverview patientSentForParaclinicalTestCount={totalRecords} />
 
-                {/* Pagination */}
-                <DoctorPatientSentForParaclinicalTestPagination 
+                {/* Pagination - Pass new props */}
+                <DoctorPatientSentForParaclinicalTestPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
+                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS} // Pass options
+                    currentRowsPerPage={rowsPerPage} // Pass current value
+                    onRowsPerPageChange={handleRowsPerPageChange} // Pass handler
                 />
 
                 {/* Table header */}

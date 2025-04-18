@@ -1,9 +1,14 @@
 import React from 'react';
-
+import SortIcon from '../../../../common/sortIcon';
 import TableHeader from '../../../../common/tableHeader';
 
-function UsersTableHeader({ userTableHeader }) {
+function UsersTableHeader({ userTableHeader, onSort, sortConfig }) {
     const headers = userTableHeader;
+
+    const getSortDirection = (name) => {
+        if (!sortConfig) return null;
+        return sortConfig.key === name ? sortConfig.direction : null;
+    };
 
     return (
         <TableHeader>
@@ -14,7 +19,13 @@ function UsersTableHeader({ userTableHeader }) {
                         className="tableHeaderCell"
                         style={{ width: header.width, minWidth: header.width }}
                     >
-                        {header.name}
+                        <div className="headerContent">
+                            <span>{header.name}</span>
+                            <SortIcon 
+                                direction={getSortDirection(header.name)} 
+                                onClick={() => onSort(header.name)}
+                            />
+                        </div>
                     </div>
                 ))
             ) : (

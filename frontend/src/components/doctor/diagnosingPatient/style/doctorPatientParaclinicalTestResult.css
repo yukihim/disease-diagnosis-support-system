@@ -21,6 +21,91 @@
     width: 100%;
     height: auto;
 
-    max-height: 441px;
+    /* max-height: 441px; */
     min-height: initial;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ... existing styles ... */
+
+.paraclinical-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 20px; /* Space between charts */
+    margin-top: 15px;
+}
+
+.paraclinical-chart-container {
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.paraclinical-chart-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #333;
+    text-align: center;
+}
+
+.paraclinical-chart-info {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.loading-indicator {
+    font-size: 0.8em;
+    color: #888;
+    margin-left: 10px;
+}
+
+.no-results {
+    text-align: center;
+    color: #888;
+    margin-top: 20px;
+}
+
+/* Adjust dropdown style if needed */
+.doctorPatientParaclinicalTestResultContent > select { /* Target DropDownBox */
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }

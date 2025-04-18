@@ -5,7 +5,7 @@
 }
 
 .eventCell:hover {
-    background-color: #F2F2F2;
+    background-color: linear-gradient(135deg, #f5f7fa 0%, #e4efef 100%);
 
     text-decoration: underline;
     
@@ -14,7 +14,7 @@
     border-radius: 20px;
 
     box-sizing: border-box;
-    box-shadow: 0 4px 4px 0 rgba(0, 128, 128, 0.6);
+    box-shadow: 0 6px 20px rgba(0, 128, 128, 0.4);
 
     transform: translateY(-1px);
 }

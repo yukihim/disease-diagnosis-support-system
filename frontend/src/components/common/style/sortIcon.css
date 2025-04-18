@@ -1,0 +1,27 @@
+.sortIconWrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 8px;
+    width: 16px;
+    height: 16px;
+}
+
+.sortIcon {
+    width: 16px;
+    height: 16px;
+    transition: all 0.2s ease;
+}
+
+.sortIconWrapper:hover .sortIcon {
+    transform: translateY(-1px);
+}
+
+/* Add this to your tableHeader.css or create a new style */
+.headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}

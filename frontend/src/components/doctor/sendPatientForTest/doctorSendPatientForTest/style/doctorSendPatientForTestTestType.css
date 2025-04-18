@@ -1,4 +1,4 @@
-.test-type-selection {
+/* .test-type-selection {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -35,4 +35,145 @@
     font-size: 12px;
     color: #4E4B66;
     font-weight: 500;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.test-type-selection-grouped {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 10px; /* Space between sections */
+}
+  
+.test-groups-container {
+    display: flex; /* Use flexbox for columns */
+    flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+    gap: 20px; /* Space between columns */
+}
+
+.test-group-column {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    gap: 5px;
+    flex: 1; /* Allow columns to grow */
+    min-width: 180px; /* Minimum width before wrapping */
+    padding: 10px;
+    border: 1px solid #eee;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+  
+/* Optional: Style the category header if not using HuggedText's margin */
+/* .test-group-column > h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+} */
+  
+.test-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Space between checkboxes in a column */
+}
+
+.test-option-item {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between checkbox and label */
+}
+
+.test-option-item input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+.test-option-item label {
+    font-size: 13px;
+    color: #555;
+    cursor: pointer;
+    flex-grow: 1; /* Allow label text to take available space */
+}
+
+.selected-tests-display {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Optional: Style the paragraph displaying selected tests */
+.selected-tests-display p {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+    margin: 0; /* Reset default margin */
+}
+
+/* Ensure HuggedText margins work as expected or override here */
+/* Example: If HuggedText doesn't apply bottom margin correctly */
+.test-type-selection-grouped > .hugged-text-component:first-child {
+    margin-bottom: 15px; /* Ensure space below main title */
+}
+.test-group-column > .hugged-text-component:first-child {
+    margin-bottom: 10px; /* Ensure space below category title */
+}
+.selected-tests-display > .hugged-text-component:first-child {
+    margin-bottom: 5px; /* Ensure space below selected tests title */
 }

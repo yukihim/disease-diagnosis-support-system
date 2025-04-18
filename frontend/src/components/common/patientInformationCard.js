@@ -12,42 +12,42 @@ import PatientInformationForm from './patientInformationForm/patientInformationF
 const initialPatientInformationHolder = [
     {
         "Name": "Phuong Xuong Thinh",
-        "Type": "Inpatient",
-        "DOB": "01/01/2002",
-        "Gender": "Male",
-        "Phone Number": "0123456789",
         "SSN": "123-45-6789",
+        "DOB": "01/01/2002",
         "Health Insurance Code": "123456789",
-        "Job": "Student",
-        "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam",
+        "Gender": "Male",
         "Height (cm)": "163 cm",
+        "Type": "Inpatient",
         "Weight (kg)": "70 kg",
+        "Phone Number": "0123456789",
+        "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam",
+        "Job": "Student",
     },
     {
         "Name": "Phuong Xuong B",
-        "Type": "Inpatient",
+        "SSN": "123-45-6789", // Moved from "Column 2"
         "DOB": "01/01/2001",
+        "Health Insurance Code": "123456789", // Moved from "Column 2"
         "Gender": "Male",
+        "Height (cm)": "163 cm", // Moved from "Column 2"
+        "Type": "Inpatient",
+        "Weight (kg)": "70 kg", // Moved from "Column 2"
         "Phone Number": "0123456789",
-        "SSN": "123-45-6789",
-        "Health Insurance Code": "123456789",
+        "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam", // Moved from "Column 2"
         "Job": "Student",
-        "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam",
-        "Height (cm)": "163 cm",
-        "Weight (kg)": "70 kg",
     },
     {
         "Name": "Phuong Xuong C",
-        "Type": "Patient",
+        "SSN": "123-45-6789", // Moved from "Column 2"
         "DOB": "01/01/2000",
+        "Health Insurance Code": "123456789", // Moved from "Column 2"
         "Gender": "Male",
+        "Height (cm)": "163 cm", // Moved from "Column 2"
+        "Type": "Patient", // Changed type for this patient
+        "Weight (kg)": "70 kg", // Moved from "Column 2"
         "Phone Number": "0123456789",
-        "SSN": "123-45-6789",
-        "Health Insurance Code": "123456789",
+        "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam", // Moved from "Column 2"
         "Job": "Student",
-        "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam",
-        "Height (cm)": "163 cm",
-        "Weight (kg)": "70 kg",
     }
 ];
 

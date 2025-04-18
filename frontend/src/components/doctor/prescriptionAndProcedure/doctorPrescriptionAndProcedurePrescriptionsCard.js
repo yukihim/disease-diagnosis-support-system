@@ -1,68 +1,3 @@
-// import React from 'react';
-// import './style/doctorPrescriptionAndProcedurePrescriptionsCard.css';
-
-// import BoxContainer from '../../common/boxContainer';
-// import BoxContainerTitle from '../../common/boxContainerTitle';
-// import BoxContainerContent from '../../common/boxContainerContent';
-
-// import Button from '../../common/button';
-// import ButtonText from '../../common/buttonText';
-
-// import DoctorPrescriptionAndProcedurePrescriptionsCardHeader from './doctorPrescriptionAndProcedurePrescriptionsCard/doctorPrescriptionAndProcedurePrescriptionsCardHeader';
-// import DoctorPrescriptionAndProcedurePrescriptionsCardTable from './doctorPrescriptionAndProcedurePrescriptionsCard/doctorPrescriptionAndProcedurePrescriptionsCardTable';
-
-// const patientPrescriptionTableHeader = [
-//     { name: 'Medicine', width: '160px' },
-//     { name: 'AM', width: '55px' },
-//     { name: 'Noon', width: '55px' },
-//     { name: 'PM', width: '55px' },
-//     { name: 'Duration', width: '160px' }
-// ];
-
-// function DoctorPrescriptionAndProcedurePrescriptionsCard() {
-//     return (
-//         <BoxContainer className='doctorPrescriptionAndProcedurePrescriptionsCardBox'>
-//             <BoxContainerTitle className='doctorPrescriptionAndProcedurePrescriptionsCard'>
-//                 Prescriptions
-
-//                 <Button>
-//                     <ButtonText>
-//                         Add
-//                     </ButtonText>
-//                 </Button>
-//             </BoxContainerTitle>
-
-//             <BoxContainerContent className='doctorPrescriptionAndProcedurePrescriptionsCardContent'>
-//                 {/* Table Header */}
-//                 <DoctorPrescriptionAndProcedurePrescriptionsCardHeader patientPrescriptionTableHeader={patientPrescriptionTableHeader} />
-
-//                 {/* Table Content */}
-//                 <DoctorPrescriptionAndProcedurePrescriptionsCardTable patientPrescriptionTableHeader={patientPrescriptionTableHeader} patientPrescriptionTableData={[]} />
-//             </BoxContainerContent>
-//         </BoxContainer>
-//     );
-// }
-
-// export default DoctorPrescriptionAndProcedurePrescriptionsCard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from 'react';
 import './style/doctorPrescriptionAndProcedurePrescriptionsCard.css';
 
@@ -100,7 +35,9 @@ const emptyPrescription = {
 function DoctorPrescriptionAndProcedurePrescriptionsCard() {
     // State to track prescriptions
     const [prescriptions, setPrescriptions] = useState([
-        { ...emptyPrescription } // Start with one empty row
+        { ...emptyPrescription }, // Start with three empty rows
+        { ...emptyPrescription },
+        { ...emptyPrescription }
     ]);
 
     // Function to add a new prescription row

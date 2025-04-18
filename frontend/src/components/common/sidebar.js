@@ -99,8 +99,7 @@ function Sidebar({ userRole }) {
                 <>
                     {/* Collapsed state for Homepage */}
                     <div 
-                        className="stateIconHolder" 
-                        style={activeTab === 'homepage' ? { backgroundColor: "#008080" } : {}}
+                        className={`stateIconHolder ${activeTab !== 'homepage' ? "" : " activeSmall"}`}
                         onClick={() => handleNavigation('homepage')}
                     >
                         <div className="iconHolder">
@@ -112,8 +111,8 @@ function Sidebar({ userRole }) {
                     </div>
                     {/* Expanded state for Homepage */}
                     <div 
-                        className={`expandStateIconHolder ${activeTab !== 'homepage' ? "inactive-tab" : ""}`} 
-                        style={activeTab === 'homepage' ? { backgroundColor: "#008080" } : { cursor: "pointer" }}
+                        className={`expandStateIconHolder ${activeTab !== 'homepage' ? "inactive-tab" : "activeBig"}`} 
+                        style={activeTab === 'homepage' ? {} : { cursor: "pointer" }}
                         onClick={() => handleNavigation('homepage')}
                     >
                         <div className="iconHolder">
@@ -140,8 +139,7 @@ function Sidebar({ userRole }) {
                 <>
                     {/* Collapsed state for Calendar */}
                     <div 
-                        className="stateIconHolder"
-                        style={activeTab === 'calendar' ? { backgroundColor: "#008080" } : {}}
+                        className={`stateIconHolder ${activeTab !== 'calendar' ? "" : " activeSmall"}`}
                         onClick={() => handleNavigation('calendar')}
                     >
                         <div className="iconHolder">
@@ -154,8 +152,8 @@ function Sidebar({ userRole }) {
                     </div>
                     {/* Expanded state for Calendar */}
                     <div 
-                        className={`expandStateIconHolder ${activeTab !== 'calendar' ? "inactive-tab" : ""}`}
-                        style={activeTab === 'calendar' ? { backgroundColor: "#008080" } : { cursor: "pointer" }}
+                        className={`expandStateIconHolder ${activeTab !== 'calendar' ? "inactive-tab" : "activeBig"}`}
+                        style={activeTab === 'calendar' ? {} : { cursor: "pointer" }}
                         onClick={() => handleNavigation('calendar')}
                     >
                         <div className="iconHolder">
