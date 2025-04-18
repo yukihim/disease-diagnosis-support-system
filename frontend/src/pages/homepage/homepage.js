@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './style/homepage.css';
 
-import LineChartComponent from '../../components/common/lineChart';
+// import LineChartComponent from '../../components/common/lineChart';
 
 function HomePage() {
   const history = useHistory();
@@ -44,7 +44,7 @@ function HomePage() {
           </div>
         </section>
 
-        <LineChartComponent />
+        {/* <LineChartComponent /> */}
         
         <section className="signin-container">
           <button className="signin-button" onClick={handleSignIn}>
