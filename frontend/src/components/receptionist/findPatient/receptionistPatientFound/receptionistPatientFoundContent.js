@@ -3,19 +3,9 @@ import './style/receptionistPatientFoundContent.css';
 
 import TableContent from '../../../common/tableContent';
 
-const patientFoundTableHeader = [
-    { name: 'Patient Name', width: '230px' },
-    { name: 'Social Security Number', width: '200px' },
-    { name: 'Health Insurance Code', width: '300px' }
-];
-
-const patientFoundTableDummyData = [
-    { patientName: 'Phuong Xuong Thinh', ssn: '079283868386', healthInsuranceCode: 'HS-4-79-793 778 6132' },
-];
-
-function ReceptionistPatientFoundContent({ onClickPatient }) {
+function ReceptionistPatientFoundContent({ patientFoundTableHeader, patientFoundTableData, onClickPatient }) {
     const headers = patientFoundTableHeader;
-    const data = patientFoundTableDummyData;
+    const data = patientFoundTableData;
 
     return (
         <TableContent>

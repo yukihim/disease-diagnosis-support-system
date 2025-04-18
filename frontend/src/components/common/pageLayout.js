@@ -213,6 +213,17 @@ function PageLayout({ children, requiredRole = null, useGrid = true, className =
       return;
     }
 
+    // Reset ttl if page reloaded
+    console.log("Token found, resetting expiration time.");
+    // Calculate expiration time: 30 seconds from now
+    const expires = new Date(new Date().getTime() + 30 * 1000);
+    Cookies.set('token', token, {
+      expires: expires, // Set the expiration time
+      path: '/',      // Make cookie available across the entire site
+      // secure: true, // Uncomment in production if using HTTPS
+      sameSite: 'Lax' // Recommended for security
+    });
+
     try {
       // Decode token directly from the cookie
       const tokenPayload = JSON.parse(atob(token.split('.')[1]));

@@ -2,13 +2,7 @@ import React from 'react';
 
 import TableHeader from '../../../common/tableHeader';
 
-const patientFoundTableHeader = [
-    { name: 'Patient Name', width: '230px' },
-    { name: 'Social Security Number', width: '200px' },
-    { name: 'Health Insurance Code', width: '300px' }
-];
-
-function ReceptionistPatientFoundHeader() {
+function ReceptionistPatientFoundHeader({patientFoundTableHeader}) {
     const headers = patientFoundTableHeader;
     
     return (

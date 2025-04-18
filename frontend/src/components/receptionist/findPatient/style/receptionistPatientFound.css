@@ -1,4 +1,4 @@
-.receptionistPatientFoundBox {
+/* .receptionistPatientFoundBox {
     width: 100%;
     height: 100%;
     max-height: initial;
@@ -7,6 +7,26 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+
+    transition: all 0.3s ease-in-out;
+} */
+
+.receptionistPatientFoundBox {
+    /* Initial state: hidden */
+    opacity: 0;
+    max-height: 0; /* Animate height for smoother appearance */
+    overflow: hidden;
+    transform: translateY(-10px); /* Optional: slight slide effect */
+
+    /* Define the transition */
+    transition: opacity 0.3s ease-out, max-height 0.3s ease-out, transform 0.3s ease-out, margin-top 0.3s ease-out;
+}
+
+.receptionistPatientFoundBox.visible {
+    /* Visible state */
+    opacity: 1;
+    max-height: 1000px; /* Set to a value larger than the expected content height */
+    transform: translateY(0);
 }
 
 .receptionistPatientFoundTitle {
