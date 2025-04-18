@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^3.2.0",
     "cra-template": "1.2.0",
+    "js-cookie": "^3.0.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
     "recharts": "^2.1.9",
-    "web-vitals": "^4.2.4",
-    "@emailjs/browser": "^3.2.0"
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
