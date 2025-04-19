@@ -20,8 +20,9 @@ const incomingPatientTableHeader = [
 ];
 
 const incomingPatientTableDummyData = [
-    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'Patient needs urgent care' },
-    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
+    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Test Result Ready', note: 'Patient needs urgent care' },
+    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Waiting For Result', note: 'Patient needs urgent care' },
+    { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'R. 304', state: 'Waiting For Result', note: 'No note' },
     { name: 'Phuong Xuong C', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'Testing blood' },
     { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
     { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
@@ -84,7 +85,8 @@ function ParaclinicalIncomingPatient() {
                 patientName: patient.name,
                 patientSex: patient.sex,
                 patientAge: patient.age,
-                patientFrom: patient.from
+                patientFrom: patient.from,
+                patientState: patient.state,
                 // Add other relevant patient data if needed
             }
         });

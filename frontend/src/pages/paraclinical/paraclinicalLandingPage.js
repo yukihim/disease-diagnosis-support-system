@@ -11,6 +11,8 @@ function ParaclinicalLandingPage() {
         <PageLayout requiredRole="paraclinical">
             <ParaclinicalIncomingPatient role="paraclinical" />
             
+            {/* Component to track done test patients component */}
+
             <Calendar />
         </PageLayout>
     );
