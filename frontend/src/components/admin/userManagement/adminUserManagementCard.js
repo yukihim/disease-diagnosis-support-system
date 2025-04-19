@@ -19,21 +19,21 @@ const EMAILJS_PUBLIC_KEY = 'Gk5db20IwPdzTF_mh';
 function AdminUserManagementCard() {
     const history = useHistory();
 
-    const onClickChangeUsername = () => {
-        const newUsername = window.prompt("Enter new username:");
+    // const onClickChangeUsername = () => {
+    //     const newUsername = window.prompt("Enter new username:");
         
-        // Check if user clicked Cancel or entered an empty string
-        if (newUsername === null || newUsername.trim() === '') {
-            alert("Username change cancelled or empty username provided");
-            return;
-        }
+    //     // Check if user clicked Cancel or entered an empty string
+    //     if (newUsername === null || newUsername.trim() === '') {
+    //         alert("Username change cancelled or empty username provided");
+    //         return;
+    //     }
         
-        // TODO: Add your username update logic here
-        // For example: updateUsername(newUsername);
+    //     // TODO: Add your username update logic here
+    //     // For example: updateUsername(newUsername);
         
-        alert(`Username will be changed to: ${newUsername}`);
-        // After successful API call you might want to refresh or redirect
-    }
+    //     alert(`Username will be changed to: ${newUsername}`);
+    //     // After successful API call you might want to refresh or redirect
+    // }
     
     const onClickChangePassword = () => {
         const newPassword = window.prompt("Enter new password:");

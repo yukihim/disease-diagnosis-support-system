@@ -279,7 +279,6 @@ function PageLayout({ children, requiredRole = null, useGrid = true, className =
     // ... (rest of the function remains the same) ...
     const role = userRole.toLowerCase();
 
-    {/* TEMPLATE */}
     if (role === 'receptionist') {
       return (
         <Button onClick={() => {

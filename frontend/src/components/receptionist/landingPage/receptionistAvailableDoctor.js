@@ -64,7 +64,7 @@ function ReceptionistAvailableDoctor() {
         const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
         const endIndex = Math.min(startIndex + ROWS_PER_PAGE, totalRecords);
         setDisplayData(doctorsTableDummyData.slice(startIndex, endIndex));
-    }, [currentPage]);
+    }, [currentPage, totalRecords, ROWS_PER_PAGE]);
 
     function handlePageChange(newPage) {
         if (newPage >= 1 && newPage <= totalPages) {
