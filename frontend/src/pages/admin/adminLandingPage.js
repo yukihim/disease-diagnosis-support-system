@@ -5,6 +5,7 @@ import Calendar from '../../components/common/calendar';
 
 // Import admin landingpage components
 import AdminMonitorUsers from '../../components/admin/landingPage/adminMonitorUsers/adminMonitorUsers';
+import AdminAddNewUsers from '../../components/admin/landingPage/adminAddNewUsers/adminAddNewUsers';
 
 function AdminLandingPage() {
     return (
@@ -12,6 +13,9 @@ function AdminLandingPage() {
             <AdminMonitorUsers role="admin" />
             
             <Calendar />
+
+            {/* Add user card */}
+            <AdminAddNewUsers />
         </PageLayout>
     );
 }

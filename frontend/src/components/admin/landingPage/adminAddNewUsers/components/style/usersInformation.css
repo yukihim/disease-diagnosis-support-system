@@ -1,0 +1,43 @@
+.usersInformationForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inputGroup {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+
+    min-height: 40px;
+    align-items: center;
+
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4E4B66;
+}
+
+.inputField {
+    grid-column: span 2;
+    height: 90%;
+
+    border-radius: 5px;
+    border: 1px solid #ccc;
+
+    padding: 0px 10px;
+
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4E4B66;
+}
+
+.optionsStyle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4E4B66;
+}
