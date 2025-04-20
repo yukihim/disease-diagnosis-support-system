@@ -1,6 +1,6 @@
 .adminUserManagementCardBox {
     width: 100%;
-    height: auto;
+    height: 170px !important;
     max-height: initial;
     min-height: initial;
 
@@ -8,8 +8,8 @@
     flex-direction: column;
     justify-content: flex-start;
 
-    grid-column: span 1;
-    grid-row: span 2;
+    /* grid-column: span 1;
+    grid-row: span 2; */
 }
 
 .adminUserManagementCardTitle {
