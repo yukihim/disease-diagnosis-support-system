@@ -52,8 +52,8 @@ except Exception as e: print(f"\n***\nError loading ML components: {e}"); exit()
 
 # --- NEW: Configure Gemini ---
 try:
-    # GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-    GEMINI_API_KEY = "AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY"
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+    # GEMINI_API_KEY = "AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY"
     if not GEMINI_API_KEY:
         raise ValueError("GEMINI_API_KEY environment variable not set.")
     # --- Ensure you replace YOUR_API_KEY in your environment ---
@@ -61,7 +61,8 @@ try:
     genai.configure(api_key=GEMINI_API_KEY)
     # Adjust model name if necessary - 'gemini-1.5-flash-latest' is often preferred for speed/cost
     # gemini_model = genai.GenerativeModel('gemini-2.0-flash')
-    gemini_model = genai.GenerativeModel('gemini-2.0-flash') # Using 1.5 flash as requested
+    GEMINI_MODEL = os.environ.get("GEMINI_MODEL")
+    gemini_model = genai.GenerativeModel(GEMINI_MODEL)
 
     print("Gemini API configured successfully.")
 except Exception as e:
