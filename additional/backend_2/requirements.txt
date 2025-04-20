@@ -1,8 +1,0 @@
-flask
-Flask-SQLAlchemy
-psycopg2-binary
-flask-swagger-ui
-PyJWT
-Werkzeug
-Flask-Cors
-Flask-Limiter
