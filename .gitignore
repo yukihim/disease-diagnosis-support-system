@@ -2,6 +2,10 @@ __pycache__
 old/
 release_validate_patients/
 ai/Dataset/22687585.zip
+ai/Dataset/release_train_patients.zip
+ai/Dataset/release_test_patients.zip
+ai/Dataset/release_validate_patients.zip
+ai/Dataset/release_conditions.json
 others/
 saved_model/
 eda.ipynb
