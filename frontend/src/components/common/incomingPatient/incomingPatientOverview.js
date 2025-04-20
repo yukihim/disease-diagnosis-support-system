@@ -3,10 +3,10 @@ import './style/incomingPatientOverview.css';
 
 import IncomingPatientToDoctorAmount from './components/incomingPatientToDoctorAmount';
 
-function IncomingPatientOverview({ incomingPatientCount }) {
+function IncomingPatientOverview({ showingResultReadyPatients=false, incomingPatientCount }) {
     return (
         <div className="incomingPatientOverview">
-            <IncomingPatientToDoctorAmount incomingPatientCount={incomingPatientCount} />
+            <IncomingPatientToDoctorAmount showingResultReadyPatients={showingResultReadyPatients} incomingPatientCount={incomingPatientCount} />
         </div>
     );
 }

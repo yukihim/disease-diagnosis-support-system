@@ -31,7 +31,7 @@ function LoginForm() {
         // --- Start Cookie Implementation ---
 
         // Calculate expiration time: 30 seconds from now
-        const expires = new Date(new Date().getTime() + 60 * 1000);
+        const expires = new Date(new Date().getTime() + 5 * 60 * 1000);
 
         // Store token in a cookie that expires in 30 seconds
         Cookies.set('token', data.access_token, {

@@ -5,6 +5,9 @@ import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 
+import Button from '../../common/button';
+import ButtonText from '../../common/buttonText';
+
 import IncomingPatientOverview from '../../common/incomingPatient/incomingPatientOverview';
 import IncomingPatientPagination from '../../common/incomingPatient/incomingPatientPagination'; // Already imported
 import IncomingPatientTableHeader from '../../common/incomingPatient/incomingPatientTableHeader';
@@ -21,7 +24,10 @@ const incomingPatientTableHeader = [
 
 const incomingPatientTableDummyData = [
     { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Test Result Ready', note: 'Patient needs urgent care' },
-    { name: 'Phuong Xuong Thinh', sex: 'Male', age: '22', from: 'R. 304', state: 'Waiting For Result', note: 'Patient needs urgent care' },
+    { name: 'Phuong Xuong 1', sex: 'Female', age: '22', from: 'R. 304', state: 'Test Result Ready', note: 'Patient needs urgent care' },
+    { name: 'Phuong Xuong 2', sex: 'Female', age: '22', from: 'R. 304', state: 'Test Result Ready', note: 'Patient needs urgent care' },
+    { name: 'Phuong Xuong 3', sex: 'Male', age: '22', from: 'R. 304', state: 'Test Result Ready', note: 'Patient needs urgent care' },
+    { name: 'Phuong Xuong 4', sex: 'Male', age: '22', from: 'R. 304', state: 'Waiting For Result', note: 'Patient needs urgent care' },
     { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'R. 304', state: 'Waiting For Result', note: 'No note' },
     { name: 'Phuong Xuong C', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'Testing blood' },
     { name: 'Phuong Xuong B', sex: 'Male', age: '22', from: 'R. 304', state: 'Sending for test', note: 'No note' },
@@ -42,9 +48,18 @@ function ParaclinicalIncomingPatient() {
     const [currentPage, setCurrentPage] = useState(1);
     const [displayData, setDisplayData] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[1]); // Default to 5
+    const [showingResultReadyPatients, setShowingResultReadyPatients] = useState(false); // State to track if "Result Ready" patients are shown
+
+    // Filter data based on showingResultReadyPatients state
+    const filteredData = useMemo(() => {
+        if (showingResultReadyPatients) {
+            return incomingPatientTableDummyData.filter(patient => patient.state === 'Test Result Ready');
+        }
+        return incomingPatientTableDummyData;
+    }, [showingResultReadyPatients]);
 
     // Calculate total count
-    const totalRecords = incomingPatientTableDummyData.length;
+    const totalRecords = filteredData.length;
 
     // Calculate total pages based on current rowsPerPage
     const totalPages = useMemo(() => {
@@ -55,7 +70,7 @@ function ParaclinicalIncomingPatient() {
     useEffect(() => {
         const startIndex = (currentPage - 1) * rowsPerPage;
         const endIndex = Math.min(startIndex + rowsPerPage, totalRecords);
-        setDisplayData(incomingPatientTableDummyData.slice(startIndex, endIndex));
+        setDisplayData(filteredData.slice(startIndex, endIndex));
     }, [currentPage, rowsPerPage, totalRecords]); // Add rowsPerPage and totalRecords dependency
 
     // Reset to first page when rowsPerPage changes
@@ -96,11 +111,23 @@ function ParaclinicalIncomingPatient() {
         <BoxContainer className='bigBoxForParaclinic'>
             <BoxContainerTitle>
                 Incoming Patient
+
+                {
+                    showingResultReadyPatients ? (
+                        <Button className='buttonText' onClick={() => setShowingResultReadyPatients(false)}>
+                            <ButtonText>Show All</ButtonText>
+                        </Button>
+                    ) : (
+                        <Button className='buttonText' onClick={() => setShowingResultReadyPatients(true)}>
+                            <ButtonText>Show Result Ready</ButtonText>
+                        </Button>
+                    )
+                }
             </BoxContainerTitle>
 
             <BoxContainerContent>
                 {/* Overview */}
-                <IncomingPatientOverview incomingPatientCount={totalRecords} />
+                <IncomingPatientOverview showingResultReadyPatients={showingResultReadyPatients} incomingPatientCount={totalRecords} />
 
                 {/* Pagination - Pass new props */}
                 <IncomingPatientPagination
