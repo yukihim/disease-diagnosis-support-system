@@ -1,2 +1,8 @@
 __pycache__
 old/
+release_validate_patients/
+ai/Dataset/22687585.zip
+others/
+saved_model/
+eda.ipynb
+new.ipynb
