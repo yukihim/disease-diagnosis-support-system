@@ -73,15 +73,16 @@ function DoctorTodaysAppointment() {
     function onClickTodaysAppointment(patient) {
         // Navigate to the next page with patient information
         // Update pathname and state as needed for doctor's workflow
-        history.push({
-            pathname: '/doctor/diagnosis', // Example path, adjust as necessary
-            state: {
-                patientName: patient.name,
-                appointmentTime: patient.time,
-                condition: patient.condition
-                // Add other relevant patient data if needed
-            }
-        });
+        // history.push({
+        //     pathname: '/doctor/diagnosis', // Example path, adjust as necessary
+        //     state: {
+        //         patientName: patient.name,
+        //         appointmentTime: patient.time,
+        //         condition: patient.condition
+        //         // Add other relevant patient data if needed
+        //     }
+        // });
+        console.log('Clicked on appointment:', patient);
     }
 
     return (
