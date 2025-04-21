@@ -55,7 +55,8 @@ function ParaclinicalIncomingPatient() {
         if (showingResultReadyPatients) {
             return incomingPatientTableDummyData.filter(patient => patient.state === 'Test Result Ready');
         }
-        return incomingPatientTableDummyData;
+        // Show all patients EXCEPT those with 'Test Result Ready' state
+        return incomingPatientTableDummyData.filter(patient => patient.state !== 'Test Result Ready');
     }, [showingResultReadyPatients]);
 
     // Calculate total count
