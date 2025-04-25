@@ -17,8 +17,11 @@ const initialPatientInformation = {
     "Phone Number": "0123456789",
     "SSN": "123-45-6789",
     "Health Insurance Code": "123456789",
+    "Height (cm)": "163 cm",
+    "Weight (kg)": "70 kg",
     "Job": "Student",
     "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam",
+    "Follow-up Date": "25/04/2025",
 };
 
 function ReceptionistPatientInformation() {

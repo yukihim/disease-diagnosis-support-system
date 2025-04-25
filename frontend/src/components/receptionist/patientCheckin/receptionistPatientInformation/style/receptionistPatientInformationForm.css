@@ -1,9 +1,12 @@
 .receptionistPatientInformationForm {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     flex-direction: column;
     justify-content: flex-start;
     align-items: left;
     width: 100%;
 
     gap: 10px;
+
+    box-sizing: border-box;
 }

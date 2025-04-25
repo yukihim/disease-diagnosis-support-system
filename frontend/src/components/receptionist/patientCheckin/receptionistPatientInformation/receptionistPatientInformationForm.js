@@ -20,8 +20,11 @@ function ReceptionistPatientInformationForm({ initialPatientInformation, isEditi
         { key: "Phone Number", label: "Phone Number" },
         { key: "SSN", label: "SSN" },
         { key: "Health Insurance Code", label: "Health Insurance Code" },
+        { key: "Height (cm)", label: "Height (cm)" },
+        { key: "Weight (kg)", label: "Weight (kg)" },
         { key: "Job", label: "Job" },
         { key: "Address", label: "Address" },
+        { key: "Follow-up Date", label: "Follow-up Date" },
     ];
 
     return (

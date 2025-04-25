@@ -1,40 +1,14 @@
-// import React from 'react';
-// import './style/doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination.css';
-
-// import HuggedText from '../../../common/huggedText';
-
-// function DoctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination() {
-//     return (
-//         <div className="doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination">
-//             <HuggedText text="Final Diagnosis: " font_size="14px" font_weight="600" color="#000000" style={{ width: "100%" }} />
-//             <input className="inputDate" type="text" placeholder="Enter Follow-up Examination Date (if any)" />
-//         </div>
-//     );
-// }
-
-// export default DoctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination;
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from 'react';
 import './style/doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination.css';
 
 import HuggedText from '../../../common/huggedText';
 
 function DoctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination() {
+    // State to store the raw date input string (MM/DD/YYYY)
     const [followUpDate, setFollowUpDate] = useState('');
 
-    const handleDateChange = (e) => {
+    const handleDateInputChange = (e) => {
+        // Directly store the user's input
         setFollowUpDate(e.target.value);
     };
 
@@ -42,14 +16,15 @@ function DoctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination() 
         <div className="doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination">
             <HuggedText className="full" text="Follow-up Examination Date: " font_size="14px" font_weight="600" color="#000000" />
             <div className="date-input-container">
-                <input 
-                    className="inputDate" 
-                    type="date" 
-                    value={followUpDate}
-                    onChange={handleDateChange}
-                    placeholder="Select follow-up date (if needed)"
+                <input
+                    className="inputDate"
+                    type="text" // Use text input
+                    value={followUpDate} // Bind to the state
+                    onChange={handleDateInputChange} // Update state directly
+                    // Removed onBlur handler
+                    placeholder="MM/DD/YYYY" // Guide user format
+                    maxLength={10} // Max length for MM/DD/YYYY
                 />
-                <label className="date-label">Select follow-up date (if needed)</label>
             </div>
         </div>
     );

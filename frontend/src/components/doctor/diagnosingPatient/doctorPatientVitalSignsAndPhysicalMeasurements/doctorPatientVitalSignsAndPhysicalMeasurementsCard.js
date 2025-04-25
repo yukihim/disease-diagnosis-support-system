@@ -4,7 +4,7 @@ import './style/doctorPatientVitalSignsAndPhysicalMeasurementsCard.css';
 import SpecificInformationItemWrapper from '../../../common/specificInformationItemWrapper';
 
 const patientFields = [
-    { key: "Blood Pressure (mmHg/mmHg)", label: "Blood Pressure (mmHg/mmHg)" },
+    { key: "Blood Pressure (mmHg)", label: "Blood Pressure (mmHg)" },
     { key: "Pulse (beats/minute)", label: "Pulse (beats/minute)" },
     { key: "Breathing Rate (breaths/minute)", label: "Breathing Rate (breaths/minute)" },
     { key: "Temperature (°C)", label: "Temperature (°C)" },

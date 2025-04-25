@@ -22,6 +22,7 @@ const initialPatientInformationHolder = [
         "Phone Number": "0123456789",
         "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam",
         "Job": "Student",
+        "Follow-up Date": "25/04/2025",
     },
     {
         "Name": "Phuong Xuong B",
@@ -35,6 +36,7 @@ const initialPatientInformationHolder = [
         "Phone Number": "0123456789",
         "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam", // Moved from "Column 2"
         "Job": "Student",
+        "Follow-up Date": "None",
     },
     {
         "Name": "Phuong Xuong C",
@@ -48,6 +50,7 @@ const initialPatientInformationHolder = [
         "Phone Number": "0123456789",
         "Address": "168 Ly Thuong Kiet Street, District 10, Ho Chi Minh City, Vietnam", // Moved from "Column 2"
         "Job": "Student",
+        "Follow-up Date": "None",
     }
 ];
 

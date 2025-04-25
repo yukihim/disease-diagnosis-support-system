@@ -3,9 +3,9 @@ import './style/receptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignme
 
 import ChooseBox from '../../../common/chooseBox';
 
-function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment() {
-    const [selectedDepartment, setSelectedDepartment] = React.useState("");
-    const [selectedDoctor, setSelectedDoctor] = React.useState("");
+function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment({ followUpDoctor, followUpDepartment }) {
+    const [selectedDepartment, setSelectedDepartment] = React.useState(followUpDepartment);
+    const [selectedDoctor, setSelectedDoctor] = React.useState(followUpDoctor);
     
     return (
         <div className="receptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment">
@@ -13,9 +13,9 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment() {
             <ChooseBox
                 text="Choose Department:"
                 options={[
-                    { label: 'Lão - Ngoại', value: 'dept1' },
-                    { label: 'Lão - Nội', value: 'dept2' },
-                    { label: 'Cấp cứu hồi sức', value: 'dept3' },
+                    { label: 'Lão - Ngoại', value: 'Lão - Ngoại' },
+                    { label: 'Lão - Nội', value: 'Lão - Nội' },
+                    { label: 'Cấp cứu hồi sức', value: 'Cấp cứu hồi sức' },
                 ]}
                 selectedValue={selectedDepartment}
                 setSelectedValue={setSelectedDepartment}
@@ -25,9 +25,9 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment() {
             <ChooseBox
                 text="Choose Doctor:"
                 options={[
-                    { label: 'Dr. A', value: 'doc1' },
-                    { label: 'Dr. B', value: 'doc2' },
-                    { label: 'Dr. C', value: 'doc3' },
+                    { label: 'Dr. A', value: 'Dr. A' },
+                    { label: 'Dr. B', value: 'Dr. B' },
+                    { label: 'Dr. C', value: 'Dr. C' },
                 ]}
                 selectedValue={selectedDoctor}
                 setSelectedValue={setSelectedDoctor}

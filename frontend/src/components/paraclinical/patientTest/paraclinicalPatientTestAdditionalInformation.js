@@ -17,16 +17,16 @@ function ParaclinicalPatientTestAdditionalInformation() {
 
             <BoxContainerContent className='paraclinicalPatientTestAdditionalInformationContent'>
                 {/* Sent From Room */}
-                <ParaclinicalPatientTestAdditionalInformationDisplay item="Sent From Room:" itemValue="Room 101" />
+                <ParaclinicalPatientTestAdditionalInformationDisplay item="Sent From Room" itemValue="Room 101" />
 
                 {/* Doctor Note */}
-                <ParaclinicalPatientTestAdditionalInformationDisplay item="Doctor Note:" itemValue="Patient needs urgent care" />
+                <ParaclinicalPatientTestAdditionalInformationDisplay item="Doctor Note" itemValue="Patient needs urgent care" />
 
                 {/* Amount of Tests */}
-                <ParaclinicalPatientTestAdditionalInformationDisplay item="Amount of Tests:" itemValue="3" />
+                <ParaclinicalPatientTestAdditionalInformationDisplay item="Amount of Tests" itemValue="3" />
 
                 {/* Test Type */}
-                <ParaclinicalPatientTestAdditionalInformationDisplay className="spanFull" item="Test Type:" itemValue="Blood Test, X-Ray, MRI." />
+                <ParaclinicalPatientTestAdditionalInformationDisplay className="spanFull" item="Test Type" itemValue="Blood Test, X-Ray, MRI." />
             </BoxContainerContent>
         </BoxContainer>
     );
