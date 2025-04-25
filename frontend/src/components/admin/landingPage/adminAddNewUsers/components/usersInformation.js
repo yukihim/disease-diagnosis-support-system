@@ -11,6 +11,8 @@ function UsersInformation() {
     const [role, setRole] = useState(''); // Default role or first option
 
     const roles = ['Doctor', 'Nurse', 'Paraclinical', 'Receptionist', 'Admin'];
+    const dept = ['Lão - Ngoại', 'Lão - Nội', 'Hồi sức cấp cứu']
+    const room = ['R. 301', 'R. 302', 'R. 303'];
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -57,21 +59,58 @@ function UsersInformation() {
                 />
             </div>
             <div className="inputGroup">
-                <label htmlFor="role">Role:</label>
+                <label htmlFor="dept">Department:</label>
                 <select
                     className='inputField'
-                    id="role"
-                    value={role}
+                    id="dept"
+                    value={dept}
                     onChange={(e) => setRole(e.target.value)}
                     required
                 >
-                    <option value="" disabled>Select a role</option>
-                    {roles.map((r) => (
+                    <option value="" disabled>Select a department</option>
+                    {dept.map((r) => (
                         <option className='optionsStyle' key={r} value={r.toLowerCase().replace(' ', '_')}> {/* Use a consistent value format */}
                             {r}
                         </option>
                     ))}
                 </select>
+            </div>
+            <div style={{ display: 'grid', height: '100%', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div className="inputGroup">
+                    <label htmlFor="role">Role:</label>
+                    <select
+                        className='inputField'
+                        id="role"
+                        value={role}
+                        onChange={(e) => setRole(e.target.value)}
+                        required
+                    >
+                        <option value="" disabled>Select a role</option>
+                        {roles.map((r) => (
+                            <option className='optionsStyle' key={r} value={r.toLowerCase().replace(' ', '_')}> {/* Use a consistent value format */}
+                                {r}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="inputGroup">
+                    <label htmlFor="room">Room:</label>
+                    <select
+                        className='inputField'
+                        id="room"
+                        value={room}
+                        onChange={(e) => setRole(e.target.value)}
+                        required
+                    >
+                        <option value="" disabled>Select a room</option>
+                        {room.map((r) => (
+                            <option className='optionsStyle' key={r} value={r.toLowerCase().replace(' ', '_')}> {/* Use a consistent value format */}
+                                {r}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
             <Button type="submit" className="addUserButton" onClick={handleSubmit}>
                 <ButtonText> Add User </ButtonText>

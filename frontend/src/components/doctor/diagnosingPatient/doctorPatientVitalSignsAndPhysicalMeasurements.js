@@ -41,7 +41,7 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
                 { // Newest
                     timestamp: "2025-04-18 10:30 AM",
                     measurements: {
-                        "Blood Pressure (mmHg/mmHg)": "125/82 mmHg",
+                        "Blood Pressure (mmHg)": "125/82 mmHg",
                         "Pulse (beats/minute)": "75 beats/minute",
                         "Breathing Rate (breaths/minute)": "17 breaths/minute",
                         "Temperature (°C)": "37.0 °C",
@@ -52,7 +52,7 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
                 { // Older
                     timestamp: "2025-04-18 08:15 AM",
                     measurements: {
-                        "Blood Pressure (mmHg/mmHg)": "120/80 mmHg",
+                        "Blood Pressure (mmHg)": "120/80 mmHg",
                         "Pulse (beats/minute)": "72 beats/minute",
                         "Breathing Rate (breaths/minute)": "16 breaths/minute",
                         "Temperature (°C)": "36.8 °C",
@@ -63,7 +63,7 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
                  { // Even Older
                     timestamp: "2025-04-17 04:00 PM",
                     measurements: {
-                        "Blood Pressure (mmHg/mmHg)": "118/78 mmHg",
+                        "Blood Pressure (mmHg)": "118/78 mmHg",
                         "Pulse (beats/minute)": "70 beats/minute",
                         "Breathing Rate (breaths/minute)": "16 breaths/minute",
                         "Temperature (°C)": "36.7 °C",
@@ -237,9 +237,9 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
                             {/* Display Selected Vitals */}
                             {currentSelectedVitals && (
                                 <>
-                                    <div className="vitalsTimestamp">
+                                    {/* <div className="vitalsTimestamp">
                                         Recorded at: {currentSelectedVitals.timestamp}
-                                    </div>
+                                    </div> */}
                                     <DoctorPatientVitalSignsAndPhysicalMeasurementsCard
                                         patientVitalSignsAndPhysicalMeasurements={currentSelectedVitals.measurements}
                                     />

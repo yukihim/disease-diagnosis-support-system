@@ -10,6 +10,14 @@ function AdminCalendar() {
     const handleDateSelected = (date) => {
         console.log("Date selected:", date); // For debugging
         setSelectedDate(date);
+
+        // Format for API call (DD-MM-YYYY)
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+        const day = date.getDate().toString().padStart(2, '0');
+        const formattedDateString = `${day}-${month}-${year}`;
+
+        console.log("Formatted Date String:", formattedDateString); // e.g., "21-04-2025"
     };
 
     return (

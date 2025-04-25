@@ -9,6 +9,9 @@ import ReceptionistFinalizeAndCheckinPatientReasonToVisit from './receptionistFi
 import ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment from './receptionistFinalizeAndCheckinPatient/receptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment';
 import ReceptionistFinalizeAndCheckinPatientCheckinButton from './receptionistFinalizeAndCheckinPatient/receptionistFinalizeAndCheckinPatientCheckinButton';
 
+const followUpDoctor='Dr. B'; // Example doctor
+const followUpDepartment='Cấp cứu hồi sức'; // Example department
+
 function ReceptionistFinalizeAndCheckinPatient() {
     return (
         <BoxContainer className='receptionistPatientCheckInBox'>
@@ -22,7 +25,7 @@ function ReceptionistFinalizeAndCheckinPatient() {
                 <ReceptionistFinalizeAndCheckinPatientReasonToVisit />
 
                 {/* Choose Department & Doctor */}
-                <ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment />
+                <ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment followUpDoctor={followUpDoctor} followUpDepartment={followUpDepartment} />
 
                 {/* Check in for patient button */}
                 <ReceptionistFinalizeAndCheckinPatientCheckinButton />

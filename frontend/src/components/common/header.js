@@ -64,7 +64,7 @@ function Header({ userName, userRole }) {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
+              // 'Content-Type': 'application/json'
             }
             // No body needed typically for logout
           });

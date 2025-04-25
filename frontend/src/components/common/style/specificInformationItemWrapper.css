@@ -3,6 +3,9 @@
     flex-direction: row;
     align-items: baseline;
     border-bottom: 1px solid #f0f0f0;
+
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .specificInformationItemWrapper.vitalSignsAndPhysicalMeasurement {
@@ -12,6 +15,8 @@
 
     align-items: none;
     border-bottom: 1px solid #8d8686;
+
+    padding-top: 20px;
 
     .item {
         min-width: 230px;
@@ -67,6 +72,7 @@
     font-size: 14px;
     padding-left: 8px;
     word-break: break-word;
+    box-sizing: border-box;
 }
 
 .editableInput {
@@ -77,6 +83,8 @@
     border-radius: 4px;
     color: #14142B;
     transition: all 0.3s;
+
+    box-sizing: border-box;
 }
 
 .editableInput:focus {

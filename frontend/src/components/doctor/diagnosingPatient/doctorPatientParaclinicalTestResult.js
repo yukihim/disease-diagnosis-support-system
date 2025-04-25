@@ -1,672 +1,451 @@
-// // import React, { useState, useEffect } from 'react';
-// // import './style/doctorPatientParaclinicalTestResult.css';
-
-// // import BoxContainer from '../../common/boxContainer';
-// // import BoxContainerTitle from '../../common/boxContainerTitle';
-// // import BoxContainerContent from '../../common/boxContainerContent';
-
-// // import DropDownBox from '../../common/dropDownBox';
-
-// // import DoctorPatientParaclinicalTestResultCard from './doctorPatientParaclinicalTestResult/doctorPatientParaclinicalTestResultCard';
-
-// // function DoctorPatientParaclinicalTestResult() {
-// //     const [patientTestResults, setTestResults] = useState([]);
-// //     const [selectedTestIndex, setSelectedTestIndex] = useState(0);
-// //     const [isLoading, setIsLoading] = useState(false);
-    
-// //     // Fetch data from API
-// //     const fetchTestResults = async () => {
-// //         try {
-// //             setIsLoading(true);
-// //             // Replace with your actual API endpoint
-// //             // const response = await fetch('your-api-endpoint');
-// //             // const data = await response.json();
-// //             // setTestResults(data);
-            
-// //             // Mock data for demonstration
-// //             const mockData = [
-// //                 {
-// //                     testName: "Complete Blood Count",
-// //                     dateTime: "2023-03-29 09:15 AM",
-// //                     testFields: [
-// //                         { key: "White Blood Cell Count", label: "WBC", value: "12.0 x10^9/L", normalRange: "4.5-11.0 x10^9/L" },
-// //                         { key: "Red Blood Cell Count", label: "RBC", value: "4.9 x10^12/L", normalRange: "4.5-5.5 x10^12/L" },
-// //                         { key: "Hemoglobin", label: "Hgb", value: "14.2 g/dL", normalRange: "13.5-17.5 g/dL" },
-// //                         { key: "Hematocrit", label: "Hct", value: "32%", normalRange: "41-50%" }
-// //                     ]
-// //                 },
-// //                 {
-// //                     testName: "Liver Function Test",
-// //                     dateTime: "2023-03-28 02:30 PM",
-// //                     testFields: [
-// //                         { key: "Total Bilirubin", label: "TBIL", value: "0.8 mg/dL", normalRange: "0.3-1.0 mg/dL" },
-// //                         { key: "Alanine Aminotransferase", label: "ALT", value: "30 U/L", normalRange: "7-56 U/L" },
-// //                         { key: "Aspartate Aminotransferase", label: "AST", value: "28 U/L", normalRange: "5-40 U/L" },
-// //                         { key: "Alkaline Phosphatase", label: "ALP", value: "43 U/L", normalRange: "44-147 U/L" }
-// //                     ]
-// //                 }
-// //             ];
-
-// //             // Simulate network delay
-// //             setTimeout(() => {
-// //                 setTestResults(mockData);
-// //                 // Reset selected test to first one when data refreshes
-// //                 setSelectedTestIndex(0);
-// //                 setIsLoading(false);
-// //             }, 500);
-// //         } catch (error) {
-// //             console.error('Error fetching test results:', error);
-// //             setIsLoading(false);
-// //         }
-// //     };
-    
-// //     useEffect(() => {
-// //         fetchTestResults();
-        
-// //         // Set up interval to fetch data every 5 seconds - only for doctor view
-// //         let intervalId;
-// //         intervalId = setInterval(() => {
-// //             fetchTestResults();
-// //             console.log('fetchTestResults');
-// //         }, 5000);
-        
-// //         // Clean up interval on component unmount
-// //         return () => {
-// //             if (intervalId) clearInterval(intervalId);
-// //         };
-// //     }, []);
-
-// //     // Generate options for dropdown
-// //     const testOptions = patientTestResults.map((test, index) => ({
-// //         label: `${test.testName} - ${test.dateTime}`,
-// //         value: index.toString()
-// //     }));
-
-// //     // Handle test selection change
-// //     const handleTestChange = (e) => {
-// //         setSelectedTestIndex(parseInt(e.target.value, 10));
-// //     };
-    
-// //     return (
-// //         <BoxContainer className='doctorPatientParaclinicalTestResultBox'>
-// //             <BoxContainerTitle className='doctorPatientParaclinicalTestResult'>
-// //                 Patient's Paraclinical Test Results
-// //                 {isLoading && <span className="loading-indicator"> Loading...</span>}
-// //             </BoxContainerTitle>
-
-// //             <BoxContainerContent className='doctorPatientParaclinicalTestResultContent'>
-// //                 {patientTestResults.length > 0 ? (
-// //                     <>
-// //                         <DropDownBox
-// //                             options={testOptions}
-// //                             value={selectedTestIndex.toString()}
-// //                             onChange={handleTestChange}
-// //                         />
-                        
-// //                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'auto' }}>
-// //                             <h3>{patientTestResults[selectedTestIndex].testName}</h3>
-// //                             <span className="testDateTime">{patientTestResults[selectedTestIndex].dateTime}</span>
-// //                         </div>
-                        
-// //                         <DoctorPatientParaclinicalTestResultCard 
-// //                             patientTestResult={patientTestResults[selectedTestIndex]}
-// //                         />
-// //                     </>
-// //                 ) : (
-// //                     <div className="no-results">No paraclinical test results available</div>
-// //                 )}
-// //             </BoxContainerContent>
-// //         </BoxContainer>
-// //     );
-// // }
-
-// // export default DoctorPatientParaclinicalTestResult;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
-// import './style/doctorPatientParaclinicalTestResult.css';
-
-// import BoxContainer from '../../common/boxContainer';
-// import BoxContainerTitle from '../../common/boxContainerTitle';
-// import BoxContainerContent from '../../common/boxContainerContent';
-// import DropDownBox from '../../common/dropDownBox';
-// import LineChartComponent from '../../common/lineChart'; // Import LineChartComponent
-
-// // --- Helper Functions (Paste parseNormalRange and generateMockFieldHistory here) ---
-// function parseNormalRange(rangeString) {
-//     if (!rangeString) return { low: 0, high: 0, unit: '' };
-//     const parts = rangeString.match(/([\d.]+)\s*-\s*([\d.]+)\s*(.*)/);
-//     if (parts && parts.length === 4) {
-//         return { low: parseFloat(parts[1]), high: parseFloat(parts[2]), unit: parts[3].trim() };
-//     }
-//     const lessThan = rangeString.match(/<\s*([\d.]+)\s*(.*)/);
-//     if (lessThan && lessThan.length === 3) {
-//         return { low: 0, high: parseFloat(lessThan[1]), unit: lessThan[2].trim() };
-//     }
-//     const greaterThan = rangeString.match(/>\s*([\d.]+)\s*(.*)/);
-//      if (greaterThan && greaterThan.length === 3) {
-//         return { low: parseFloat(greaterThan[1]), high: Infinity, unit: greaterThan[2].trim() };
-//     }
-//     console.warn("Could not parse normal range:", rangeString);
-//     return { low: 0, high: 0, unit: rangeString };
-// }
-
-// // const generateMockFieldHistory = (currentValueStr, numPoints = 1) => {
-// //     const history = [];
-// //     const numericMatch = currentValueStr ? currentValueStr.match(/[\d.]+/) : null;
-// //     let currentValue = numericMatch ? parseFloat(numericMatch[0]) : 0;
-// //     if (isNaN(currentValue)) currentValue = 0;
-
-// //     let tempValue = currentValue;
-// //     for (let i = numPoints - 1; i > 0; i--) {
-// //         const time = `T-${numPoints - 1 - i}`;
-// //         const variation = (Math.random() - 0.5) * (tempValue * 0.1);
-// //         tempValue = Math.max(0, tempValue - variation);
-// //         history.push({ time, value: parseFloat(tempValue.toFixed(2)) });
-// //     }
-// //     history.push({ time: 'Now', value: parseFloat(currentValue.toFixed(2)) });
-// //     return history;
-// // };
-// const generateCurrentPointData = (currentValueStr) => {
-//     const history = [];
-//     const numericMatch = currentValueStr ? currentValueStr.match(/[\d.]+/) : null;
-//     let currentValue = numericMatch ? parseFloat(numericMatch[0]) : 0;
-//     if (isNaN(currentValue)) currentValue = 0;
-
-//     // Only add the current point
-//     history.push({ time: 'Now', value: parseFloat(currentValue.toFixed(2)) });
-//     return history;
-// };
-// // --- End Helper Functions ---
-
-
-// function DoctorPatientParaclinicalTestResult() {
-//     const [patientTestResults, setTestResults] = useState([]);
-//     const [selectedTestIndex, setSelectedTestIndex] = useState(0);
-//     const [isLoading, setIsLoading] = useState(false);
-
-//     // Processed data with history, safe ranges, and units
-//     // const processedTestResults = useMemo(() => {
-//     //     return patientTestResults.map(test => ({
-//     //         ...test,
-//     //         testFields: test.testFields.map(field => {
-//     //             const { low, high, unit } = parseNormalRange(field.normalRange);
-//     //             return {
-//     //                 ...field,
-//     //                 // history: generateMockFieldHistory(field.value),
-//     //                 safeRange: { low, high },
-//     //                 // unit: unit
-//     //                 unit: generateMockFieldHistory(field.value),
-//     //             };
-//     //         })
-//     //     }));
-//     // }, [patientTestResults]); // Recalculate when raw results change
-//     const processedTestResults = useMemo(() => {
-//         return patientTestResults.map(test => ({
-//             ...test,
-//             testFields: test.testFields.map(field => {
-//                 const { low, high, unit } = parseNormalRange(field.normalRange);
-//                 return {
-//                     ...field,
-//                     chartData: generateCurrentPointData(field.value), // Generate only the current point
-//                     safeRange: { low, high },
-//                     unit: unit // Correctly assign the unit
-//                 };
-//             })
-//         }));
-//     }, [patientTestResults]); // Recalculate when raw results change
-
-//     // Fetch data from API (using original mock structure initially)
-//     const fetchTestResults = async () => {
-//         try {
-//             setIsLoading(true);
-//             // Mock data (original structure)
-//             const mockData = [
-//                 {
-//                     testName: "Complete Blood Count",
-//                     dateTime: "2023-03-29 09:15 AM",
-//                     testFields: [
-//                         { key: "White Blood Cell Count", label: "WBC", value: "12.0 x10^9/L", normalRange: "4.5-11.0 x10^9/L" },
-//                         { key: "Red Blood Cell Count", label: "RBC", value: "4.9 x10^12/L", normalRange: "4.5-5.5 x10^12/L" },
-//                         { key: "Hemoglobin", label: "Hgb", value: "14.2 g/dL", normalRange: "13.5-17.5 g/dL" },
-//                         { key: "Hematocrit", label: "Hct", value: "32%", normalRange: "41-50%" } // Note: % unit might need special handling in chart/parser
-//                     ]
-//                 },
-//                 {
-//                     testName: "Liver Function Test",
-//                     dateTime: "2023-03-28 02:30 PM",
-//                     testFields: [
-//                         { key: "Total Bilirubin", label: "TBIL", value: "0.8 mg/dL", normalRange: "0.3-1.0 mg/dL" },
-//                         { key: "Alanine Aminotransferase", label: "ALT", value: "30 U/L", normalRange: "7-56 U/L" },
-//                         { key: "Aspartate Aminotransferase", label: "AST", value: "28 U/L", normalRange: "5-40 U/L" },
-//                         { key: "Alkaline Phosphatase", label: "ALP", value: "43 U/L", normalRange: "44-147 U/L" }
-//                     ]
-//                 }
-//                 // Add more mock tests if needed
-//             ];
-
-//             // Simulate network delay
-//             setTimeout(() => {
-//                 setTestResults(mockData); // Set the raw data
-//                 setSelectedTestIndex(0);
-//                 setIsLoading(false);
-//             }, 500);
-//         } catch (error) {
-//             console.error('Error fetching test results:', error);
-//             setIsLoading(false);
-//         }
-//     };
-
-//     useEffect(() => {
-//         fetchTestResults();
-//     }, []);
-
-//     // Generate options for dropdown using the raw patientTestResults
-//     const testOptions = patientTestResults.map((test, index) => ({
-//         label: `${test.testName} - ${test.dateTime}`,
-//         value: index.toString()
-//     }));
-
-//     const handleTestChange = (e) => {
-//         setSelectedTestIndex(parseInt(e.target.value, 10));
-//     };
-
-//     // Get the currently selected processed test data
-//     const selectedTestData = processedTestResults.length > selectedTestIndex ? processedTestResults[selectedTestIndex] : null;
-
-//     // return (
-//     //     <BoxContainer className='doctorPatientParaclinicalTestResultBox'>
-//     //         <BoxContainerTitle className='doctorPatientParaclinicalTestResult'>
-//     //             Patient's Paraclinical Test Results
-//     //             {isLoading && <span className="loading-indicator"> Loading...</span>}
-//     //         </BoxContainerTitle>
-
-//     //         <BoxContainerContent className='doctorPatientParaclinicalTestResultContent'>
-//     //             {processedTestResults.length > 0 && selectedTestData ? (
-//     //                 <>
-//     //                     <DropDownBox
-//     //                         options={testOptions}
-//     //                         value={selectedTestIndex.toString()}
-//     //                         onChange={handleTestChange}
-//     //                     />
-
-//     //                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'auto', marginTop: '10px', marginBottom: '10px' }}>
-//     //                         <h3>{selectedTestData.testName}</h3>
-//     //                         <span className="testDateTime">{selectedTestData.dateTime}</span>
-//     //                     </div>
-
-//     //                     {/* Render a chart for each test field */}
-//     //                     <div className="paraclinical-charts-grid">
-//     //                         {selectedTestData.testFields.map((field, fieldIndex) => (
-//     //                             <div key={fieldIndex} className="paraclinical-chart-container">
-//     //                                 <h4 className="paraclinical-chart-title">{field.label} ({field.key})</h4>
-//     //                                 <div style={{ height: '200px', width: '100%' }}> {/* Adjust height as needed */}
-//     //                                     <LineChartComponent
-//     //                                         // data={field.history}
-//     //                                         dataKeys={['value']} // The key in our generated history
-//     //                                         unit={field.unit}
-//     //                                         safeRange={field.safeRange}
-//     //                                         chartName={field.label} // Use label for chart name
-//     //                                         height={200} // Set chart height
-//     //                                     />
-//     //                                 </div>
-//     //                                  {/* Optionally display current value and range textually */}
-//     //                                  <div className="paraclinical-chart-info">
-//     //                                     <span>Current: {field.value}</span>
-//     //                                     <span>Normal Range: {field.normalRange}</span>
-//     //                                 </div>
-//     //                             </div>
-//     //                         ))}
-//     //                     </div>
-//     //                 </>
-//     //             ) : (
-//     //                 <div className="no-results">{isLoading ? 'Loading...' : 'No paraclinical test results available'}</div>
-//     //             )}
-//     //         </BoxContainerContent>
-//     //     </BoxContainer>
-//     // );
-
-//     return (
-//         <BoxContainer className='doctorPatientParaclinicalTestResultBox'>
-//             <BoxContainerTitle className='doctorPatientParaclinicalTestResult'>
-//                 Patient's Paraclinical Test Results
-//                 {isLoading && <span className="loading-indicator"> Loading...</span>}
-//             </BoxContainerTitle>
-
-//             <BoxContainerContent className='doctorPatientParaclinicalTestResultContent'>
-//                 {processedTestResults.length > 0 && selectedTestData ? (
-//                     <>
-//                         <DropDownBox
-//                             options={testOptions}
-//                             value={selectedTestIndex.toString()}
-//                             onChange={handleTestChange}
-//                         />
-
-//                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'auto', marginTop: '10px', marginBottom: '10px' }}>
-//                             <h3>{selectedTestData.testName}</h3>
-//                             <span className="testDateTime">{selectedTestData.dateTime}</span>
-//                         </div>
-
-//                         {/* Render a chart for each test field */}
-//                         <div className="paraclinical-charts-grid">
-//                             {selectedTestData.testFields.map((field, fieldIndex) => (
-//                                 <div key={fieldIndex} className="paraclinical-chart-container">
-//                                     <h4 className="paraclinical-chart-title">{field.label} ({field.key})</h4>
-//                                     <div style={{ height: '200px', width: '100%' }}> {/* Adjust height as needed */}
-//                                         <LineChartComponent
-//                                             data={field.chartData} // Pass the single data point
-//                                             dataKeys={['value']} // The key in our generated data
-//                                             unit={field.unit} // Pass the correct unit
-//                                             safeRange={field.safeRange}
-//                                             chartName={field.label} // Use label for chart name
-//                                             height={200} // Set chart height
-//                                             medianOrNot={false} // Set medianOrNot to false for current point
-//                                         />
-//                                     </div>
-//                                      {/* Optionally display current value and range textually */}
-//                                      <div className="paraclinical-chart-info">
-//                                         <span>Current: {field.value}</span>
-//                                         <span>Normal Range: {field.normalRange}</span>
-//                                     </div>
-//                                 </div>
-//                             ))}
-//                         </div>
-//                     </>
-//                 ) : (
-//                     <div className="no-results">{isLoading ? 'Loading...' : 'No paraclinical test results available'}</div>
-//                 )}
-//             </BoxContainerContent>
-//         </BoxContainer>
-//     );
-// }
-
-// export default DoctorPatientParaclinicalTestResult;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
+import React, { useState, useEffect, useMemo } from 'react';
 import './style/doctorPatientParaclinicalTestResult.css';
 
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 import DropDownBox from '../../common/dropDownBox';
-import LineChartComponent from '../../common/lineChart'; // Import LineChartComponent
+import LineChartComponent from '../../common/lineChart';
 
 // --- Helper Functions ---
-function parseNormalRange(rangeString) {
-    if (!rangeString) return { low: 0, high: 0, unit: '' };
-    // Match "number - number unit" format
-    const parts = rangeString.match(/([\d.]+)\s*-\s*([\d.]+)\s*(.*)/);
-    if (parts && parts.length === 4) {
-        return { low: parseFloat(parts[1]), high: parseFloat(parts[2]), unit: parts[3].trim() };
-    }
-    // Match "< number unit" format
-    const lessThan = rangeString.match(/<\s*([\d.]+)\s*(.*)/);
-    if (lessThan && lessThan.length === 3) {
-        return { low: 0, high: parseFloat(lessThan[1]), unit: lessThan[2].trim() };
-    }
-    // Match "> number unit" format
-    const greaterThan = rangeString.match(/>\s*([\d.]+)\s*(.*)/);
-     if (greaterThan && greaterThan.length === 3) {
-        return { low: parseFloat(greaterThan[1]), high: Infinity, unit: greaterThan[2].trim() };
-    }
-    // Fallback if no format matches
-    console.warn("Could not parse normal range:", rangeString);
-    return { low: 0, high: 0, unit: rangeString }; // Return the original string as unit if unparseable
-}
 
 // Generates a single data point for the chart based on the current value
-const generateCurrentPointData = (currentValueStr) => {
+const generateCurrentPointData = (currentValue) => {
     const history = [];
-    // Extract the first numeric part of the value string
-    const numericMatch = currentValueStr ? currentValueStr.match(/[\d.]+/) : null;
-    let currentValue = numericMatch ? parseFloat(numericMatch[0]) : 0;
-    // Handle cases where parsing fails
-    if (isNaN(currentValue)) currentValue = 0;
-
+    let numericValue = NaN;
+    if (typeof currentValue === 'number' && isFinite(currentValue)) {
+        numericValue = currentValue;
+    } else if (typeof currentValue === 'string') {
+        // Try to extract the first numeric part if it's a string
+        const numericMatch = currentValue.match(/^-?[\d.]+/); // Match potential leading number
+        if (numericMatch) {
+            numericValue = parseFloat(numericMatch[0]);
+        }
+    }
+    // Handle cases where parsing fails or value is not numeric
+    if (isNaN(numericValue)) {
+        return []; // Return empty array for non-numeric values
+    }
     // Create a single data point object for the chart
-    history.push({ time: 'Now', value: parseFloat(currentValue.toFixed(2)) });
+    history.push({ time: 'Now', value: parseFloat(numericValue.toFixed(2)) });
     return history;
 };
 // --- End Helper Functions ---
 
+// --- Full grouped_test_options ---
+// In a real app, import this from its source file.
+const grouped_test_options = {
+    'Blood Tests': [
+        {
+            label: 'Complete Blood Count (CBC)', value: 'cbc', parameters: [
+                { name: 'Hemoglobin (Hgb)', label: 'Hgb', unit: 'g/dL', range: { low: 12, high: 18 } },
+                { name: 'Hematocrit (Hct)', label: 'Hct', unit: '%', range: { low: 36, high: 50 } },
+                { name: 'White Blood Cell Count (WBC)', label: 'WBC', unit: 'cells/mm³', range: { low: 4500, high: 11000 } },
+                { name: 'Platelet Count', label: 'PLT', unit: 'cells/mm³', range: { low: 150000, high: 350000 } },
+            ]
+        },
+        {
+            label: 'Basic Metabolic Panel (BMP)', value: 'bmp', parameters: [
+                { name: 'Blood Urea Nitrogen (BUN)', label: 'BUN', unit: 'mg/dL', range: { low: 8, high: 23 } },
+                { name: 'Serum Creatinine', label: 'Creatinine', unit: 'mg/dL', range: { low: 0.6, high: 1.2 } },
+                { name: 'Glucose', label: 'Glucose', unit: 'mg/dL', range: { low: 70, high: 110 } },
+                { name: 'Calcium', label: 'Calcium', unit: 'mg/dL', range: { low: 8.2, high: 10.2 } },
+                { name: 'Sodium', label: 'Sodium', unit: 'mEq/L', range: { low: 135, high: 145 } },
+                { name: 'Potassium', label: 'Potassium', unit: 'mEq/L', range: { low: 3.5, high: 5.0 } },
+                { name: 'Chloride', label: 'Chloride', unit: 'mEq/L', range: { low: 98, high: 107 } },
+                { name: 'Bicarbonate (CO2)', label: 'CO2', unit: 'mEq/L', range: { low: 22, high: 29 } },
+            ]
+        },
+        {
+            label: 'Lipid Panel', value: 'lipid_panel', parameters: [
+                { name: 'Total Cholesterol', label: 'Total Chol', unit: 'mg/dL', range: { low: 125, high: 200 } },
+                { name: 'LDL Cholesterol', label: 'LDL', unit: 'mg/dL', range: { low: 0, high: 130 } },
+                { name: 'HDL Cholesterol', label: 'HDL', unit: 'mg/dL', range: { low: 40, high: 60 } },
+                { name: 'Triglycerides', label: 'Trig', unit: 'mg/dL', range: { low: 0, high: 150 } },
+            ]
+        },
+        {
+            label: 'HbA1c (Diabetes Screen)', value: 'hba1c', parameters: [
+                { name: 'Hemoglobin A1c', label: 'HbA1c', unit: '%', range: { low: 4, high: 6 } },
+            ]
+        },
+        {
+            label: 'Liver Function Tests (LFTs)', value: 'lft', parameters: [
+                { name: 'Alanine Aminotransferase (ALT)', label: 'ALT', unit: 'U/L', range: { low: 10, high: 40 } },
+                { name: 'Aspartate Aminotransferase (AST)', label: 'AST', unit: 'U/L', range: { low: 10, high: 30 } },
+                { name: 'Alkaline Phosphatase (ALP)', label: 'ALP', unit: 'IU/L', range: { low: 30, high: 120 } },
+                { name: 'Total Bilirubin', label: 'TBIL', unit: 'mg/dL', range: { low: 0.3, high: 1.2 } },
+                { name: 'Direct Bilirubin', label: 'DBIL', unit: 'mg/dL', range: { low: 0.1, high: 0.3 } },
+                { name: 'Albumin', label: 'Albumin', unit: 'g/dL', range: { low: 3.5, high: 5.0 } },
+            ]
+        },
+        {
+            label: 'C-Reactive Protein (CRP)', value: 'crp', parameters: [
+                { name: 'CRP', label: 'CRP', unit: 'mg/L', range: { low: 0.08, high: 3.1 } },
+            ]
+        },
+        {
+            label: 'Ferritin', value: 'ferritin', parameters: [
+                { name: 'Ferritin', label: 'Ferritin', unit: 'ng/mL', range: { low: 15, high: 200 } },
+            ]
+        },
+    ],
+    'Urine & Stool Tests': [
+        {
+            label: 'Urinalysis (UA)', value: 'urinalysis', parameters: [
+                { name: 'Protein', label: 'Protein', unit: 'mg/dL', range: { low: 0, high: 15 } },
+                { name: 'Glucose', label: 'Glucose', unit: 'mg/dL', range: { low: 0, high: 15 } },
+                { name: 'Ketones', label: 'Ketones', unit: 'mg/dL', range: { low: 0, high: 5 } },
+                // Ensure unit is 'presence' for positive/negative types
+                { name: 'Blood', label: 'Blood', unit: 'presence', range: { low: 'negative', high: 'negative' } },
+            ]
+        },
+        {
+            label: 'Urine Culture', value: 'urine_culture', parameters: [
+                { name: 'Bacterial Growth', label: 'Growth', unit: 'CFU/mL', range: { low: 0, high: 10000 } },
+                { name: 'Pathogen Identified', label: 'Pathogen', unit: 'string', range: {} },
+            ]
+        },
+        {
+            label: 'Stool Occult Blood Test', value: 'stool_occult', parameters: [
+                // Ensure unit is 'presence'
+                { name: 'Occult Blood', label: 'Occult Blood', unit: 'presence', range: { low: 'negative', high: 'negative' } },
+            ]
+        },
+        {
+            label: 'Stool Culture', value: 'stool_culture', parameters: [
+                { name: 'Pathogen Identified', label: 'Pathogen', unit: 'string', range: {} },
+            ]
+        },
+    ],
+    'Imaging': [
+        {
+            label: 'X-Ray', value: 'xray', parameters: [
+                { name: 'Findings', label: 'Findings', unit: 'string' },
+            ]
+        },
+        {
+            label: 'Magnetic Resonance Imaging (MRI)', value: 'mri', parameters: [
+                { name: 'Findings', label: 'Findings', unit: 'string' },
+            ]
+        },
+        {
+            label: 'Computed Tomography (CT) Scan', value: 'ct', parameters: [
+                { name: 'Findings', label: 'Findings', unit: 'string' },
+            ]
+        },
+        {
+            label: 'Ultrasound', value: 'ultrasound', parameters: [
+                { name: 'Findings', label: 'Findings', unit: 'string' },
+            ]
+        },
+        {
+            label: 'Positron Emission Tomography (PET)', value: 'pet', parameters: [
+                { name: 'Findings', label: 'Findings', unit: 'string' },
+            ]
+        },
+        {
+            label: 'Optical Coherence Tomography (OCT)', value: 'oct', parameters: [
+                { name: 'Retinal Nerve Fiber Layer Thickness', label: 'RNFL', unit: 'µm', range: { low: 80, high: 110 } },
+            ]
+        },
+    ],
+    'Cardiac Tests': [
+        {
+            label: 'Electrocardiogram (ECG/EKG)', value: 'ecg', parameters: [
+                { name: 'Heart Rate', label: 'HR', unit: 'bpm', range: { low: 60, high: 100 } },
+                { name: 'PR Interval', label: 'PR', unit: 'ms', range: { low: 120, high: 200 } },
+                { name: 'QRS Duration', label: 'QRS', unit: 'ms', range: { low: 80, high: 120 } },
+            ]
+        },
+        {
+            label: 'Echocardiogram', value: 'echocardiogram', parameters: [
+                { name: 'Ejection Fraction', label: 'EF', unit: '%', range: { low: 55, high: 70 } },
+                { name: 'Left Ventricular Size', label: 'LV Size', unit: 'cm', range: { low: 3.5, high: 5.7 } },
+            ]
+        },
+        {
+            label: 'Stress Test', value: 'stress_test', parameters: [
+                { name: 'Exercise Duration', label: 'Duration', unit: 'minutes' },
+                { name: 'Max Heart Rate Achieved', label: 'Max HR', unit: 'bpm' },
+            ]
+        },
+    ],
+    'Neurological & Specialized Tests': [
+        {
+            label: 'Evoked Potentials', value: 'evoked_potentials', parameters: [
+                { name: 'Visual Evoked Potential Latency', label: 'VEP Latency', unit: 'ms', range: { low: 90, high: 110 } },
+                { name: 'Somatosensory Evoked Potential Latency', label: 'SSEP Latency', unit: 'ms' },
+            ]
+        },
+        {
+            label: 'Cerebrospinal Fluid (CSF) Analysis', value: 'csf_analysis', parameters: [
+                { name: 'White Blood Cell Count', label: 'WBC (CSF)', unit: 'cells/mm³', range: { low: 0, high: 5 } },
+                { name: 'Protein', label: 'Protein (CSF)', unit: 'mg/dL', range: { low: 15, high: 45 } },
+                { name: 'Glucose', label: 'Glucose (CSF)', unit: 'mg/dL', range: { low: 50, high: 80 } },
+                { name: 'Oligoclonal Bands', label: 'Oligo Bands', unit: 'presence', range: { low: 'negative', high: 'negative' } },
+            ]
+        },
+        {
+            label: 'Biopsy', value: 'biopsy', parameters: [
+                { name: 'Histopathological Findings', label: 'Findings', unit: 'string' },
+            ]
+        },
+        {
+            label: 'Enzyme-linked Immunosorbent Assay (ELISA)', value: 'elisa', parameters: [
+                { name: 'Antibody Level', label: 'Antibody Lvl', unit: 'IU/mL' },
+            ]
+        },
+    ],
+    'Other Specialized Tests': [
+        {
+            label: 'Allergy Panel (IgE)', value: 'allergy_panel', parameters: [
+                { name: 'Total IgE', label: 'Total IgE', unit: 'IU/mL', range: { low: 0, high: 100 } },
+                { name: 'Specific IgE', label: 'Specific IgE', unit: 'IU/mL' },
+            ]
+        },
+        {
+            label: 'Genetic Screening', value: 'genetic_screening', parameters: [
+                { name: 'Mutation Detected', label: 'Mutation', unit: 'string' },
+            ]
+        },
+        {
+            label: 'Pulmonary Function Tests (PFTs)', value: 'pfts', parameters: [
+                { name: 'Forced Vital Capacity (FVC)', label: 'FVC', unit: 'L', range: { low: 3.0, high: 5.0 } },
+                { name: 'Forced Expiratory Volume in 1 second (FEV1)', label: 'FEV1', unit: 'L', range: { low: 2.5, high: 4.0 } },
+                { name: 'FEV1/FVC Ratio', label: 'FEV1/FVC', unit: '%', range: { low: 70, high: 85 } },
+            ]
+        },
+    ],
+};
+// --- End grouped_test_options ---
+
 
 function DoctorPatientParaclinicalTestResult() {
-    const [patientTestResults, setTestResults] = useState([]); // Raw data from API
-    const [selectedTestIndex, setSelectedTestIndex] = useState(0); // Index of the selected test in the dropdown
-    const [isLoading, setIsLoading] = useState(false); // Loading state indicator
+    // --- Helper: Create a lookup map for test parameters (label, unit, range) ---
+    const parameterDetailsMap = useMemo(() => {
+        const map = new Map();
+        Object.values(grouped_test_options).forEach(category => {
+            category.forEach(test => {
+                if (test.parameters) {
+                    test.parameters.forEach(param => {
+                        // Key: param.name (matches API 'name' field)
+                        // Value: { label, unit, range }
+                        map.set(param.name, {
+                            label: param.label || param.name, // Use specific label or fallback to name
+                            unit: param.unit || '',
+                            range: param.range || { low: null, high: null }
+                        });
+                    });
+                }
+            });
+        });
+        return map;
+    }, []); // Calculate only once as grouped_test_options is constant
+
+    const [patientTestResults, setTestResults] = useState([]);
+    const [selectedTestIndex, setSelectedTestIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Process the raw test results using useMemo for optimization
     const processedTestResults = useMemo(() => {
         return patientTestResults.map(test => ({
-            ...test, // Keep original test data
+            ...test, // Keep original test data (testName, dateTime)
             testFields: test.testFields.map(field => {
-                // Parse the normal range string to get low, high, and unit
-                const { low, high, unit } = parseNormalRange(field.normalRange);
+                // Look up label, unit, and range from the map using field.name
+                // console.log("API Field Name:", field.name);
+                const details = parameterDetailsMap.get(field.name) || { label: field.name, unit: '', range: { low: null, high: null } }; // Fallback if name not found
+                // console.log("Mapped Details:", details);
+                const label = details.label;
+                const unit = details.unit;
+                let safeRange = details.range; // Use let as it might be modified for presence chart
+                let isNumeric = typeof safeRange.low === 'number' && typeof safeRange.high === 'number';
+                let chartData = [];
+                let chartValue = field.value; // Default to original value
+
+                // --- Modification for presence tests ---
+                if (unit === 'presence') {
+                    isNumeric = true; // Treat as numeric for charting
+                    // Convert positive/negative to 1/0 for chart data
+                    chartValue = String(field.value).toLowerCase() === 'positive' ? 1 : 0;
+                    // Generate chart data using the numeric value (0 or 1)
+                    chartData = generateCurrentPointData(chartValue);
+                    // Adjust safeRange for chart display (optional, but helps ReferenceArea)
+                    // safeRange = { low: 0, high: 0 }; // Treat 'negative' (0) as the safe range
+                } else if (isNumeric) {
+                    // Generate chart data for standard numeric fields
+                    chartData = generateCurrentPointData(field.value);
+                }
+                // --- End Modification ---
+
                 return {
-                    ...field, // Keep original field data
-                    chartData: generateCurrentPointData(field.value), // Generate data for the chart (single point)
-                    safeRange: { low, high }, // Parsed safe range for the chart
-                    unit: unit // Extracted unit for the chart
+                    name: field.name, // Keep original name from API
+                    value: field.value, // Keep original value (e.g., "positive") for text display
+                    label: label, // Use looked-up label
+                    chartData: chartData, // Use potentially modified chart data
+                    safeRange: safeRange, // Use original or modified safe range
+                    unit: unit, // Use the looked-up unit
+                    isNumeric: isNumeric // Use potentially modified isNumeric flag
                 };
             })
         }));
-    }, [patientTestResults]); // Recalculate only when patientTestResults changes
+    }, [patientTestResults]); // Dependency: only raw results (map is stable)
 
     // Function to fetch test results data (currently uses mock data)
     const fetchTestResults = async () => {
         try {
             setIsLoading(true);
-            // Mock data simulating API response
+            // Mock data simulating API response - NOW ONLY CONTAINS name and value
             const mockData = [
                 {
-                    testName: "Complete Blood Count",
+                    testName: "Complete Blood Count", // Test panel name (from API or derived)
                     dateTime: "2023-03-29 09:15 AM",
                     testFields: [
-                        { key: "White Blood Cell Count", label: "WBC", value: "12.0 x10^9/L", normalRange: "4.5-11.0 x10^9/L" },
-                        { key: "Red Blood Cell Count", label: "RBC", value: "4.9 x10^12/L", normalRange: "4.5-5.5 x10^12/L" },
-                        { key: "Hemoglobin", label: "Hgb", value: "14.2 g/dL", normalRange: "13.5-17.5 g/dL" },
-                        { key: "Hematocrit", label: "Hct", value: "32%", normalRange: "41-50%" } // Note: % unit might need special handling
+                        // API only sends name and value
+                        { name: "Hemoglobin (Hgb)", value: 11.5 }, // Example: Low
+                        { name: "Hematocrit (Hct)", value: 45 },
+                        { name: "White Blood Cell Count (WBC)", value: 13500 }, // Example: High
+                        { name: "Platelet Count", value: 140000 }, // Example: Low
                     ]
                 },
                 {
                     testName: "Liver Function Test",
                     dateTime: "2023-03-28 02:30 PM",
                     testFields: [
-                        { key: "Total Bilirubin", label: "TBIL", value: "0.8 mg/dL", normalRange: "0.3-1.0 mg/dL" },
-                        { key: "Alanine Aminotransferase", label: "ALT", value: "30 U/L", normalRange: "7-56 U/L" },
-                        { key: "Aspartate Aminotransferase", label: "AST", value: "28 U/L", normalRange: "5-40 U/L" },
-                        { key: "Alkaline Phosphatase", label: "ALP", value: "43 U/L", normalRange: "44-147 U/L" }
+                        { name: "Alanine Aminotransferase (ALT)", value: 35 },
+                        { name: "Aspartate Aminotransferase (AST)", value: 25 },
+                        { name: "Alkaline Phosphatase (ALP)", value: 130 }, // Example: High
+                        { name: "Total Bilirubin", value: 0.9 },
+                        { name: "Direct Bilirubin", value: 0.2 },
+                        { name: "Albumin", value: 4.0 },
+                    ]
+                },
+                {
+                    testName: "Urinalysis (UA)",
+                    dateTime: "2023-03-29 10:00 AM",
+                    testFields: [
+                        { name: 'Protein', value: 5 },
+                        { name: 'Glucose', value: 0 },
+                        { name: 'Ketones', value: 0 },
+                        { name: 'Blood', value: 'positive' }, // Non-numeric value
                     ]
                 }
-                // Add more mock tests if needed
             ];
 
             // Simulate network delay
             setTimeout(() => {
-                setTestResults(mockData); // Set the raw data fetched
-                setSelectedTestIndex(0); // Reset selection to the first test
-                setIsLoading(false); // Turn off loading indicator
+                setTestResults(mockData);
+                setSelectedTestIndex(0);
+                setIsLoading(false);
             }, 500);
         } catch (error) {
             console.error('Error fetching test results:', error);
-            setIsLoading(false); // Ensure loading is off even if there's an error
+            setIsLoading(false);
         }
     };
 
     // Fetch data when the component mounts
     useEffect(() => {
         fetchTestResults();
-        // No cleanup needed for this effect as it only runs once
-    }, []); // Empty dependency array means this runs only once on mount
+    }, []);
 
     // Generate options for the dropdown based on the raw patientTestResults
     const testOptions = patientTestResults.map((test, index) => ({
-        label: `${test.testName} - ${test.dateTime}`, // Display test name and date
-        value: index.toString() // Use the index as the value
+        label: `${test.testName} - ${test.dateTime}`,
+        value: index.toString()
     }));
 
     // Handler for when the dropdown selection changes
     const handleTestChange = (e) => {
-        setSelectedTestIndex(parseInt(e.target.value, 10)); // Update the selected index state
+        setSelectedTestIndex(parseInt(e.target.value, 10));
     };
 
     // Get the currently selected processed test data based on selectedTestIndex
-    // Check if processedTestResults has data and the index is valid
     const selectedTestData = processedTestResults.length > selectedTestIndex ? processedTestResults[selectedTestIndex] : null;
 
     return (
         <BoxContainer className='doctorPatientParaclinicalTestResultBox'>
             <BoxContainerTitle className='doctorPatientParaclinicalTestResult'>
                 Patient's Paraclinical Test Results
-                {/* Show loading indicator if data is being fetched */}
                 {isLoading && <span className="loading-indicator"> Loading...</span>}
             </BoxContainerTitle>
 
             <BoxContainerContent className='doctorPatientParaclinicalTestResultContent'>
-                {/* Conditional rendering: Show content only if data is loaded and a test is selected */}
                 {processedTestResults.length > 0 && selectedTestData ? (
                     <>
-                        {/* Dropdown to select different tests */}
                         <DropDownBox
                             options={testOptions}
                             value={selectedTestIndex.toString()}
                             onChange={handleTestChange}
                         />
 
-                        {/* Display the name and date/time of the selected test */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'auto', marginTop: '10px', marginBottom: '10px' }}>
                             <h3>{selectedTestData.testName}</h3>
                             <span className="testDateTime">{selectedTestData.dateTime}</span>
                         </div>
 
-                        {/* Grid layout for displaying charts for each test field */}
                         <div className="paraclinical-charts-grid">
-                            {/* Map through each field of the selected test */}
-                            {selectedTestData.testFields.map((field, fieldIndex) => (
-                                <div key={fieldIndex} className="paraclinical-chart-container">
-                                    {/* Title for the chart */}
-                                    <h4 className="paraclinical-chart-title">{field.label} ({field.key})</h4>
-                                    {/* Container for the line chart component */}
-                                    <div style={{ height: '200px', width: '100%' }}> {/* Adjust height as needed */}
-                                        <LineChartComponent
-                                            data={field.chartData} // Pass the single data point array
-                                            dataKeys={['value']} // Key to access the value in the data object
-                                            unit={field.unit} // Pass the extracted unit
-                                            safeRange={field.safeRange} // Pass the parsed safe range
-                                            chartName={field.label} // Use field label as chart name
-                                            height={200} // Set chart height
-                                            medianOrNot={false} // Explicitly disable median for this component
-                                        />
+                            {selectedTestData.testFields.map((field, fieldIndex) => {
+                                console.log("Field Name:", field.name);
+                                // Construct display range string based on looked-up type
+                                let displayRange = 'N/A';
+                                // Use original logic for display range text
+                                if (typeof field.safeRange.low === 'number' && typeof field.safeRange.high === 'number') {
+                                    displayRange = `${field.safeRange.low} - ${field.safeRange.high} ${field.unit}`;
+                                } else if (field.safeRange?.low === 'negative' && field.safeRange?.high === 'negative') {
+                                    displayRange = 'Negative'; // Display 'Negative' for presence tests
+                                } else if (field.unit === 'string') {
+                                    displayRange = 'Textual Description';
+                                } else if (field.unit) {
+                                    displayRange = `(${field.unit})`;
+                                }
+
+                                // --- Determine Y-axis limits for presence charts ---
+                                const isPresenceTest = field.unit === 'presence';
+                                const yAxisMin = isPresenceTest ? 0 : undefined; // Use default if not presence
+                                const yAxisMax = isPresenceTest ? 1 : undefined; // Use default if not presence, add buffer
+                                // --- End Y-axis limits ---
+
+                                return (
+                                    <div key={fieldIndex} className="paraclinical-chart-container">
+                                        {/* Use looked-up label for display */}
+                                        <h4 className="paraclinical-chart-title">{field.label} ({field.name})</h4>
+                                        {/* Render chart if isNumeric is true (now includes presence tests) */}
+                                        {field.isNumeric && field.chartData.length > 0 ? (
+                                            <div style={{ height: '200px', width: '100%' }}>
+                                                <LineChartComponent
+                                                    data={field.chartData}
+                                                    dataKeys={['value']}
+                                                    // Unit display might be confusing for 0/1, maybe hide it?
+                                                    unit={isPresenceTest ? '' : field.unit} // Hide unit for presence
+                                                    safeRange={isPresenceTest ? { low: 0, high: 0 } : { low: field.safeRange.low, high: field.safeRange.high } } // Set safe range to 0 for presence chart areas
+                                                    chartName={field.label} // Use looked-up label
+                                                    height={200}
+                                                    medianOrNot={false} // Only one data point, median not applicable
+                                                    // --- Pass specific Y-axis limits ---
+                                                    yMin={yAxisMin}
+                                                    yMax={yAxisMax}
+                                                    // Use the specific condition based on field.value
+                                                    noZone={isPresenceTest} // Only one data point, median not applicable
+                                                    // --- End Pass Y-axis limits ---
+                                                />
+                                            </div>
+                                        ) : (
+                                            // This part should now only render for truly non-numeric/non-presence fields (like 'Findings')
+                                            <div className="non-numeric-value">
+                                                Result: <span className={`value-${String(field.value).toLowerCase()}`}>{field.value}</span>
+                                                {/* Example styling: Add CSS for .value-positive, .value-negative */}
+                                            </div>
+                                        )}
+                                        <div className="paraclinical-chart-info">
+                                            {/* Display original value ("positive"/"negative") */}
+                                            <span>Current: {field.value}{field.isNumeric && !isPresenceTest ? ` ${field.unit}` : ''}</span>
+                                            {/* Display range textually */}
+                                            <span>Normal Range: {displayRange}</span>
+                                        </div>
                                     </div>
-                                     {/* Display the current value and normal range textually below the chart */}
-                                     <div className="paraclinical-chart-info">
-                                        <span>Current: {field.value}</span>
-                                        <span>Normal Range: {field.normalRange}</span>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </>
                 ) : (

@@ -1,89 +1,3 @@
-// import React from 'react';
-// import './style/measurementCard.css';
-
-// import BoxContainer from '../../../common/boxContainer';
-// import BoxContainerTitle from '../../../common/boxContainerTitle';
-// import BoxContainerContent from '../../../common/boxContainerContent';
-
-// import BloodPressureIcon from '../../../../assets/images/doctor/bloodPressureIcon.png';
-
-// import HuggedText from '../../../common/huggedText';
-// import LineChartComponent from '../../../common/lineChart'; // Import the chart component
-
-// function BloodPressure() {
-//     // Note: The current LineChartComponent uses 'bpm'. You'll need to adapt it
-//     // or create a specific chart component for blood pressure (systolic/diastolic).
-//     // For now, it will display the default BPM chart.
-//     return (
-//         <BoxContainer className='cardBox bloodPressure'>
-//             <BoxContainerTitle className='cardTitle'>
-//                 <img src={BloodPressureIcon} alt="Blood Pressure Icon" className='icon' />
-//                 Blood Pressure
-//             </BoxContainerTitle>
-
-//             <BoxContainerContent className='cardContent'>
-//                 {/* Existing Stats */}
-//                 <div className="measurementStats">
-//                     <div className="measurementValue">
-//                         <HuggedText text='102/72' font_size="32px" font_weight="400" color="#272927" />
-//                         <HuggedText text='mmhg' font_size="16px" font_weight="400" color="#818181" />
-//                     </div>
-//                     <div className="measurementStatus" style={{ backgroundColor: '#4CAF50' }}>
-//                         <HuggedText text='Normal' font_size="16px" font_weight="400" color="#FFF" />
-//                     </div>
-//                 </div>
-
-//                 {/* Add Line Chart */}
-//                 <div className="chartContainer" style={{ marginTop: '20px', width: '100%', height: '150px' }}> {/* Adjust height as needed */}
-//                     <LineChartComponent /> {/* Needs adaptation for BP data */}
-//                 </div>
-//             </BoxContainerContent>
-//         </BoxContainer>
-//     );
-// }
-
-// export default BloodPressure;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useMemo } from 'react'; // Import useMemo
 import './style/measurementCard.css';
 
@@ -96,38 +10,33 @@ import BloodPressureIcon from '../../../../assets/images/doctor/bloodPressureIco
 import HuggedText from '../../../common/huggedText';
 import LineChartComponent from '../../../common/lineChart';
 
-// Mock Data Generation
-const generateMockBloodPressureData = (numPoints = 12) => {
-    const data = [];
-    let currentSystolic = 115;
-    let currentDiastolic = 75;
-    for (let i = 0; i < numPoints; i++) {
-        const time = `${String(i * 2).padStart(2, '0')}:00`;
-        const sysChange = (Math.random() - 0.5) * 10;
-        const diaChange = (Math.random() - 0.5) * 8;
-        currentSystolic = Math.max(90, Math.min(160, Math.round(currentSystolic + sysChange)));
-        currentDiastolic = Math.max(60, Math.min(100, Math.round(currentDiastolic + diaChange)));
-        // Ensure systolic is always higher than diastolic
-        if (currentSystolic <= currentDiastolic) {
-            currentSystolic = currentDiastolic + 10;
-        }
-        
-        
-        // Round the bounded rate to 2 decimal places
-        currentSystolic = parseFloat(currentSystolic.toFixed(2));
-        currentDiastolic = parseFloat(currentDiastolic.toFixed(2));
-        data.push({ time, systolic: currentSystolic, diastolic: currentDiastolic });
-    }
-    return data;
-};
 
+// ADDED: Fixed mock data array
+const mockBloodPressureData = [
+    { time: '00:00', systolic: 115, diastolic: 75 },
+    { time: '02:00', systolic: 118, diastolic: 78 },
+    { time: '04:00', systolic: 122, diastolic: 80 },
+    { time: '06:00', systolic: 125, diastolic: 82 },
+    { time: '08:00', systolic: 130, diastolic: 85 }, // Borderline high
+    { time: '10:00', systolic: 128, diastolic: 84 },
+    { time: '12:00', systolic: 120, diastolic: 79 },
+    { time: '14:00', systolic: 112, diastolic: 72 }, // Lower
+    { time: '16:00', systolic: 110, diastolic: 70 },
+    { time: '18:00', systolic: 114, diastolic: 74 },
+    { time: '20:00', systolic: 116, diastolic: 76 },
+    { time: '22:00', systolic: 119, diastolic: 77 },
+];
+
+// Blood Pressure = SYSTOLIC/DIASTOLIC
 // Define safe range primarily for Systolic for the reference area
-const SAFE_RANGE_BP_SYSTOLIC = { low: 100, high: 130 };
+const SAFE_RANGE_BP_SYSTOLIC = { low: 90, high: 120 };
 // You might have a separate range check for diastolic if needed for status text
-const SAFE_RANGE_BP_DIASTOLIC = { low: 65, high: 85 };
+const SAFE_RANGE_BP_DIASTOLIC = { low: 60, high: 80 };
 
 function BloodPressure() {
-    const mockData = useMemo(() => generateMockBloodPressureData(), []);
+    // Use the fixed mock data directly
+    const mockData = mockBloodPressureData;
+    
     const latestMeasurement = mockData.length > 0 ? mockData[mockData.length - 1] : null;
     const latestSystolic = latestMeasurement ? latestMeasurement.systolic : 'N/A';
     const latestDiastolic = latestMeasurement ? latestMeasurement.diastolic : 'N/A';
