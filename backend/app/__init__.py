@@ -15,6 +15,9 @@ def create_app():
     # Import blueprints
     from . import authentication
     app.register_blueprint(authentication.app, url_prefix=authentication.url_prefix)
+    
+    from . import Pass_Session
+    app.register_blueprint(Pass_Session.app, url_prefix=Pass_Session.url_prefix)
 
 
     # from . import EHR
