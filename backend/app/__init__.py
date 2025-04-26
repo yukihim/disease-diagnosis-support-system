@@ -22,9 +22,11 @@ def create_app():
     from . import Pass_Session
     app.register_blueprint(Pass_Session.app, url_prefix=Pass_Session.url_prefix)
 
-
-    # from . import EHR
-    # app.register_blueprint(EHR.app, url_prefix=EHR.url_prefix)
+    from . import Receptionist
+    app.register_blueprint(Receptionist.app, url_prefix=Receptionist.url_prefix)
+    
+    # from . import Doctor
+    # app.register_blueprint(Doctor.app, url_prefix=Doctor.url_prefix)
     
     from . import Nurse
     app.register_blueprint(Nurse.app, url_prefix=Nurse.url_prefix)    
