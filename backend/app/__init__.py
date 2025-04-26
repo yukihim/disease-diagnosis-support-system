@@ -20,7 +20,9 @@ def create_app():
     # from . import EHR
     # app.register_blueprint(EHR.app, url_prefix=EHR.url_prefix)
     
-    
+
+    from . import Paraclinical
+    app.register_blueprint(Paraclinical.app, url_prefix=Paraclinical.url_prefix)    
     
     from . import Admin
     app.register_blueprint(Admin.app, url_prefix=Admin.url_prefix)
