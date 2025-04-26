@@ -16,6 +16,9 @@ def create_app():
     from . import authentication
     app.register_blueprint(authentication.app, url_prefix=authentication.url_prefix)
     
+    from . import Events_Calendar
+    app.register_blueprint(Events_Calendar.app, url_prefix=Events_Calendar.url_prefix)
+    
     from . import Pass_Session
     app.register_blueprint(Pass_Session.app, url_prefix=Pass_Session.url_prefix)
 
