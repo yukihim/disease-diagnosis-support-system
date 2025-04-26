@@ -19,15 +19,15 @@ def login():
         access_token = create_access_token(identity=username,additional_claims={'username':username,'role':role})
         return jsonify(access_token=access_token), 200
     except Username_unfound as e:
-        return {'error': str(e)}, 400
-    except Username_unfound as e:
-        return {'error': str(e)}, 400
+        return {'message': str(e)}, 400
+    except WrongPassword as e:
+        return {'message': str(e)}, 400
 
     except Exception as e:
         print(str(e))
         import logging
         logging.error(str(e))
-        return {'error': 'Error while authentication'}, 400
+        return {'message': 'Error while authentication'}, 400
 
 
 @app.route('/logout', methods=['POST'])
