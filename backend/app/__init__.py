@@ -26,6 +26,8 @@ def create_app():
     # from . import EHR
     # app.register_blueprint(EHR.app, url_prefix=EHR.url_prefix)
     
+    from . import Nurse
+    app.register_blueprint(Nurse.app, url_prefix=Nurse.url_prefix)    
 
     from . import Paraclinical
     app.register_blueprint(Paraclinical.app, url_prefix=Paraclinical.url_prefix)    
