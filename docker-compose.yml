@@ -35,7 +35,17 @@ services:
       - GEMINI_MODEL=gemini-2.0-flash
     depends_on:
       - db # Ensures db is started before ai
-
+  frontend: # No dependencies
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Frontend runs on host port 3000, container port 3000
+    networks:
+      - my-bridge-network
+    volumes:
+      - ./frontend:/app
+      - node_modules:/app/node_modules
   app: # Waits for db and ai
     build:
       context: ./backend
@@ -57,7 +67,7 @@ services:
 
 volumes:
     my-db-data:
-
+    node_modules:
 networks:
   my-bridge-network:
     driver: bridge
