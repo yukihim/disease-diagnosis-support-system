@@ -10,7 +10,7 @@ function FindPatientBy({ method, onChangeSSN, onChangeHealthInsuranceNumber }) {
             {method === 'SSN' ? (
                 <div className="findPatientBy">
                     <Method>SSN</Method>
-                    <Find method={method} onchangeSSN={onChangeSSN} />
+                    <Find method={method} onChangeSSN={onChangeSSN} />
                 </div>
             ) : method === 'HealthInsuranceNumber' ? (
                 <div className="findPatientBy">

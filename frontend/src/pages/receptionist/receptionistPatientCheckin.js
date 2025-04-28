@@ -10,7 +10,7 @@ function ReceptionistPatientCheckin() {
     return (
         <PageLayout requiredRole="receptionist" useGrid={false}>
             <ReceptionistPatientInformation />
-            <PatientPassSessions role="receptionist" />
+            <PatientPassSessions role="receptionist" onClickSession={() => {}} />
             <ReceptionistFinalizeAndCheckinPatient />
         </PageLayout>
     );

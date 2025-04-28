@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react'; // Removed useState
 import './style/receptionistPatientInformationForm.css';
 
 import SpecificInformationItemWrapper from '../../../common/specificInformationItemWrapper';
 
-function ReceptionistPatientInformationForm({ initialPatientInformation, isEditing }) {
-    const [patientInfo, setPatientInfo] = useState({...initialPatientInformation});
-    
+// Receive patientData and onFormChange from parent
+function ReceptionistPatientInformationForm({ patientData, isEditing, onFormChange }) {
+
+    // No internal state needed anymore
+
+    // handleChange now calls the prop function
     const handleChange = (field, value) => {
-        setPatientInfo(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        onFormChange(field, value); // Call the handler passed from parent
     };
 
     const patientFields = [
+        // Keys should match the keys in the patientData state object
         { key: "Name", label: "Name" },
         { key: "DOB", label: "DOB" },
         { key: "Gender", label: "Gender" },
@@ -24,16 +25,17 @@ function ReceptionistPatientInformationForm({ initialPatientInformation, isEditi
         { key: "Weight (kg)", label: "Weight (kg)" },
         { key: "Job", label: "Job" },
         { key: "Address", label: "Address" },
-        { key: "Follow-up Date", label: "Follow-up Date" },
+        { key: "Follow-up Date", label: "Follow-up Date" }, // Keep or remove based on requirements
     ];
 
     return (
         <div className="receptionistPatientInformationForm">
             {patientFields.map(field => (
-                <SpecificInformationItemWrapper 
+                <SpecificInformationItemWrapper
                     key={field.key}
                     item={field.label}
-                    itemValue={patientInfo[field.key]}
+                    // Use patientData prop directly
+                    itemValue={patientData[field.key] ?? ''} // Use nullish coalescing for safety
                     isEditing={isEditing}
                     onChange={(value) => handleChange(field.key, value)}
                 />

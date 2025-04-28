@@ -8,45 +8,44 @@ import BoxContainerContent from '../../common/boxContainerContent';
 
 import UserInformationForm from './adminUserInformation/userInformationForm';
 
-const initialUserInformationHolder = [
-    {
-        "Name": "Phuong Xuong Thinh",
-        "Role": "Doctor",
-        "Room": "220",
-        "Dept": "Lão - Nội",
-    },
-    {
-        "Name": "Phuong Xuong B",
-        "Role": "Nurse",
-        "Room": "222",
-        "Dept": "Lão - Nội",
-    },
-    {
-        "Name": "Phuong Xuong C",
-        "Role": "Paraclinical Technician",
-        "Room": "223",
-        "Dept": "Lão - Ngoại",
-    }
-];
+// Remove the outdated hardcoded data
+// const initialUserInformationHolder = [ ... ];
 
 function AdminUserInformationCard() {
     const location = useLocation();
-    const { userName } = location.state || {};
+    // Get the whole state object passed from the previous page
+    // Provide a default empty object to prevent errors if state is missing
+    const userInfoFromState = location.state || {};
 
-    // Use find instead of map to get a single patient object
-    const userInformation = initialUserInformationHolder.find(user => 
-        user.Name === userName
-    ) || null;
-    
+    // Check if essential data like userId or userName is present
+    if (!userInfoFromState.userId || !userInfoFromState.userName) {
+        return (
+            <BoxContainer className='adminUserInformationCardBox'>
+                <BoxContainerTitle className='adminUserInformationCardTitle'>
+                    User Information Error
+                </BoxContainerTitle>
+                <BoxContainerContent className='adminUserInformationCardContent'>
+                    Error: User details not found. Please navigate from the user list.
+                </BoxContainerContent>
+            </BoxContainer>
+        );
+    }
+
+    // Capitalize role for display purposes if it exists
+    const displayRole = userInfoFromState.userRole
+        ? userInfoFromState.userRole.charAt(0).toUpperCase() + userInfoFromState.userRole.slice(1)
+        : 'User'; // Default if role is missing
+
     return (
         <BoxContainer className='adminUserInformationCardBox'>
             <BoxContainerTitle className='adminUserInformationCardTitle'>
-                {userInformation.Role} {userName}'s Information
+                {/* Use the role and name directly from the state */}
+                {displayRole} {userInfoFromState.userName}'s Information
             </BoxContainerTitle>
 
             <BoxContainerContent className='adminUserInformationCardContent'>
-                {/* User Information */}
-                <UserInformationForm userInformation={userInformation} />
+                {/* Pass the user information object received from the state */}
+                <UserInformationForm userInformation={userInfoFromState} />
             </BoxContainerContent>
         </BoxContainer>
     );

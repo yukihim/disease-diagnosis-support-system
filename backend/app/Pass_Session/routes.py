@@ -1,24 +1,23 @@
 from flask import jsonify
-from flask_jwt_extended import jwt_required
-from . import app # Import the blueprint 'app' defined in Pass_Session/__init__.py
+from flask_jwt_extended import jwt_required, get_jwt_identity
+# Removed check_role import as it's no longer used on the remaining route
+# from ..authentication import check_role
+from . import app
 
 # --- Mock Data ---
-# Dictionary where keys are sessionIDs (as per updated request)
-# and values are lists of their past sessions (Note: This structure might need rethinking
-# if a sessionID should only map to a single session's details).
-# Keeping the structure for now, assuming the key represents the ID requested.
-mock_pass_sessions_db = {
-    "sess_patient_001_checkup": [ # Example session ID
+# Using patientID as key, mapping to a list of sessions
+mock_patient_sessions_map = {
+    "patient_001": [
         {
+            "sessionID": "sess_patient_001_checkup",
             "sessionDate": "2025-03-15",
             "sessionType": "Check-up",
             "personInCharged": "Dr. Smith",
             "department": "General Medicine",
             "result": "Stable condition"
-        }
-    ],
-     "sess_patient_001_followup": [
-         {
+        },
+        {
+            "sessionID": "sess_patient_001_followup",
             "sessionDate": "2024-11-20",
             "sessionType": "Follow-up",
             "personInCharged": "Dr. Jones",
@@ -26,8 +25,9 @@ mock_pass_sessions_db = {
             "result": "Blood pressure controlled"
         }
     ],
-    "sess_patient_002_emergency": [
+    "patient_002": [
         {
+            "sessionID": "sess_patient_002_emergency",
             "sessionDate": "2025-04-01",
             "sessionType": "Emergency",
             "personInCharged": "Dr. Davis",
@@ -35,8 +35,9 @@ mock_pass_sessions_db = {
             "result": "Treated for minor injury"
         }
     ],
-    "abc-xyz-123": [ # Matching the test value in the doc - assuming this is now a sessionID
+    "abc-xyz-123": [
          {
+            "sessionID": "sess_abc-xyz-123_consult",
             "sessionDate": "2025-01-10",
             "sessionType": "Consultation",
             "personInCharged": "Dr. Quan",
@@ -44,35 +45,32 @@ mock_pass_sessions_db = {
             "result": "Initial assessment"
         },
     ]
-    # Add more session IDs and their details as needed
+    # Add more patient IDs and their sessions as needed
 }
 
+# --- API Endpoints ---
 
-# 7.4.3.1 Pass Sessions Table: Get List for Page (Path updated to use sessionID)
-@app.route('/pass_sessions/<string:sessionID>', methods=['GET']) # Changed patientID to sessionID
+# 7.4.3.1 Pass Sessions Table: Get List by PatientID
+# Changed path parameter from sessionID to patientID
+@app.route('/pass_sessions/<string:patientID>', methods=['GET'])
 @jwt_required()
-def get_patient_pass_sessions(sessionID): # Changed patientID to sessionID
+# Removed role check - assuming any authenticated user can get sessions by patient ID
+def get_patient_pass_sessions(patientID): # Changed function parameter name
     """
-    Retrieves details for a specific past medical session based on sessionID.
-    (Note: The original implementation returned a list based on patientID.
-     This is adjusted based on the path change, but mock data structure might need review.)
+    Retrieves a list of past medical sessions for a specific patient based on patientID.
+    Uses the mock_patient_sessions_map.
     """
     try:
-        # In a real application, query the database for the session with the given sessionID
-        # The mock data structure might need adjustment if a sessionID maps to a single session object.
-        session_data = mock_pass_sessions_db.get(sessionID) # Changed patientID to sessionID
+        # Directly look up the patientID in the map
+        patient_sessions = mock_patient_sessions_map.get(patientID, []) # Default to empty list if not found
 
-        if session_data is None:
-            # Session ID not found in our mock database
-            return jsonify({"message": f"Session with ID '{sessionID}' not found."}), 404 # Changed message
+        # Optional: Validate patientID against a central patient DB if needed
+        # if patientID not in mock_patients_db: # Assuming mock_patients_db is accessible
+        #     return jsonify({"message": f"Patient with ID '{patientID}' not found."}), 404
 
-        # Return the session data found.
-        # If sessionID maps to a single session, the response might just be the object itself,
-        # or still wrapped in a list/object as required by the frontend.
-        # Returning the list as per the current mock data structure.
-        return jsonify({"passSessions": session_data}), 200
+        # Return the list of sessions found for the patient (can be empty).
+        return jsonify({"passSessions": patient_sessions}), 200
 
     except Exception as e:
-        # Log the exception e for debugging
-        print(f"Error retrieving pass session for session {sessionID}: {e}") # Changed message
-        return jsonify({"message": "An error occurred while retrieving pass session."}), 500
+        print(f"Error retrieving pass sessions for patient {patientID}: {e}")
+        return jsonify({"message": "An error occurred while retrieving pass sessions."}), 500

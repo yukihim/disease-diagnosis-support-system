@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react'; // Import useMemo
-
+import React, { useState, useEffect, useMemo } from 'react';
+import Cookies from 'js-cookie';
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
@@ -15,48 +15,86 @@ const emergencyTableHeader = [
     { name: 'Dept', width: '80px' }
 ];
 
-const emergencyTableDummyData = [
-    { case: 'Car Accident', time: '10:00 AM', dept: 'Lão - Nội' },
-    { case: 'Heart Attack', time: '10:15 AM', dept: 'Lão - Nội' },
-    { case: 'Broken Arm', time: '10:30 AM', dept: 'Unassigned' },
-    { case: 'Severe Burn', time: '10:45 AM', dept: 'Unassigned' },
-    { case: 'Stroke', time: '11:00 AM', dept: 'Lão - Ngoại' },
-    { case: 'Allergic Reaction', time: '11:15 AM', dept: 'Unassigned' },
-];
-
-const ROWS_PER_PAGE_OPTIONS = [2, 4, 6]; // Define options for rows per page
+const ROWS_PER_PAGE_OPTIONS = [2, 4, 6];
 
 function ReceptionistEmergency() {
     const [currentPage, setCurrentPage] = useState(1);
     const [displayData, setDisplayData] = useState([]);
-    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]); // Default to the first option (2)
+    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
+    const [emergencyData, setEmergencyData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    // Calculate counts (can be memoized if data changes frequently)
+    useEffect(() => {
+        const fetchEmergencyData = async () => {
+            setIsLoading(true);
+            setError(null);
+            const token = Cookies.get('token');
+
+            if (!token) {
+                setError("User not authenticated.");
+                setIsLoading(false);
+                setEmergencyData([]);
+                return;
+            }
+
+            try {
+                // Corrected API endpoint based on routes.py
+                const apiUrl = 'http://localhost:5001/receptionist/landing_page/emergency';
+                console.log("Fetching emergency data from:", apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("API Response Data (Emergency):", data);
+
+                setEmergencyData(data.emergencyCases || []);
+
+            } catch (err) {
+                console.error("Error fetching emergency data:", err);
+                setError(err.message || "Failed to fetch emergency cases.");
+                setEmergencyData([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchEmergencyData();
+    }, []);
+
     const unassignedCount = useMemo(() =>
-        emergencyTableDummyData.filter(item => item.dept === 'Unassigned').length,
-        [] // Recalculate only if dummy data changes (which it doesn't here)
+        emergencyData.filter(item => item.dept === 'Unassigned').length,
+        [emergencyData]
     );
     const assignedCount = useMemo(() =>
-        emergencyTableDummyData.filter(item => item.dept !== 'Unassigned').length,
-        [] // Recalculate only if dummy data changes
+        emergencyData.filter(item => item.dept !== 'Unassigned').length,
+        [emergencyData]
     );
 
-    // Calculate total pages based on current rowsPerPage
     const totalPages = useMemo(() => {
-        return Math.ceil(emergencyTableDummyData.length / rowsPerPage);
-    }, [rowsPerPage]); // Recalculate when rowsPerPage changes
+        return Math.ceil(emergencyData.length / rowsPerPage);
+    }, [emergencyData, rowsPerPage]);
 
-    // Update displayed data when page or rowsPerPage changes
     useEffect(() => {
         const startIndex = (currentPage - 1) * rowsPerPage;
-        const endIndex = Math.min(startIndex + rowsPerPage, emergencyTableDummyData.length);
-        setDisplayData(emergencyTableDummyData.slice(startIndex, endIndex));
-    }, [currentPage, rowsPerPage]); // Add rowsPerPage dependency
+        const endIndex = Math.min(startIndex + rowsPerPage, emergencyData.length);
+        setDisplayData(emergencyData.slice(startIndex, endIndex));
+    }, [currentPage, rowsPerPage, emergencyData]);
 
-    // Reset to first page when rowsPerPage changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [rowsPerPage]); // Reset page if rowsPerPage changes
+    }, [rowsPerPage]);
 
     function handlePageChange(newPage) {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -64,10 +102,8 @@ function ReceptionistEmergency() {
         }
     }
 
-    // --- Handle Rows Per Page Change ---
     function handleRowsPerPageChange(newRowsPerPage) {
         setRowsPerPage(newRowsPerPage);
-        // setCurrentPage(1) is handled by the useEffect hook
     }
 
     return (
@@ -77,27 +113,32 @@ function ReceptionistEmergency() {
             </BoxContainerTitle>
 
             <BoxContainerContent>
-                {/* Overview - Pass calculated counts */}
                 <ReceptionistEmergencyOverview
                     unassignedCount={unassignedCount}
                     assignedCount={assignedCount}
                 />
 
-                {/* Pagination - Add rows per page functionality */}
                 <ReceptionistEmergencyPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
-                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS} // Pass options
-                    currentRowsPerPage={rowsPerPage} // Pass current value
-                    onRowsPerPageChange={handleRowsPerPageChange} // Pass handler
+                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+                    currentRowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleRowsPerPageChange}
                 />
 
-                {/* Table header */}
                 <ReceptionistEmergencyTableHeader emergencyTableHeader={emergencyTableHeader} />
 
-                {/* Table content */}
-                <ReceptionistEmergencyTableContent emergencyTableHeader={emergencyTableHeader} emergencyTableData={displayData} />
+                {isLoading ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>Loading emergency cases...</div>
+                ) : error ? (
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>Error: {error}</div>
+                ) : (
+                    <ReceptionistEmergencyTableContent
+                        emergencyTableHeader={emergencyTableHeader}
+                        emergencyTableData={displayData}
+                    />
+                )}
             </BoxContainerContent>
         </BoxContainer>
     );

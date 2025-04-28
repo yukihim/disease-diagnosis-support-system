@@ -21,7 +21,7 @@ mock_users = {
         "username": "nursemai",
         "role": "nurse",
         "room": "205",
-        "department": "Noi Tong Hop",
+        "department": "Hồi sức cấp cứu",
         "email": "mai.nurse@hospital.com"
     },
     "admin001": {
@@ -57,7 +57,14 @@ def get_users_list():
         # In a real application, you would query the database here.
         # Returning mock data for now.
         users_list = [
-            {"userId": data["userId"], "username": data["username"], "role": data["role"], "room": data.get("room"), "department": data.get("department")}
+            {
+                "userId": data["userId"],
+                "username": data["username"],
+                "role": data["role"],
+                "room": data.get("room"),
+                "department": data.get("department"),
+                "email": data.get("email") # <-- Add this line
+            }
             for data in mock_users.values()
         ]
         return jsonify({"users": users_list}), 200
