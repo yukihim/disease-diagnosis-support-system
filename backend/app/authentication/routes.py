@@ -15,8 +15,8 @@ def login():
         username = request.json.get('username')
         password = request.json.get('password')
 
-        ans, role = check_password(username, password)
-        access_token = create_access_token(identity=username,additional_claims={'username':username,'role':role})
+        ans, role, userID = check_password(username, password)
+        access_token = create_access_token(identity=username,additional_claims={'userID':userID, 'username':username,'role':role})
         return jsonify(access_token=access_token), 200
     except Username_unfound as e:
         return {'message': str(e)}, 400
