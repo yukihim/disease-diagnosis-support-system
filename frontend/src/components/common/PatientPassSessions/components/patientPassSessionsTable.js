@@ -18,7 +18,7 @@ function ReceptionistPatientPassSessionsTable({ patientPassSessionsTableHeader, 
                             {row.sessionType}
                         </div>
                         <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[2].width }}>
-                            {row.pIC}
+                            {row.personInCharged}
                         </div>
                         <div className="tableContentCell" style={{ width: headers[1].width, minWidth: headers[3].width }}>
                             {row.department}
