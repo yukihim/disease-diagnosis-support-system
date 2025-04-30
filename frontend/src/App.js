@@ -88,7 +88,7 @@ function App() {
         <Route path="/doctor/finalizing_diagnosis">
           <DoctorFinalizingDiagnosis />
         </Route>
-        <Route path="/doctor/precription_and_procedure">
+        <Route path="/doctor/prescription_and_procedure">
           <DoctorPrescriptionAndProcedure />
         </Route>
         <Route path="/doctor/inpatient_monitoring">

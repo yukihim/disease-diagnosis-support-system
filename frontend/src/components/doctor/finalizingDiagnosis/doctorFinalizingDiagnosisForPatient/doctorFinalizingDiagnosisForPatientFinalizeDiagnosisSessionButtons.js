@@ -3,11 +3,12 @@ import React from 'react';
 import Button from '../../../common/button';
 import ButtonText from '../../../common/buttonText';
 
-function DoctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons({ onClickFinalizeDiagnosis }) {
+function DoctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons({ onClickFinalizeDiagnosis, disabled }) {
     return (
-        <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickFinalizeDiagnosis}>
+        <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickFinalizeDiagnosis} disabled={disabled}>
             <ButtonText>
-                Finalize Diagnosis
+                {/* Change button text when submitting */}
+                {disabled ? 'Finalizing...' : 'Finalize Diagnosis & Continue'}
             </ButtonText>
         </Button>
     );

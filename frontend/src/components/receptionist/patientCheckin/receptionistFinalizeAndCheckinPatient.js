@@ -18,10 +18,10 @@ function ReceptionistFinalizeAndCheckinPatient() {
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const [selectedDoctor, setSelectedDoctor] = useState('');
 
-    // Get patientID from location state
+    // Get sessionID from location state
     const location = useLocation();
     // Adjust key based on how it was pushed in ReceptionistPatientFound
-    const patientID = location.state?.patientID || location.state?.patientName;
+    const sessionID = location.state?.sessionID || location.state?.patientName;
 
     return (
         <BoxContainer className='receptionistPatientCheckInBox'>
@@ -36,9 +36,9 @@ function ReceptionistFinalizeAndCheckinPatient() {
                     setReasonToVisit={setReasonToVisit}
                 />
 
-                {/* Choose Department & Doctor - Pass state, setters, and patientID */}
+                {/* Choose Department & Doctor - Pass state, setters, and sessionID */}
                 <ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment
-                    patientID={patientID} // Pass patientID down
+                    sessionID={sessionID} // Pass sessionID down
                     selectedDepartment={selectedDepartment}
                     setSelectedDepartment={setSelectedDepartment}
                     selectedDoctor={selectedDoctor}
@@ -48,7 +48,7 @@ function ReceptionistFinalizeAndCheckinPatient() {
 
                 {/* Check in for patient button - Pass necessary data for API call */}
                 <ReceptionistFinalizeAndCheckinPatientCheckinButton
-                    patientID={patientID}
+                    sessionID={sessionID}
                     reasonToVisit={reasonToVisit}
                     department={selectedDepartment}
                     doctor={selectedDoctor}

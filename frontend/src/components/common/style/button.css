@@ -46,3 +46,37 @@
     width: auto;
     min-width: 100px;
 }
+
+.button.cancel {
+    width: auto;
+    min-width: 100px;
+
+    background-color: rgba(210, 50, 50, 1);
+}
+
+.button.cancel:hover {
+    background-color: rgba(210, 50, 50, 0.6);
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 20px rgba(210, 50, 50, 0.4);
+    
+    transform: translateY(-1px);
+}
+
+.button.cancelBig {
+    width: 100%;
+    min-width: 100px;
+
+    background-color: rgba(210, 50, 50, 1);
+}
+
+.button.cancelBig:hover {
+    background-color: rgba(210, 50, 50, 0.6);
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 20px rgba(210, 50, 50, 0.4);
+    
+    transform: translateY(-1px);
+}

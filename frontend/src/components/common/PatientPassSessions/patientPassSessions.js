@@ -34,15 +34,17 @@ function PatientPassSessions({ role, onClickSession }) {
     const [isLoading, setIsLoading] = useState(false); // Loading state
     const [error, setError] = useState(null); // Error state
 
-    // Get patientID from location state
+    // Get sessionID from location state
     const location = useLocation();
     // Adjust key based on how it was pushed in ReceptionistPatientFound
-    const patientID = location.state?.patientID || location.state?.patientName;
+    const sessionID = location.state?.sessionID || "";
+
+    // console.log("PATIENT PASS SESSIONS _ Session ID from location state:", sessionID);
 
     // --- Fetch Data ---
     useEffect(() => {
-        // Don't fetch if patientID is missing
-        if (!patientID) {
+        // Don't fetch if sessionID is missing
+        if (!sessionID) {
             setError("Patient ID not found in location state.");
             setAllSessionsData([]); // Clear data if no ID
             return;
@@ -61,9 +63,9 @@ function PatientPassSessions({ role, onClickSession }) {
             }
 
             try {
-                // Use the correct endpoint: /pass_sessions/<patientID>
-                const apiUrl = `http://localhost:5001/pass_sessions/${patientID}`;
-                console.log("Fetching pass sessions from:", apiUrl);
+                // Use the correct endpoint: /pass_sessions/<sessionID>
+                const apiUrl = `http://localhost:5001/pass_sessions/${sessionID}`;
+                console.log("PatientPassSessions _ Fetching pass sessions from:", apiUrl);
 
                 const response = await fetch(apiUrl, {
                     method: 'GET',
@@ -79,10 +81,12 @@ function PatientPassSessions({ role, onClickSession }) {
                 }
 
                 const data = await response.json();
-                console.log("API Response Data (Pass Sessions):", data);
+                // Log the actual data received from the backend
+                console.log("PATIENT PASS SESSIONS _ API Response Data:", data);
 
-                // Set the fetched data (assuming API returns { passSessions: [...] })
-                setAllSessionsData(data.passSessions || []);
+                // The backend returns a single object, wrap it in an array
+                // Check if data is not null/undefined before wrapping
+                setAllSessionsData(data ? [data] : []);
 
             } catch (err) {
                 console.error("Error fetching pass sessions:", err);
@@ -94,7 +98,7 @@ function PatientPassSessions({ role, onClickSession }) {
         };
 
         fetchPassSessions();
-    }, [patientID]); // Dependency array includes patientID from location state
+    }, [sessionID]); // Dependency array includes sessionID from location state
 
     // --- Sorting Logic ---
     const sortedData = useMemo(() => {
@@ -144,10 +148,10 @@ function PatientPassSessions({ role, onClickSession }) {
         setDisplayData(sortedData.slice(startIndex, endIndex));
     }, [currentPage, rowsPerPage, sortedData, totalSessionsCount]);
 
-    // Reset to first page when rowsPerPage, sorting, or patientID changes
+    // Reset to first page when rowsPerPage, sorting, or sessionID changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [rowsPerPage, sortConfig, patientID]); // Add patientID dependency
+    }, [rowsPerPage, sortConfig, sessionID]); // Add sessionID dependency
 
     function handlePageChange(newPage) {
         if (newPage >= 1 && newPage <= totalPages) {

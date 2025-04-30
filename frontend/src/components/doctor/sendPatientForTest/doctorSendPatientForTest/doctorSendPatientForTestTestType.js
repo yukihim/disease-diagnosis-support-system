@@ -1,76 +1,81 @@
-import React from 'react';
-import './style/doctorSendPatientForTestTestType.css'; // Assuming you'll update this CSS
+import React from 'react'; // Removed useState
+import './style/doctorSendPatientForTestTestType.css';
 
 import HuggedText from '../../../common/huggedText';
 
-// Define test options grouped by category with detailed parameters
+// --- Constants ---
+// (Keep grouped_test_options and helper functions as they are)
+// --- Full grouped_test_options ---
 const grouped_test_options = {
     'Blood Tests': [
         {
             label: 'Complete Blood Count (CBC)',
-            value: 'cbc',
+            value: 'Complete Blood Count', // Value should match the expected string for the API
             parameters: [
-                { name: 'Hemoglobin (Hgb)', unit: 'g/dL', range: { low: 12, high: 18 }, example: 14.5 },
-                { name: 'Hematocrit (Hct)', unit: '%', range: { low: 36, high: 50 }, example: 42 },
-                { name: 'White Blood Cell Count (WBC)', unit: 'cells/mm³', range: { low: 4500, high: 11000 }, example: 7000 },
-                { name: 'Platelet Count', unit: 'cells/mm³', range: { low: 150000, high: 350000 }, example: 250000 },
+                { name: 'Hemoglobin (Hgb)', unit: 'g/dL', range: { low: 13.5, high: 17.5 }, example: 15.0 },
+                { name: 'Hematocrit (Hct)', unit: '%', range: { low: 40, high: 52 }, example: 45 },
+                { name: 'White Blood Cell Count (WBC)', unit: 'x10³/µL', range: { low: 4.5, high: 11.0 }, example: 7.5 },
+                { name: 'Platelet Count', unit: 'x10³/µL', range: { low: 150, high: 450 }, example: 250 },
             ],
         },
         {
             label: 'Basic Metabolic Panel (BMP)',
-            value: 'bmp',
+            value: 'Basic Metabolic Panel (BMP)',
             parameters: [
-                { name: 'Blood Urea Nitrogen (BUN)', unit: 'mg/dL', range: { low: 8, high: 23 }, example: 15 },
-                { name: 'Serum Creatinine', unit: 'mg/dL', range: { low: 0.6, high: 1.2 }, example: 1.0 },
-                { name: 'Glucose', unit: 'mg/dL', range: { low: 70, high: 110 }, example: 90 },
-                { name: 'Calcium', unit: 'mg/dL', range: { low: 8.2, high: 10.2 }, example: 9.5 },
+                { name: 'Blood Urea Nitrogen (BUN)', unit: 'mg/dL', range: { low: 7, high: 20 }, example: 15 },
+                { name: 'Serum Creatinine', unit: 'mg/dL', range: { low: 0.6, high: 1.2 }, example: 0.9 },
+                { name: 'Glucose', unit: 'mg/dL', range: { low: 70, high: 100 }, example: 90 },
+                { name: 'Calcium', unit: 'mg/dL', range: { low: 8.5, high: 10.2 }, example: 9.5 },
                 { name: 'Sodium', unit: 'mEq/L', range: { low: 135, high: 145 }, example: 140 },
-                { name: 'Potassium', unit: 'mEq/L', range: { low: 3.5, high: 5.0 }, example: 4.2 },
-                { name: 'Chloride', unit: 'mEq/L', range: { low: 98, high: 107 }, example: 102 },
+                { name: 'Potassium', unit: 'mEq/L', range: { low: 3.5, high: 5.0 }, example: 4.0 },
+                { name: 'Chloride', unit: 'mEq/L', range: { low: 98, high: 106 }, example: 102 },
                 { name: 'Bicarbonate (CO2)', unit: 'mEq/L', range: { low: 22, high: 29 }, example: 25 },
             ],
         },
         {
             label: 'Lipid Panel',
-            value: 'lipid_panel',
+            value: 'Lipid Panel',
             parameters: [
-                { name: 'Total Cholesterol', unit: 'mg/dL', range: { low: 125, high: 200 }, example: 180 },
-                { name: 'LDL Cholesterol', unit: 'mg/dL', range: { low: 0, high: 130 }, example: 100 },
+                { name: 'Total Cholesterol', unit: 'mg/dL', range: { low: 0, high: 200 }, example: 180 },
+                { name: 'LDL Cholesterol', unit: 'mg/dL', range: { low: 0, high: 100 }, example: 90 },
                 { name: 'HDL Cholesterol', unit: 'mg/dL', range: { low: 40, high: 60 }, example: 50 },
                 { name: 'Triglycerides', unit: 'mg/dL', range: { low: 0, high: 150 }, example: 120 },
             ],
         },
         {
-            label: 'HbA1c (Diabetes Screen)',
-            value: 'hba1c',
+            label: 'Thyroid Function Tests (TFTs)',
+            value: 'Thyroid Function Tests (TFTs)',
             parameters: [
-                { name: 'Hemoglobin A1c', unit: '%', range: { low: 4, high: 6 }, example: 5.5 },
+                { name: 'Thyroid-Stimulating Hormone (TSH)', unit: 'µIU/mL', range: { low: 0.4, high: 4.0 }, example: 2.5 },
+                { name: 'Free Thyroxine (Free T4)', unit: 'ng/dL', range: { low: 0.8, high: 1.8 }, example: 1.2 },
+            ],
+        },
+        {
+            label: 'Coagulation Panel (PT/INR, PTT)',
+            value: 'Coagulation Panel (PT/INR, PTT)',
+            parameters: [
+                { name: 'Prothrombin Time (PT)', unit: 'seconds', range: { low: 11, high: 13.5 }, example: 12.0 },
+                { name: 'International Normalized Ratio (INR)', unit: '', range: { low: 0.8, high: 1.1 }, example: 1.0 },
+                { name: 'Partial Thromboplastin Time (PTT)', unit: 'seconds', range: { low: 25, high: 35 }, example: 30.0 },
             ],
         },
         {
             label: 'Liver Function Tests (LFTs)',
-            value: 'lft',
+            value: 'Liver Function Tests (LFTs)',
             parameters: [
                 { name: 'Alanine Aminotransferase (ALT)', unit: 'U/L', range: { low: 10, high: 40 }, example: 25 },
                 { name: 'Aspartate Aminotransferase (AST)', unit: 'U/L', range: { low: 10, high: 30 }, example: 20 },
                 { name: 'Alkaline Phosphatase (ALP)', unit: 'IU/L', range: { low: 30, high: 120 }, example: 80 },
                 { name: 'Total Bilirubin', unit: 'mg/dL', range: { low: 0.3, high: 1.2 }, example: 0.8 },
-                { name: 'Direct Bilirubin', unit: 'mg/dL', range: { low: 0.1, high: 0.3 }, example: 0.2 },
-                { name: 'Albumin', unit: 'g/dL', range: { low: 3.5, high: 5.0 }, example: 4.2 },
+                { name: 'Direct Bilirubin', unit: 'mg/dL', range: { low: 0.0, high: 0.3 }, example: 0.1 },
+                { name: 'Albumin', unit: 'g/dL', range: { low: 3.5, high: 5.0 }, example: 4.0 },
             ],
         },
         {
-            label: 'C-Reactive Protein (CRP)',
-            value: 'crp',
+            label: 'Hemoglobin A1c (HbA1c)',
+            value: 'Hemoglobin A1c (HbA1c)',
             parameters: [
-                { name: 'CRP', unit: 'mg/L', range: { low: 0.08, high: 3.1 }, example: 1.5 },
-            ],
-        },
-        {
-            label: 'Ferritin',
-            value: 'ferritin',
-            parameters: [
-                { name: 'Ferritin', unit: 'ng/mL', range: { low: 15, high: 200 }, example: 100 },
+                { name: 'HbA1c', unit: '%', range: { low: 4.0, high: 5.6 }, example: 5.2 },
             ],
         },
     ],
@@ -78,7 +83,7 @@ const grouped_test_options = {
     'Urine & Stool Tests': [
         {
             label: 'Urinalysis (UA)',
-            value: 'urinalysis',
+            value: 'Urinalysis (UA)',
             parameters: [
                 { name: 'Protein', unit: 'mg/dL', range: { low: 0, high: 15 }, example: 5 },
                 { name: 'Glucose', unit: 'mg/dL', range: { low: 0, high: 15 }, example: 0 },
@@ -88,7 +93,7 @@ const grouped_test_options = {
         },
         {
             label: 'Urine Culture',
-            value: 'urine_culture',
+            value: 'Urine Culture',
             parameters: [
                 { name: 'Bacterial Growth', unit: 'CFU/mL', range: { low: 0, high: 10000 }, example: 0 },
                 { name: 'Pathogen Identified', unit: 'string', range: {}, example: 'None' },
@@ -96,14 +101,14 @@ const grouped_test_options = {
         },
         {
             label: 'Stool Occult Blood Test',
-            value: 'stool_occult',
+            value: 'Stool Occult Blood Test',
             parameters: [
                 { name: 'Occult Blood', unit: 'presence', range: { low: 'negative', high: 'negative' }, example: 'negative' },
             ],
         },
         {
             label: 'Stool Culture',
-            value: 'stool_culture',
+            value: 'Stool Culture',
             parameters: [
                 { name: 'Pathogen Identified', unit: 'string', range: {}, example: 'None' },
             ],
@@ -113,42 +118,42 @@ const grouped_test_options = {
     'Imaging': [
         {
             label: 'X-Ray',
-            value: 'xray',
+            value: 'X-Ray',
             parameters: [
                 { name: 'Findings', unit: 'string', example: 'No fractures or abnormalities detected' },
             ],
         },
         {
             label: 'Magnetic Resonance Imaging (MRI)',
-            value: 'mri',
+            value: 'Magnetic Resonance Imaging (MRI)',
             parameters: [
                 { name: 'Findings', unit: 'string', example: 'Multiple demyelinating plaques in periventricular white matter' },
             ],
         },
         {
             label: 'Computed Tomography (CT) Scan',
-            value: 'ct',
+            value: 'Computed Tomography (CT) Scan',
             parameters: [
                 { name: 'Findings', unit: 'string', example: 'No acute intracranial hemorrhage' },
             ],
         },
         {
             label: 'Ultrasound',
-            value: 'ultrasound',
+            value: 'Ultrasound',
             parameters: [
                 { name: 'Findings', unit: 'string', example: 'Normal liver size and echotexture' },
             ],
         },
         {
             label: 'Positron Emission Tomography (PET)',
-            value: 'pet',
+            value: 'Positron Emission Tomography (PET)',
             parameters: [
                 { name: 'Findings', unit: 'string', example: 'Increased uptake in mediastinal lymph nodes' },
             ],
         },
         {
             label: 'Optical Coherence Tomography (OCT)',
-            value: 'oct',
+            value: 'Optical Coherence Tomography (OCT)',
             parameters: [
                 { name: 'Retinal Nerve Fiber Layer Thickness', unit: 'µm', range: { low: 80, high: 110 }, example: 95 },
             ],
@@ -158,7 +163,7 @@ const grouped_test_options = {
     'Cardiac Tests': [
         {
             label: 'Electrocardiogram (ECG/EKG)',
-            value: 'ecg',
+            value: 'Electrocardiogram (ECG/EKG)',
             parameters: [
                 { name: 'Heart Rate', unit: 'bpm', range: { low: 60, high: 100 }, example: 72 },
                 { name: 'PR Interval', unit: 'ms', range: { low: 120, high: 200 }, example: 160 },
@@ -167,7 +172,7 @@ const grouped_test_options = {
         },
         {
             label: 'Echocardiogram',
-            value: 'echocardiogram',
+            value: 'Echocardiogram',
             parameters: [
                 { name: 'Ejection Fraction', unit: '%', range: { low: 55, high: 70 }, example: 60 },
                 { name: 'Left Ventricular Size', unit: 'cm', range: { low: 3.5, high: 5.7 }, example: 4.8 },
@@ -175,7 +180,7 @@ const grouped_test_options = {
         },
         {
             label: 'Stress Test',
-            value: 'stress_test',
+            value: 'Stress Test',
             parameters: [
                 { name: 'Exercise Duration', unit: 'minutes', example: 10 },
                 { name: 'Max Heart Rate Achieved', unit: 'bpm', example: 160 },
@@ -185,8 +190,16 @@ const grouped_test_options = {
 
     'Neurological & Specialized Tests': [
         {
+            label: 'Electroencephalogram (EEG)',
+            value: 'Electroencephalogram (EEG)',
+            parameters: [
+                { name: 'Background Rhythm', unit: 'Hz', range: { low: 8, high: 12 }, example: 10 },
+                { name: 'Abnormal Activity', unit: 'presence', range: { low: 'absent', high: 'absent' }, example: 'absent' },
+            ],
+        },
+        {
             label: 'Evoked Potentials',
-            value: 'evoked_potentials',
+            value: 'Evoked Potentials',
             parameters: [
                 { name: 'Visual Evoked Potential Latency', unit: 'ms', range: { low: 90, high: 110 }, example: 105 },
                 { name: 'Somatosensory Evoked Potential Latency', unit: 'ms', example: 35 },
@@ -194,7 +207,7 @@ const grouped_test_options = {
         },
         {
             label: 'Cerebrospinal Fluid (CSF) Analysis',
-            value: 'csf_analysis',
+            value: 'Cerebrospinal Fluid (CSF) Analysis',
             parameters: [
                 { name: 'White Blood Cell Count', unit: 'cells/mm³', range: { low: 0, high: 5 }, example: 2 },
                 { name: 'Protein', unit: 'mg/dL', range: { low: 15, high: 45 }, example: 30 },
@@ -204,14 +217,14 @@ const grouped_test_options = {
         },
         {
             label: 'Biopsy',
-            value: 'biopsy',
+            value: 'Biopsy',
             parameters: [
                 { name: 'Histopathological Findings', unit: 'string', example: 'Granulomatous inflammation' },
             ],
         },
         {
             label: 'Enzyme-linked Immunosorbent Assay (ELISA)',
-            value: 'elisa',
+            value: 'Enzyme-linked Immunosorbent Assay (ELISA)',
             parameters: [
                 { name: 'Antibody Level', unit: 'IU/mL', example: 120 },
             ],
@@ -221,7 +234,7 @@ const grouped_test_options = {
     'Other Specialized Tests': [
         {
             label: 'Allergy Panel (IgE)',
-            value: 'allergy_panel',
+            value: 'Allergy Panel (IgE)',
             parameters: [
                 { name: 'Total IgE', unit: 'IU/mL', range: { low: 0, high: 100 }, example: 50 },
                 { name: 'Specific IgE', unit: 'IU/mL', example: 10 },
@@ -229,14 +242,14 @@ const grouped_test_options = {
         },
         {
             label: 'Genetic Screening',
-            value: 'genetic_screening',
+            value: 'Genetic Screening',
             parameters: [
                 { name: 'Mutation Detected', unit: 'string', example: 'BRCA1 positive' },
             ],
         },
         {
             label: 'Pulmonary Function Tests (PFTs)',
-            value: 'pfts',
+            value: 'Pulmonary Function Tests (PFTs)',
             parameters: [
                 { name: 'Forced Vital Capacity (FVC)', unit: 'L', range: { low: 3.0, high: 5.0 }, example: 4.2 },
                 { name: 'Forced Expiratory Volume in 1 second (FEV1)', unit: 'L', range: { low: 2.5, high: 4.0 }, example: 3.5 },
@@ -257,46 +270,35 @@ const getAllTestOptionsFlat = () => {
 };
 const allTestOptionsFlat = getAllTestOptionsFlat();
 
-function DoctorSendPatientForTestTestType() {
-    const [selectedTestValues, setSelectedTestValues] = React.useState([]);
+// Accept props: selectedTestValues, onTestTypeToggle
+function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle }) {
+    // Removed internal state
 
-    const handleTestTypeToggle = (value) => {
-        setSelectedTestValues(prevSelected => {
-            if (prevSelected.includes(value)) {
-                // Remove if already selected
-                return prevSelected.filter(item => item !== value);
-            } else {
-                // Add if not selected
-                return [...prevSelected, value];
-            }
-        });
-    };
-
-    // Get the labels of the selected tests
-    const selectedTestLabels = selectedTestValues
-        .map(value => {
-            const foundOption = allTestOptionsFlat.find(option => option.value === value);
-            return foundOption ? foundOption.label : null; // Find the label corresponding to the value
-        })
-        .filter(label => label !== null); // Filter out any potential nulls if a value wasn't found (shouldn't happen with this setup)
+    // Derive selected labels from selected values
+    const selectedTestLabels = selectedTestValues.map(value => {
+        const option = allTestOptionsFlat.find(opt => opt.value === value);
+        return option ? option.label : value; // Fallback to value if label not found
+    });
 
     return (
+        // Use the structure provided by the user
         <div className="test-type-selection-grouped">
-            <HuggedText text="Select Test Types:" font_size="16px" font_weight="700" color="#000000" margin_bottom="15px" />
+            <HuggedText text="Select Test Types:" font_size="16px" font_weight="700" color="#4E4B66" margin_bottom="15px" />
 
             <div className="test-groups-container">
                 {Object.entries(grouped_test_options).map(([categoryName, tests]) => (
                     <div key={categoryName} className="test-group-column">
-                        <HuggedText text={categoryName} font_size="14px" font_weight="600" color="#333333" margin_bottom="10px" />
+                        <HuggedText text={categoryName} font_size="14px" font_weight="600" color="#4E4B66" margin_bottom="10px" />
                         <div className="test-options-list">
                             {tests.map((option) => (
                                 <div key={option.value} className="test-option-item">
                                     <input
                                         type="checkbox"
-                                        id={`test-${option.value}`}
+                                        id={`test-${option.value}`} // Use value for unique ID
                                         value={option.value} // value attribute is good practice
+                                        // Use props for checked state and onChange handler
                                         checked={selectedTestValues.includes(option.value)}
-                                        onChange={() => handleTestTypeToggle(option.value)}
+                                        onChange={() => onTestTypeToggle(option.value)}
                                     />
                                     <label htmlFor={`test-${option.value}`}>{option.label}</label>
                                 </div>
@@ -306,9 +308,10 @@ function DoctorSendPatientForTestTestType() {
                 ))}
             </div>
 
+            {/* Display selected tests */}
             {selectedTestLabels.length > 0 && (
                 <div className="selected-tests-display">
-                    <HuggedText text="Selected Tests:" font_size="14px" font_weight="600" color="#000000" margin_bottom="5px" />
+                    <HuggedText text="Selected Tests:" font_size="14px" font_weight="600" color="#4E4B66" margin_bottom="5px" />
                     <p>{selectedTestLabels.join(', ')}</p>
                 </div>
             )}

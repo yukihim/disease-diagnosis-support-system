@@ -1,69 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'; // Removed useState, useEffect
 import './style/doctorPrescriptionAndProcedureDiagnosisResult.css';
 
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 
+// Assuming this component correctly displays symptoms passed as a string prop
 import DoctorFinalizingDiagnosisForPatientSymptoms from '../finalizingDiagnosis/doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientSymptoms';
 import DoctorPrescriptionAndProcedureDiagnosisResultFinalDiagnosis from './doctorPrescriptionAndProcedureDiagnosisResult/doctorPrescriptionAndProcedureDiagnosisResultFinalDiagnosis';
 
-function DoctorPrescriptionAndProcedureDiagnosisResult() {
-    const [patientSymptoms, setPatientSymptoms] = useState("");
+// Accept props from parent
+function DoctorPrescriptionAndProcedureDiagnosisResult({ patientSymptoms, finalDiagnosis }) {
 
-    const [finalDiagnosis, setFinalDiagnosis] = useState("");
-    
-    useEffect(() => {
-        fetchPatientSymptoms();
-        fetchFinalDiagnosis();
-    }, []);
+    // Removed internal state and useEffect for fetching mock data
+    // Removed fetchPatientSymptoms and fetchFinalDiagnosis functions
 
-    // Fetch Patient Symptoms from API
-    const fetchPatientSymptoms = async () => {
-        try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint');
-            // const data = await response.json();
-            // setpatientReasonToVisit(data);
-            
-            // Mock data for demonstration
-            const mockData = "Influenza (Flu)";
-            
-            setPatientSymptoms(mockData);
-        } catch (error) {
-            console.error('Error fetching patient symptoms:', error);
-        }
-    };
-
-    // Fetch Diagnosis from API
-    const fetchFinalDiagnosis = async () => {
-        try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint');
-            // const data = await response.json();
-            // setpatientReasonToVisit(data);
-            
-            // Mock data for demonstration
-            const mockData = "Influenza (Flu)";
-            
-            setFinalDiagnosis(mockData);
-        } catch (error) {
-            console.error('Error fetching diagnosis recommendation:', error);
-        }
-    };
-    
     return (
         <BoxContainer className='doctorPrescriptionAndProcedureDiagnosisResultBox'>
             <BoxContainerTitle className='doctorPrescriptionAndProcedureDiagnosisResult'>
-                Finalizing Diagnosis
+                Diagnosis Result {/* Changed title */}
             </BoxContainerTitle>
 
             <BoxContainerContent className='doctorPrescriptionAndProcedureDiagnosisResultContent'>
-                {/* Symptoms */}
-                <DoctorFinalizingDiagnosisForPatientSymptoms patientSymptoms={patientSymptoms} />
+                {/* Symptoms - Display passed prop */}
+                <DoctorFinalizingDiagnosisForPatientSymptoms patientSymptoms={patientSymptoms || "No symptoms recorded."} />
 
-                {/* Final Diagnosis */}
-                <DoctorPrescriptionAndProcedureDiagnosisResultFinalDiagnosis patientFinalDiagnosis={finalDiagnosis} />
+                {/* Final Diagnosis - Display passed prop */}
+                <DoctorPrescriptionAndProcedureDiagnosisResultFinalDiagnosis patientFinalDiagnosis={finalDiagnosis || "No final diagnosis recorded."} />
             </BoxContainerContent>
         </BoxContainer>
     );

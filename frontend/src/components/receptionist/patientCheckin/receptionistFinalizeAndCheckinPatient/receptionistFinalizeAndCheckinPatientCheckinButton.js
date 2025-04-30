@@ -7,12 +7,12 @@ import Button from '../../../common/button';
 import ButtonText from '../../../common/buttonText';
 
 // Receive necessary data from parent
-function ReceptionistFinalizeAndCheckinPatientCheckinButton({ patientID, reasonToVisit, department, doctor }) {
+function ReceptionistFinalizeAndCheckinPatientCheckinButton({ sessionID, reasonToVisit, department, doctor }) {
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleCheckin = async () => {
-        if (!patientID) {
+        if (!sessionID) {
             alert("Error: Patient ID is missing.");
             return;
         }
@@ -37,7 +37,7 @@ function ReceptionistFinalizeAndCheckinPatientCheckinButton({ patientID, reasonT
         };
 
         try {
-            const apiUrl = `http://localhost:5001/receptionist/finalize_check_in/patient_information/${patientID}/checkin`;
+            const apiUrl = `http://localhost:5001/receptionist/finalize_check_in/patient_information/${sessionID}/checkin`;
             console.log("Checking in patient:", apiUrl);
             console.log("Payload:", JSON.stringify(payload));
 
@@ -71,7 +71,7 @@ function ReceptionistFinalizeAndCheckinPatientCheckinButton({ patientID, reasonT
         <div className="receptionistFinalizeAndCheckinPatientCheckinButton">
             <Button
                 onClick={handleCheckin}
-                disabled={isLoading || !patientID} // Disable if loading or no patientID
+                disabled={isLoading || !sessionID} // Disable if loading or no sessionID
             >
                 <ButtonText>
                     {isLoading ? 'Checking In...' : 'Check in for Patient'}

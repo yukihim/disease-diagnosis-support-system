@@ -4,20 +4,26 @@ import './style/doctorSendPatientForTestCancelOrConfirmButton.css';
 import Button from '../../../common/button';
 import ButtonText from '../../../common/buttonText';
 
-function DoctorSendPatientForTestCancelOrConfirmButton({ onClickCancelSendForTest, onClickConfirmSendForTest }) {
+// Accept props: onClickCancelSendForTest, onClickConfirmSendForTest, isSubmitting, submitError
+function DoctorSendPatientForTestCancelOrConfirmButton({
+    onClickCancelSendForTest,
+    onClickConfirmSendForTest,
+    isSubmitting,
+    submitError
+}) {
+    if(submitError) {
+        console.error("Error in DoctorSendPatientForTestCancelOrConfirmButton:", submitError);
+        alert("An error occurred: " + submitError);
+    }
+
     return (
         <div className="doctorSendPatientForTestCancelOrConfirmButton">
-            {/* Cancel Button */}
-            <Button className="sendForTestAndFinalizingDiagnosis cancel" onClick={onClickCancelSendForTest}>
-                <ButtonText>
-                    Cancel
-                </ButtonText>
+            <Button className="sendForTestAndFinalizingDiagnosis cancelBig" onClick={onClickCancelSendForTest} disabled={isSubmitting}>
+                <ButtonText>Cancel</ButtonText>
             </Button>
-
-            {/* Confirm Button */}
-            <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickConfirmSendForTest}>
+            <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickConfirmSendForTest} disabled={isSubmitting}>
                 <ButtonText>
-                    Confirm
+                    {isSubmitting ? 'Sending...' : 'Confirm'}
                 </ButtonText>
             </Button>
         </div>

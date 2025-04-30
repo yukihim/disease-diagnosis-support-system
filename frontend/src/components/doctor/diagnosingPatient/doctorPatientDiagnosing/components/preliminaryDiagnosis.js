@@ -6,7 +6,7 @@ import HuggedText from '../../../../common/huggedText';
 function PreliminaryDiagnosis({ preliminaryDiagnosis, setPreliminaryDiagnosis }) {
     return (
         <div className="preliminaryDiagnosis">
-            <HuggedText text="Preliminary Diagnosis:" font_size="14px" font_weight="600" color="#000000" />
+            <HuggedText text="Preliminary Diagnosis:" font_size="14px" font_weight="600" color="#4E4B66" />
             <textarea
                 className="preliminaryDiagnosisInput"
                 placeholder="Input your preliminary Diagnosis"

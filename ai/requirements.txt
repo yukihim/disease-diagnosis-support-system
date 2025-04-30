@@ -6,3 +6,4 @@ google-generativeai
 scikit-learn
 xgboost
 gunicorn
+Flask-Cors

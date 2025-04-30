@@ -20,11 +20,12 @@ function ReceptionistPatientFound({ patientFoundTableData, isVisible }) {
     const history = useHistory();
 
     function onClickPatient(patient) {
+        console.log("Patient clicked:", patient);
         // Navigate to the next page with patient information
         history.push({
             pathname: '/receptionist/patient_checkin',
             state: {
-                patientName: patient.patientID
+                sessionID: patient.sessionID
             }
         });
     }

@@ -35,55 +35,119 @@ mock_available_doctors = [
     {"name": "Dr. Jones", "role": "Dermatologist"},
 ]
 
-# Mock patient database
+# Mock patient database, date format mm-dd-yyyy
+# This DB uses patientID as the key
 mock_patients_db = {
     "patient_001": {
         "patientID": "patient_001", # Using userID as patientID for simplicity here
         "patientName": "Nguyen Van A",
         "ssn": "079200001111",
         "hic": "HIC-A",
-        "dob": "1985-05-10",
+        "dob": "05-10-1985",
         "gender": "Male",
         "phone": "0912345678",
         "height": "175",
         "weight": "70",
         "job": "Engineer",
         "address": "123 Main St, Hanoi",
-        "hasFollowUpAppointment": True
+        "followUpDate": "04-30-2025",
+        "type": "Outpatient"
     },
     "patient_002": {
         "patientID": "patient_002",
         "patientName": "Tran Thi B",
         "ssn": "079200002222",
         "hic": "HIC-B",
-        "dob": "1992-11-25",
+        "dob": "11-25-1992",
         "gender": "Female",
         "phone": "0987654321",
         "height": "160",
         "weight": "55",
         "job": "Teacher",
         "address": "456 Oak Ave, HCMC",
-        "hasFollowUpAppointment": False
+        "followUpDate": "",
+        "type": "Inpatient"
     },
     "abc-xyz-123": { # Matching test value
         "patientID": "abc-xyz-123",
         "patientName": "Le Van C (Test)",
         "ssn": "079283868386", # Matching test value
         "hic": "HIC-C",
-        "dob": "1978-01-15",
+        "dob": "01-15-1978",
         "gender": "Male",
         "phone": "0909913313",
         "height": "180",
         "weight": "85",
         "job": "Manager",
         "address": "789 Pine Ln, Danang",
-        "hasFollowUpAppointment": True
-    }
+        "followUpDate": "04-29-2025",
+        "type": "Outpatient"
+    },
+    "patient_jd": {
+        "patientID": "patient_jd", "patientName": "John Doe", "ssn": "111223333", "hic": "HIC-JD", "dob": "01-15-1979", "gender": "Male", "phone": "0912345010", "height": "180", "weight": "80", "job": "Unknown", "address": "10 Unknown St", "followUpDate": "", "type": "Outpatient"
+    },
+    "patient_js": {
+        "patientID": "patient_js", "patientName": "Jane Smith", "ssn": "444556666", "hic": "HIC-JS", "dob": "03-20-1992", "gender": "Female", "phone": "0912345011", "height": "165", "weight": "60", "job": "Unknown", "address": "11 Unknown St", "followUpDate": "", "type": "Outpatient"
+    },
+    "patient_mj": {
+        "patientID": "patient_mj", "patientName": "Mike Johnson", "ssn": "777889999", "hic": "HIC-MJ", "dob": "06-10-1996", "gender": "Male", "phone": "0912345012", "height": "170", "weight": "72", "job": "Unknown", "address": "12 Unknown St", "followUpDate": "", "type": "Outpatient"
+    },
+    "patient_sw": {
+        "patientID": "patient_sw", "patientName": "Sarah Williams", "ssn": "121314151", "hic": "HIC-SW", "dob": "09-05-1970", "gender": "Female", "phone": "0912345013", "height": "162", "weight": "65", "job": "Unknown", "address": "13 Unknown St", "followUpDate": "", "type": "Outpatient"
+    },
+    "patient_rb": {
+        "patientID": "patient_rb", "patientName": "Robert Brown", "ssn": "161718191", "hic": "HIC-RB", "dob": "11-25-1957", "gender": "Male", "phone": "0912345014", "height": "173", "weight": "82", "job": "Retired", "address": "14 Unknown St", "followUpDate": "", "type": "Outpatient"
+    },
+    "patient_ed": {
+        "patientID": "patient_ed", "patientName": "Emily Davis", "ssn": "202122232", "hic": "HIC-ED", "dob": "04-15-2005", "gender": "Female", "phone": "0912345015", "height": "168", "weight": "58", "job": "Student", "address": "15 Unknown St", "followUpDate": "", "type": "Outpatient"
+    },
+    "patient_dw": {
+        "patientID": "patient_dw", "patientName": "David Wilson", "ssn": "242526272", "hic": "HIC-DW", "dob": "07-30-1983", "gender": "Male", "phone": "0912345016", "height": "182", "weight": "88", "job": "Unknown", "address": "16 Unknown St", "followUpDate": "", "type": "Outpatient"
+    },
+    # Add inpatient details here as well if they are distinct patients
+    "patient_in_001": {"patientID": "patient_in_001", "patientName": "Diana Prince", "dob": "1989-06-01", "gender": "Female", "phone": "0912121212", "job": "Curator", "ssn": "079600006666", "hic": "HIC-G", "height": "175", "weight": "65", "address": "Themyscira", "followUpDate": "", "type": "Inpatient"},
+    "patient_in_002": {"patientID": "patient_in_002", "patientName": "Clark Kent", "dob": "1984-02-29", "gender": "Male", "phone": "0934343434", "job": "Reporter", "ssn": "079700007777", "hic": "HIC-H", "height": "190", "weight": "95", "address": "Metropolis", "followUpDate": "", "type": "Inpatient"},
 }
 
+# Mock mapping from a current sessionID to its associated patientID
+# Consistent with Paraclinical and Pass_Session modules
+session_to_patient_map = {
+    "sess_pxt_001": "patient_001",
+    "sess_px1_002": "patient_001",
+    "sess_px2_003": "patient_001",
+    "sess_px3_004": "patient_002",
+    "sess_px4_005": "patient_002",
+    "sess_pxb_006": "patient_002",
+    "sess_pxc_007": "abc-xyz-123",
+    "sess_pxb_008": "abc-xyz-123",
+    "sess_pxt_009": "patient_001",
+    "sess_jd_010": "patient_jd",
+    "sess_jd_past_001": "patient_jd",
+    "sess_jd_past_002": "patient_jd",
+    "sess_js_011": "patient_js",
+    "sess_mj_012": "patient_mj",
+    "sess_sw_013": "patient_sw",
+    "sess_rb_014": "patient_rb",
+    "sess_ed_015": "patient_ed",
+    "sess_dw_016": "patient_dw",
+    # Add mappings for the original patient_001, patient_002, abc-xyz-123 if they can also be session IDs
+    "patient_001": "patient_001",
+    "patient_002": "patient_002",
+    "abc-xyz-123": "abc-xyz-123",
+    # Add mappings for inpatient sessions if needed
+    "inpatient_session_1": "patient_in_001",
+    "inpatient_session_2": "patient_in_002",
+    # Add mappings for doctor-specific sessions if they differ
+    "session_1": "patient_jd", # Example: Doctor's session_1 maps to John Doe
+    "session_2": "patient_js", # Example: Doctor's session_2 maps to Jane Smith
+}
+
+
+# Mock follow-up info, keyed by patientID
 mock_follow_up_info = {
     "patient_001": {"reasonToVisit": "Follow up Re-examination", "department": "Cardiology", "doctor": "Dr. Jones"},
     "abc-xyz-123": {"reasonToVisit": "", "department": "Neurology", "doctor": "Dr. Smith"}
+    # patient_002 has no entry, simulating no follow-up info
 }
 
 # 7.4.4.1 Landing Page: Get Emergency List
@@ -153,6 +217,7 @@ def get_available_doctor_list():
 def find_patient_by_ssn():
     """
     Finds patients by Social Security Number (case-insensitive, whitespace-insensitive, partial match).
+    Returns patientID mapped to sessionID key.
     """
     try:
         data = request.get_json()
@@ -166,6 +231,7 @@ def find_patient_by_ssn():
              return jsonify({"patients": []}), 200
 
         results = []
+        # Iterate through the values (patient dictionaries) in mock_patients_db
         for patient in mock_patients_db.values():
             db_ssn = patient.get('ssn')
             if db_ssn:
@@ -174,7 +240,8 @@ def find_patient_by_ssn():
                 # Check if normalized search term is part of the normalized DB SSN
                 if normalized_search_ssn in normalized_db_ssn:
                     results.append({
-                        "patientID": patient.get('patientID'),
+                        # Return patientID under the sessionID key as expected by frontend
+                        "sessionID": patient.get('patientID'),
                         "patientName": patient.get('patientName'),
                         "ssn": patient.get('ssn'), # Return original format
                         "hic": patient.get('hic')   # Return original format
@@ -184,7 +251,7 @@ def find_patient_by_ssn():
 
     except Exception as e:
         print(f"Error finding patient by SSN: {e}")
-        return jsonify({"error": "Error while searching for patient by SSN."}), 500 # Use 500 for unexpected server errors
+        return jsonify({"string": "Error while searching for patient by SSN."}), 500 # Use 500 for unexpected server errors
 
 # 7.4.4.6 Find Patient Page: Find Patient by Health Insurance Code
 @app.route('/find_patient/hic', methods=['POST'])
@@ -193,6 +260,7 @@ def find_patient_by_ssn():
 def find_patient_by_hic():
     """
     Finds patients by Health Insurance Code (case-insensitive, whitespace-insensitive, partial match).
+    Returns patientID mapped to sessionID key.
     """
     try:
         data = request.get_json()
@@ -206,6 +274,7 @@ def find_patient_by_hic():
              return jsonify({"patients": []}), 200
 
         results = []
+        # Iterate through the values (patient dictionaries) in mock_patients_db
         for patient in mock_patients_db.values():
             db_hic = patient.get('hic')
             if db_hic:
@@ -214,7 +283,8 @@ def find_patient_by_hic():
                 # Check if normalized search term is part of the normalized DB HIC
                 if normalized_search_hic in normalized_db_hic:
                     results.append({
-                        "patientID": patient.get('patientID'),
+                        # Return patientID under the sessionID key as expected by frontend
+                        "sessionID": patient.get('patientID'),
                         "patientName": patient.get('patientName'),
                         "ssn": patient.get('ssn'), # Return original format
                         "hic": patient.get('hic')   # Return original format
@@ -224,7 +294,7 @@ def find_patient_by_hic():
 
     except Exception as e:
         print(f"Error finding patient by HIC: {e}")
-        return jsonify({"error": "Error while searching for patient by HIC."}), 500 # Use 500 for unexpected server errors
+        return jsonify({"string": "Error while searching for patient by HIC."}), 500 # Use 500 for unexpected server errors
 
 
 
@@ -232,15 +302,22 @@ def find_patient_by_hic():
 
 
 # 7.4.4.7 Patient Finalize and Check-in Page: Retrieve Patient Information
-@app.route('/finalize_check_in/patient_information/<string:patientID>', methods=['GET'])
+@app.route('/finalize_check_in/patient_information/<string:sessionID>', methods=['GET'])
 @jwt_required()
-@check_role(['receptionist'])
-def retrieve_patient_information(patientID):
+# @check_role(['receptionist'])
+def retrieve_patient_information(sessionID):
     """Retrieves detailed information for a specific patient."""
     try:
-        patient_info = mock_patients_db.get(patientID)
+        patient_info = mock_patients_db.get(sessionID) # Try direct lookup first
+
         if not patient_info:
-            return jsonify({"error": f"Patient with ID '{patientID}' not found."}), 404 # Use 404 for not found
+            patientID_from_map = session_to_patient_map.get(sessionID)
+            if patientID_from_map:
+                patient_info = mock_patients_db.get(patientID_from_map) # Lookup using mapped ID
+
+        if not patient_info:
+            # If still not found after direct lookup and map fallback
+            return jsonify({"message": f"Session ID '{sessionID}' not found."}), 404 # Updated error message
 
         # Format response according to documentation
         response_data = {
@@ -254,35 +331,36 @@ def retrieve_patient_information(patientID):
             "weight": patient_info.get("weight"),
             "job": patient_info.get("job"),
             "address": patient_info.get("address"),
-            "hasFollowUpAppointment": patient_info.get("hasFollowUpAppointment", False)
+            "followUpDate": patient_info.get("followUpDate"),
+            "type": patient_info.get("type"),
         }
         return jsonify(response_data), 200
 
     except Exception as e:
-        print(f"Error retrieving patient info for {patientID}: {e}")
+        print(f"Error retrieving patient info for {sessionID}: {e}")
         # Doc says 400 for errors, but 500 might be more appropriate for server errors
-        return jsonify({"error": "Error while retrieving patient information."}), 400
+        return jsonify({"string": "Error while retrieving patient information."}), 400
 
 
 
 
 
 # 7.4.4.8 Patient Finalize and Check-in Page: Edit Patient Information
-@app.route('/finalize_check_in/patient_information/<string:patientID>/edit', methods=['POST'])
+@app.route('/finalize_check_in/patient_information/<string:sessionID>/edit', methods=['POST'])
 @jwt_required()
 @check_role(['receptionist'])
-def edit_patient_information(patientID):
+def edit_patient_information(sessionID):
     """Edits information for a specific patient."""
     try:
-        if patientID not in mock_patients_db:
-            return jsonify({"error": f"Patient with ID '{patientID}' not found."}), 404 # Use 404
+        if sessionID not in mock_patients_db:
+            return jsonify({"string": f"Patient with ID '{sessionID}' not found."}), 404 # Use 404
 
         data = request.get_json()
         if not data:
             return jsonify({"message": "Missing JSON payload."}), 400
 
         # Update mock database (only update fields provided in the payload)
-        patient_record = mock_patients_db[patientID]
+        patient_record = mock_patients_db[sessionID]
         if 'name' in data: patient_record['patientName'] = data['name'] # Map 'name' from payload to 'patientName' in DB
         if 'dob' in data: patient_record['dob'] = data['dob']
         if 'gender' in data: patient_record['gender'] = data['gender']
@@ -295,38 +373,52 @@ def edit_patient_information(patientID):
         if 'address' in data: patient_record['address'] = data['address']
         # 'hasFollowUpAppointment' is not in the edit payload per the doc
 
-        print(f"Updated patient info for {patientID}: {patient_record}") # Server log
+        print(f"Updated patient info for {sessionID}: {patient_record}") # Server log
 
         return jsonify({"message": "Patient information edited successfully"}), 200
 
     except Exception as e:
-        print(f"Error editing patient info for {patientID}: {e}")
+        print(f"Error editing patient info for {sessionID}: {e}")
         # Doc says 400 for errors, but 500 might be more appropriate for server errors
-        return jsonify({"error": "Error while editing patient information."}), 400
+        return jsonify({"string": "Error while editing patient information."}), 400
 
 # 7.4.4.9 Patient Finalize and Check-in Page: Retrieve Follow Up Patient Information
-@app.route('/finalize_check_in/patient_information/<string:patientID>/follow_up', methods=['GET'])
+# MODIFIED: Uses sessionID from URL to find patientID, then gets follow-up info for that patientID
+@app.route('/finalize_check_in/patient_information/<string:sessionID>/follow_up', methods=['GET'])
 @jwt_required()
 @check_role(['receptionist'])
-def retrieve_follow_up_information(patientID):
-    """Retrieves follow-up appointment details for a specific patient."""
+def retrieve_follow_up_information(sessionID):
+    """
+    Retrieves follow-up appointment details for the patient associated
+    with the given sessionID.
+    """
     try:
-        if patientID not in mock_patients_db:
-             return jsonify({"error": f"Patient with ID '{patientID}' not found."}), 404 # Use 404
+        # Step 1: Find the patientID associated with the input sessionID
+        patientID = session_to_patient_map.get(sessionID)
 
+        if not patientID:
+            # The provided sessionID doesn't map to a known patient in our mock data
+            # Check if the sessionID itself is a valid patientID (fallback for older logic/direct patientID usage)
+            if sessionID in mock_patients_db:
+                patientID = sessionID
+                print(f"Warning: Using sessionID '{sessionID}' directly as patientID for follow-up lookup.")
+            else:
+                return jsonify({"message": f"Session ID '{sessionID}' not found or not linked to a patient."}), 404
+
+        # Step 2: Use the found patientID to get the follow-up info
         follow_up = mock_follow_up_info.get(patientID)
 
         if not follow_up:
-             # Handle case where patient exists but has no follow-up info stored
-             return jsonify({"message": f"No follow-up information found for patient ID '{patientID}'."}), 404 # Or return 200 with empty data? Doc implies error.
+            # Handle case where patient exists but has no follow-up info stored
+            return jsonify({"message": f"No follow-up information found for patient ID '{patientID}' (from session '{sessionID}')."}), 404 # Doc implies 404 error.
 
         # Return the follow-up details
         return jsonify(follow_up), 200
 
     except Exception as e:
-        print(f"Error retrieving follow-up info for {patientID}: {e}")
-        # Doc says 400 for errors, but 500 might be more appropriate for server errors
-        return jsonify({"error": "Error while retrieving follow-up information."}), 400
+        print(f"Error retrieving follow-up info for session {sessionID} (patient {patientID if 'patientID' in locals() else 'unknown'}): {e}")
+        # Using 500 for unexpected server errors
+        return jsonify({"string": "Error while retrieving follow-up information."}), 500
 
 
 
@@ -334,15 +426,15 @@ def retrieve_follow_up_information(patientID):
 
 
 # 7.4.4.10 Patient Finalize and Check-in Page: Check in Patient
-@app.route('/finalize_check_in/patient_information/<string:patientID>/checkin', methods=['POST'])
+@app.route('/finalize_check_in/patient_information/<string:sessionID>/checkin', methods=['POST'])
 @jwt_required()
 @check_role(['receptionist'])
-def check_in_patient(patientID):
+def check_in_patient(sessionID):
     """Checks in a patient, creating a new session or record."""
     try:
         # 1. Validate Patient ID
-        if patientID not in mock_patients_db:
-            return jsonify({"error": f"Patient with ID '{patientID}' not found."}), 404 # Use 404 for not found
+        if sessionID not in mock_patients_db:
+            return jsonify({"string": f"Patient with ID '{sessionID}' not found."}), 404 # Use 404 for not found
 
         # 2. Get and Validate Payload
         data = request.get_json()
@@ -360,12 +452,12 @@ def check_in_patient(patientID):
         # 3. Mock Check-in Logic
         # In a real application, this would:
         # - Create a new session record in a database table (e.g., 'sessions')
-        # - Link it to the patientID, doctor, department
+        # - Link it to the sessionID, doctor, department
         # - Store the reasonForVisit
         # - Set the initial status (e.g., 'Waiting for Nurse')
         # - Potentially update the patient's status or last visit date
         print(f"--- Patient Check-in ---")
-        print(f"Patient ID: {patientID}")
+        print(f"Session ID: {sessionID}")
         print(f"Reason: {reason}")
         print(f"Department: {department}")
         print(f"Doctor: {doctor}")
@@ -379,6 +471,6 @@ def check_in_patient(patientID):
         return jsonify({"message": "Patient checked in successfully"}), 200
 
     except Exception as e:
-        print(f"Error during check-in for patient {patientID}: {e}")
+        print(f"Error during check-in for patient {sessionID}: {e}")
         # Using 500 for unexpected server errors, though doc says 400.
-        return jsonify({"error": "An error occurred while checking in the patient."}), 500
+        return jsonify({"string": "An error occurred while checking in the patient."}), 500

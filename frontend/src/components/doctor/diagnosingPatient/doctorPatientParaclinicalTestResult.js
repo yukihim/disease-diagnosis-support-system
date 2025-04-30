@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useLocation } from 'react-router-dom'; // Import useLocation
+import Cookies from 'js-cookie'; // Import Cookies
 import './style/doctorPatientParaclinicalTestResult.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -6,31 +8,41 @@ import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 import DropDownBox from '../../common/dropDownBox';
 import LineChartComponent from '../../common/lineChart';
+import HuggedText from '../../common/huggedText';
+
+// --- Constants ---
+const API_BASE_URL = 'http://localhost:5001'; // Define your API base URL
 
 // --- Helper Functions ---
 
-// Generates a single data point for the chart based on the current value
-const generateCurrentPointData = (currentValue) => {
-    const history = [];
-    let numericValue = NaN;
-    if (typeof currentValue === 'number' && isFinite(currentValue)) {
-        numericValue = currentValue;
-    } else if (typeof currentValue === 'string') {
-        // Try to extract the first numeric part if it's a string
-        const numericMatch = currentValue.match(/^-?[\d.]+/); // Match potential leading number
-        if (numericMatch) {
-            numericValue = parseFloat(numericMatch[0]);
-        }
+// Parses the numeric value from the API string (e.g., "14.5 g/dL" -> 14.5)
+// Handles "Negative", "Positive" as strings for direct display but allows charting logic to convert later.
+const parseNumericValue = (apiValueString) => {
+    if (typeof apiValueString !== 'string') {
+        return apiValueString; // Return as is if not a string (e.g., already a number)
     }
-    // Handle cases where parsing fails or value is not numeric
-    if (isNaN(numericValue)) {
+    const lowerCaseValue = apiValueString.toLowerCase();
+    if (lowerCaseValue === 'negative' || lowerCaseValue === 'positive') {
+        return apiValueString; // Keep as string for display, chart logic handles conversion
+    }
+    // Try to parse a float from the beginning of the string
+    const numericMatch = apiValueString.match(/^-?[\d.]+/);
+    if (numericMatch) {
+        const num = parseFloat(numericMatch[0]);
+        return isNaN(num) ? apiValueString : num; // Return number if valid, else original string
+    }
+    return apiValueString; // Return original string if no number found
+};
+
+
+// Generates a single data point for the chart based on a numeric value
+const generateCurrentPointData = (numericValue) => {
+    if (typeof numericValue !== 'number' || !isFinite(numericValue)) {
         return []; // Return empty array for non-numeric values
     }
     // Create a single data point object for the chart
-    history.push({ time: 'Now', value: parseFloat(numericValue.toFixed(2)) });
-    return history;
+    return [{ time: 'Now', value: parseFloat(numericValue.toFixed(2)) }];
 };
-// --- End Helper Functions ---
 
 // --- Full grouped_test_options ---
 // In a real app, import this from its source file.
@@ -222,14 +234,23 @@ const grouped_test_options = {
 
 
 function DoctorPatientParaclinicalTestResult() {
-    // --- Helper: Create a lookup map for test parameters (label, unit, range) ---
+    const location = useLocation(); // Use location to get sessionID
+    const sessionID = location.state?.sessionID; // Get sessionID from location state
+
+    // --- State ---
+    const [rawTestResults, setRawTestResults] = useState([]); // Store raw API response
+    const [selectedTestIndex, setSelectedTestIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    // --- Helper: Create a lookup map from grouped_test_options ---
     const parameterDetailsMap = useMemo(() => {
         const map = new Map();
         Object.values(grouped_test_options).forEach(category => {
             category.forEach(test => {
                 if (test.parameters) {
                     test.parameters.forEach(param => {
-                        // Key: param.name (matches API 'name' field)
+                        // Key: param.name (MUST match API 'name' field)
                         // Value: { label, unit, range }
                         map.set(param.name, {
                             label: param.label || param.name, // Use specific label or fallback to name
@@ -241,136 +262,153 @@ function DoctorPatientParaclinicalTestResult() {
             });
         });
         return map;
-    }, []); // Calculate only once as grouped_test_options is constant
+    }, []); // Calculate only once
 
-    const [patientTestResults, setTestResults] = useState([]);
-    const [selectedTestIndex, setSelectedTestIndex] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
+    // --- Data Fetching ---
+    const fetchTestResults = useCallback(async () => {
+        if (!sessionID) {
+            setError("Session ID not provided. Cannot fetch test results.");
+            setRawTestResults([]);
+            return;
+        }
 
-    // Process the raw test results using useMemo for optimization
-    const processedTestResults = useMemo(() => {
-        return patientTestResults.map(test => ({
-            ...test, // Keep original test data (testName, dateTime)
-            testFields: test.testFields.map(field => {
-                // Look up label, unit, and range from the map using field.name
-                // console.log("API Field Name:", field.name);
-                const details = parameterDetailsMap.get(field.name) || { label: field.name, unit: '', range: { low: null, high: null } }; // Fallback if name not found
-                // console.log("Mapped Details:", details);
-                const label = details.label;
-                const unit = details.unit;
-                let safeRange = details.range; // Use let as it might be modified for presence chart
-                let isNumeric = typeof safeRange.low === 'number' && typeof safeRange.high === 'number';
-                let chartData = [];
-                let chartValue = field.value; // Default to original value
+        setIsLoading(true);
+        setError(null);
+        const token = Cookies.get('token');
+        if (!token) {
+            setError("User not authenticated.");
+            setIsLoading(false);
+            return;
+        }
 
-                // --- Modification for presence tests ---
-                if (unit === 'presence') {
-                    isNumeric = true; // Treat as numeric for charting
-                    // Convert positive/negative to 1/0 for chart data
-                    chartValue = String(field.value).toLowerCase() === 'positive' ? 1 : 0;
-                    // Generate chart data using the numeric value (0 or 1)
-                    chartData = generateCurrentPointData(chartValue);
-                    // Adjust safeRange for chart display (optional, but helps ReferenceArea)
-                    // safeRange = { low: 0, high: 0 }; // Treat 'negative' (0) as the safe range
-                } else if (isNumeric) {
-                    // Generate chart data for standard numeric fields
-                    chartData = generateCurrentPointData(field.value);
-                }
-                // --- End Modification ---
-
-                return {
-                    name: field.name, // Keep original name from API
-                    value: field.value, // Keep original value (e.g., "positive") for text display
-                    label: label, // Use looked-up label
-                    chartData: chartData, // Use potentially modified chart data
-                    safeRange: safeRange, // Use original or modified safe range
-                    unit: unit, // Use the looked-up unit
-                    isNumeric: isNumeric // Use potentially modified isNumeric flag
-                };
-            })
-        }));
-    }, [patientTestResults]); // Dependency: only raw results (map is stable)
-
-    // Function to fetch test results data (currently uses mock data)
-    const fetchTestResults = async () => {
         try {
-            setIsLoading(true);
-            // Mock data simulating API response - NOW ONLY CONTAINS name and value
-            const mockData = [
-                {
-                    testName: "Complete Blood Count", // Test panel name (from API or derived)
-                    dateTime: "2023-03-29 09:15 AM",
-                    testFields: [
-                        // API only sends name and value
-                        { name: "Hemoglobin (Hgb)", value: 11.5 }, // Example: Low
-                        { name: "Hematocrit (Hct)", value: 45 },
-                        { name: "White Blood Cell Count (WBC)", value: 13500 }, // Example: High
-                        { name: "Platelet Count", value: 140000 }, // Example: Low
-                    ]
-                },
-                {
-                    testName: "Liver Function Test",
-                    dateTime: "2023-03-28 02:30 PM",
-                    testFields: [
-                        { name: "Alanine Aminotransferase (ALT)", value: 35 },
-                        { name: "Aspartate Aminotransferase (AST)", value: 25 },
-                        { name: "Alkaline Phosphatase (ALP)", value: 130 }, // Example: High
-                        { name: "Total Bilirubin", value: 0.9 },
-                        { name: "Direct Bilirubin", value: 0.2 },
-                        { name: "Albumin", value: 4.0 },
-                    ]
-                },
-                {
-                    testName: "Urinalysis (UA)",
-                    dateTime: "2023-03-29 10:00 AM",
-                    testFields: [
-                        { name: 'Protein', value: 5 },
-                        { name: 'Glucose', value: 0 },
-                        { name: 'Ketones', value: 0 },
-                        { name: 'Blood', value: 'positive' }, // Non-numeric value
-                    ]
+            const apiUrl = `${API_BASE_URL}/doctor/diagnosis/test_results/${sessionID}`;
+            // console.log("PATIENT TEST RESULTS _ Fetching from:", apiUrl);
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
-            ];
+            });
 
-            // Simulate network delay
-            setTimeout(() => {
-                setTestResults(mockData);
-                setSelectedTestIndex(0);
-                setIsLoading(false);
-            }, 500);
-        } catch (error) {
-            console.error('Error fetching test results:', error);
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            // console.log("PATIENT TEST RESULTS _ Received data:", data);
+            setRawTestResults(data.testResults || []); // Store the raw results
+            setSelectedTestIndex(0); // Reset selection to the first test
+
+        } catch (err) {
+            console.error('Error fetching test results:', err);
+            setError(err.message || 'Failed to fetch test results.');
+            setRawTestResults([]);
+        } finally {
             setIsLoading(false);
         }
-    };
+    }, [sessionID]); // Dependency: fetch when sessionID changes
 
-    // Fetch data when the component mounts
+    // Fetch data when the component mounts or sessionID changes
     useEffect(() => {
         fetchTestResults();
-    }, []);
+    }, [fetchTestResults]); // Use the useCallback dependency
 
-    // Generate options for the dropdown based on the raw patientTestResults
-    const testOptions = patientTestResults.map((test, index) => ({
-        label: `${test.testName} - ${test.dateTime}`,
-        value: index.toString()
-    }));
+    // --- Data Processing ---
+    const processedTestResults = useMemo(() => {
+        // console.log("Processing raw results:", rawTestResults);
+        return rawTestResults.map(test => {
+            // Map API structure to the structure expected by the rendering logic
+            const testFields = test.parameters.map(param => {
+                // param = { name: "Hemoglobin", value: "14.5 g/dL" }
 
-    // Handler for when the dropdown selection changes
+                // 1. Lookup details using the exact API name
+                const details = parameterDetailsMap.get(param.name) || { label: param.name, unit: '', range: { low: null, high: null } };
+                const { label, unit, range: safeRange } = details;
+
+                // 2. Store the original API value for display
+                const originalValue = param.value;
+
+                // 3. Parse the numeric value (if possible) from the original string
+                const parsedValue = parseNumericValue(originalValue);
+
+                // 4. Determine if the value can be charted
+                // Chartable if it's a number OR if the unit indicates presence/absence
+                const isChartable = typeof parsedValue === 'number' || unit === 'presence';
+
+                // 5. Prepare chart data
+                let chartData = [];
+                let chartValueForPoint = NaN;
+
+                if (unit === 'presence') {
+                    // Convert "Positive"/"Negative" to 1/0 for charting
+                    chartValueForPoint = String(originalValue).toLowerCase() === 'positive' ? 1 : 0;
+                    chartData = generateCurrentPointData(chartValueForPoint);
+                } else if (typeof parsedValue === 'number') {
+                    chartValueForPoint = parsedValue;
+                    chartData = generateCurrentPointData(chartValueForPoint);
+                }
+
+                // 6. Determine safe range for the chart's ReferenceArea
+                let chartSafeRange = { low: safeRange.low, high: safeRange.high };
+                if (unit === 'presence') {
+                    // For presence charts (0 or 1), define the "safe" area as 0 (Negative)
+                    chartSafeRange = { low: 0, high: 0 };
+                }
+
+
+                return {
+                    name: param.name,       // Original API name (used as key)
+                    value: originalValue,   // Original API value string (for display)
+                    parsedValue: parsedValue, // Parsed numeric value or original string
+                    label: label,           // Looked-up label for display
+                    unit: unit,             // Looked-up unit
+                    safeRange: safeRange,   // Looked-up original safe range (for text display)
+                    chartSafeRange: chartSafeRange, // Safe range specifically for chart area
+                    isChartable: isChartable, // Can this be put on the chart?
+                    chartData: chartData,   // Data points for the chart
+                };
+            });
+
+            return {
+                // Keep structure similar to original mock data for compatibility
+                testName: test.testType, // Use testType from API
+                dateTime: test.timeMeasured, // Use timeMeasured from API
+                testFields: testFields, // The processed parameters
+            };
+        });
+    }, [rawTestResults, parameterDetailsMap]); // Dependencies: raw data and the lookup map
+
+    // --- Event Handlers ---
     const handleTestChange = (e) => {
         setSelectedTestIndex(parseInt(e.target.value, 10));
     };
 
-    // Get the currently selected processed test data based on selectedTestIndex
+    // --- Derived State ---
+    // Generate options for the dropdown based on the processed results
+    const testOptions = processedTestResults.map((test, index) => ({
+        label: `${test.testName} - ${test.dateTime}`,
+        value: index.toString()
+    }));
+
+    // Get the currently selected processed test data
     const selectedTestData = processedTestResults.length > selectedTestIndex ? processedTestResults[selectedTestIndex] : null;
 
+    // --- Rendering ---
     return (
         <BoxContainer className='doctorPatientParaclinicalTestResultBox'>
             <BoxContainerTitle className='doctorPatientParaclinicalTestResult'>
                 Patient's Paraclinical Test Results
                 {isLoading && <span className="loading-indicator"> Loading...</span>}
+                {error && <span className="error-message"> Error: {error}</span>}
             </BoxContainerTitle>
 
             <BoxContainerContent className='doctorPatientParaclinicalTestResultContent'>
+                {!isLoading && !error && processedTestResults.length === 0 && (
+                    <div className="no-data">No data</div> // Show only if no error
+                )}
                 {processedTestResults.length > 0 && selectedTestData ? (
                     <>
                         <DropDownBox
@@ -379,67 +417,57 @@ function DoctorPatientParaclinicalTestResult() {
                             onChange={handleTestChange}
                         />
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'auto', marginTop: '10px', marginBottom: '10px' }}>
-                            <h3>{selectedTestData.testName}</h3>
-                            <span className="testDateTime">{selectedTestData.dateTime}</span>
-                        </div>
-
-                        <div className="paraclinical-charts-grid">
+                        <div className="paraclinicalChartsGrid">
                             {selectedTestData.testFields.map((field, fieldIndex) => {
-                                console.log("Field Name:", field.name);
-                                // Construct display range string based on looked-up type
+                                // Construct display range string
                                 let displayRange = 'N/A';
-                                // Use original logic for display range text
                                 if (typeof field.safeRange.low === 'number' && typeof field.safeRange.high === 'number') {
-                                    displayRange = `${field.safeRange.low} - ${field.safeRange.high} ${field.unit}`;
+                                    displayRange = `${field.safeRange.low} - ${field.safeRange.high}${field.unit ? ` ${field.unit}` : ''}`;
                                 } else if (field.safeRange?.low === 'negative' && field.safeRange?.high === 'negative') {
-                                    displayRange = 'Negative'; // Display 'Negative' for presence tests
+                                    displayRange = 'Negative';
                                 } else if (field.unit === 'string') {
                                     displayRange = 'Textual Description';
                                 } else if (field.unit) {
-                                    displayRange = `(${field.unit})`;
+                                    displayRange = `(${field.unit})`; // Fallback if range is weird but unit exists
                                 }
 
-                                // --- Determine Y-axis limits for presence charts ---
+                                // Determine Y-axis limits for presence charts (0 to 1)
                                 const isPresenceTest = field.unit === 'presence';
-                                const yAxisMin = isPresenceTest ? 0 : undefined; // Use default if not presence
-                                const yAxisMax = isPresenceTest ? 1 : undefined; // Use default if not presence, add buffer
-                                // --- End Y-axis limits ---
+                                const yAxisMin = isPresenceTest ? -0.1 : undefined; // Add slight buffer below 0
+                                const yAxisMax = isPresenceTest ? 1.1 : undefined; // Add slight buffer above 1
+
+                                const displayLabel = `${field.label} (${field.name})`;
 
                                 return (
-                                    <div key={fieldIndex} className="paraclinical-chart-container">
-                                        {/* Use looked-up label for display */}
-                                        <h4 className="paraclinical-chart-title">{field.label} ({field.name})</h4>
-                                        {/* Render chart if isNumeric is true (now includes presence tests) */}
-                                        {field.isNumeric && field.chartData.length > 0 ? (
+                                    <div key={fieldIndex} className="paraclinicalChartContainer">
+                                        <HuggedText text={displayLabel} font_size="14px" font_weight="600" color="#4E4B66" />
+
+                                        {/* Render chart if chartable */}
+                                        {field.isChartable && field.chartData.length > 0 ? (
                                             <div style={{ height: '200px', width: '100%' }}>
                                                 <LineChartComponent
                                                     data={field.chartData}
                                                     dataKeys={['value']}
-                                                    // Unit display might be confusing for 0/1, maybe hide it?
-                                                    unit={isPresenceTest ? '' : field.unit} // Hide unit for presence
-                                                    safeRange={isPresenceTest ? { low: 0, high: 0 } : { low: field.safeRange.low, high: field.safeRange.high } } // Set safe range to 0 for presence chart areas
-                                                    chartName={field.label} // Use looked-up label
+                                                    unit={isPresenceTest ? '' : field.unit} // Hide unit for presence chart (0/1)
+                                                    safeRange={field.chartSafeRange} // Use the specific range for chart area
+                                                    chartName={field.label}
                                                     height={200}
-                                                    medianOrNot={false} // Only one data point, median not applicable
-                                                    // --- Pass specific Y-axis limits ---
+                                                    medianOrNot={false} // Only one data point
                                                     yMin={yAxisMin}
                                                     yMax={yAxisMax}
-                                                    // Use the specific condition based on field.value
-                                                    noZone={isPresenceTest} // Only one data point, median not applicable
-                                                    // --- End Pass Y-axis limits ---
+                                                    // Only show zones if it's NOT a presence test (avoids red/green for 0/1)
+                                                    noZone={isPresenceTest}
                                                 />
                                             </div>
                                         ) : (
-                                            // This part should now only render for truly non-numeric/non-presence fields (like 'Findings')
-                                            <div className="non-numeric-value">
+                                            // Display non-chartable values directly
+                                            <div className="nonNumericValue">
                                                 Result: <span className={`value-${String(field.value).toLowerCase()}`}>{field.value}</span>
-                                                {/* Example styling: Add CSS for .value-positive, .value-negative */}
                                             </div>
                                         )}
-                                        <div className="paraclinical-chart-info">
-                                            {/* Display original value ("positive"/"negative") */}
-                                            <span>Current: {field.value}{field.isNumeric && !isPresenceTest ? ` ${field.unit}` : ''}</span>
+                                        <div className="paraclinicalChartInfo">
+                                            {/* Display original value string */}
+                                            <span>Current: {field.value}</span>
                                             {/* Display range textually */}
                                             <span>Normal Range: {displayRange}</span>
                                         </div>
@@ -449,8 +477,8 @@ function DoctorPatientParaclinicalTestResult() {
                         </div>
                     </>
                 ) : (
-                    // Display message if loading or no results are available
-                    <div className="no-results">{isLoading ? 'Loading...' : 'No paraclinical test results available'}</div>
+                    // Only show this if not loading, no error, and length > 0 but selectedTestData is null (shouldn't happen)
+                    !isLoading && !error && processedTestResults.length > 0 && <div className="no-results">Select a test to view results.</div>
                 )}
             </BoxContainerContent>
         </BoxContainer>

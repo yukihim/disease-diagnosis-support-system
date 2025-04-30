@@ -1,54 +1,100 @@
-import React, { useState, useEffect, useMemo } from 'react'; // Import useMemo
-// import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect, useMemo, useCallback } from 'react'; // Import useCallback
+import Cookies from 'js-cookie'; // Import Cookies
 
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 
 import DoctorPatientSentForParaclinicalTestOverview from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestOverview';
-import DoctorPatientSentForParaclinicalTestPagination from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestPagination'; // Ensure this is imported
+import DoctorPatientSentForParaclinicalTestPagination from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestPagination';
 import DoctorPatientSentForParaclinicalTestTableHeader from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestTableHeader';
 import DoctorPatientSentForParaclinicalTestTableContent from './doctorPatientSentForParaclinicalTest/doctorPatientSentForParaclinicalTestTableContent';
 
 const patientSentForParaclinicalTestTableHeader = [
-    { name: 'Name', width: '150px' },
-    { name: 'Test', width: '100px' },
-    { name: 'State', width: '150px' }
+    { name: 'Name', width: '130px' },
+    { name: 'Test', width: '150px' },
+    { name: 'State', width: '170px' }
 ];
 
-const patientSentForParaclinicalTestTableDummyData = [
-    { name: 'Phuong Xuong Thinh', test: 'Blood Test', state: 'Waiting for result' },
-    { name: 'Phuong Xuong A', test: 'Blood Test', state: 'On-going' },
-    { name: 'Phuong Xuong B', test: 'Blood Test', state: 'On-going' },
-    { name: 'Phuong Xuong C', test: 'Blood Test', state: 'Waiting for test' },
-    { name: 'Phuong Xuong D', test: 'Blood Test', state: 'Waiting for test' },
-    { name: 'Phuong Xuong E', test: 'Blood Test', state: 'Waiting for test' },
-    { name: 'Phuong Xuong F', test: 'Blood Test', state: 'Waiting for test' },
-    { name: 'Phuong Xuong G', test: 'Blood Test', state: 'Waiting for test' },
-    { name: 'Phuong Xuong H', test: 'Blood Test', state: 'Waiting for test' },
-];
+// Remove dummy data
+// const patientSentForParaclinicalTestTableDummyData = [ ... ];
 
 const ROWS_PER_PAGE_OPTIONS = [3, 5, 7]; // Define options for rows per page
+const API_BASE_URL = 'http://localhost:5001/doctor'; // Define base URL for doctor API
 
 function DoctorPatientSentForParaclinicalTest() {
     const [currentPage, setCurrentPage] = useState(1);
-    const [displayData, setDisplayData] = useState([]);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[1]); // Default to 5 (index 1)
+    const [sentPatientsData, setSentPatientsData] = useState([]); // State for fetched data
+    const [displayData, setDisplayData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [error, setError] = useState(null); // Error state
 
-    // Calculate total count
-    const totalRecords = patientSentForParaclinicalTestTableDummyData.length;
+    // --- Fetch Data from Backend ---
+    const fetchSentPatients = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+        setSentPatientsData([]); // Clear previous data
 
-    // Calculate total pages based on current rowsPerPage
+        const token = Cookies.get('token');
+        if (!token) {
+            setError("User not authenticated.");
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            // Use the correct endpoint from Doctor/routes.py
+            const apiUrl = `${API_BASE_URL}/landing_page/patient_sent_for_test`;
+            // console.log("Fetching sent patients from:", apiUrl);
+
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            // console.log("API Response Data (Sent Patients):", data);
+
+            // Assuming the backend returns the list in 'patientSentForTest' array
+            setSentPatientsData(data.patientSentForTest || []);
+
+        } catch (err) {
+            console.error("Error fetching sent patients:", err);
+            setError(err.message || "Failed to fetch sent patients.");
+            setSentPatientsData([]);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []); // Empty dependency array means fetch only once on mount
+
+    // Fetch data when component mounts
+    useEffect(() => {
+        fetchSentPatients();
+    }, [fetchSentPatients]);
+
+    // Calculate total count based on fetched data
+    const totalRecords = sentPatientsData.length;
+
+    // Calculate total pages based on fetched data and current rowsPerPage
     const totalPages = useMemo(() => {
         return Math.ceil(totalRecords / rowsPerPage);
     }, [totalRecords, rowsPerPage]); // Recalculate when count or rowsPerPage changes
 
-    // Update displayed data when page or rowsPerPage changes
+    // Update displayed data when page, rowsPerPage, or fetched data changes
     useEffect(() => {
         const startIndex = (currentPage - 1) * rowsPerPage;
         const endIndex = Math.min(startIndex + rowsPerPage, totalRecords);
-        setDisplayData(patientSentForParaclinicalTestTableDummyData.slice(startIndex, endIndex));
-    }, [currentPage, rowsPerPage, totalRecords]); // Add rowsPerPage and totalRecords dependency
+        setDisplayData(sentPatientsData.slice(startIndex, endIndex));
+    }, [currentPage, rowsPerPage, sentPatientsData, totalRecords]); // Add sentPatientsData and totalRecords dependency
 
     // Reset to first page when rowsPerPage changes
     useEffect(() => {
@@ -77,7 +123,8 @@ function DoctorPatientSentForParaclinicalTest() {
         //     }
         // });
 
-        alert(`Patient ${patient.name} is sent for ${patient.test} test`);
+        // Keep alert for now, or implement navigation as needed
+        alert(`Patient ${patient.name} is sent for ${patient.test} test. State: ${patient.state}`);
     }
 
     return (
@@ -103,8 +150,18 @@ function DoctorPatientSentForParaclinicalTest() {
                 {/* Table header */}
                 <DoctorPatientSentForParaclinicalTestTableHeader patientSentForParaclinicalTestTableHeader={patientSentForParaclinicalTestTableHeader} />
 
-                {/* Table content */}
-                <DoctorPatientSentForParaclinicalTestTableContent patientSentForParaclinicalTestTableHeader={patientSentForParaclinicalTestTableHeader} patientSentForParaclinicalTestTableData={displayData} onClickPatientSentForParaclinicalTest={onClickPatientSentForParaclinicalTest} />
+                {/* Table content - Conditional Rendering */}
+                {isLoading ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>Loading sent patients...</div>
+                ) : error ? (
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>Error: {error}</div>
+                ) : (
+                    <DoctorPatientSentForParaclinicalTestTableContent
+                        patientSentForParaclinicalTestTableHeader={patientSentForParaclinicalTestTableHeader}
+                        patientSentForParaclinicalTestTableData={displayData} // Use paginated data
+                        onClickPatientSentForParaclinicalTest={onClickPatientSentForParaclinicalTest}
+                    />
+                )}
             </BoxContainerContent>
         </BoxContainer>
     );

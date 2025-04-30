@@ -2,7 +2,7 @@ import './style/button.css';
 
 function Button({ children, onClick, className }) {
   return (
-    <div className={`button ${className}`} onClick={onClick} >
+    <div className={`button ${className}`} onClick={onClick}>
       {children}
     </div>
   );

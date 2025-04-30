@@ -7,7 +7,7 @@ import ChooseBox from '../../../common/chooseBox';
 
 // Receive state and setters from parent
 function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment({
-    patientID, // Receive patientID from parent
+    sessionID, // Receive sessionID from parent
     selectedDepartment,
     setSelectedDepartment,
     selectedDoctor,
@@ -18,12 +18,12 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment({
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Removed location hook, patientID comes from props now
+    // Removed location hook, sessionID comes from props now
 
     // Fetch follow-up data
     useEffect(() => {
-        // Check if patientID is valid before fetching
-        if (!patientID) {
+        // Check if sessionID is valid before fetching
+        if (!sessionID) {
             setError("Patient ID not provided.");
             // Clear selections if ID becomes invalid
             setSelectedDepartment('');
@@ -44,7 +44,7 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment({
             }
 
             try {
-                const apiUrl = `http://localhost:5001/receptionist/finalize_check_in/patient_information/${patientID}/follow_up`;
+                const apiUrl = `http://localhost:5001/receptionist/finalize_check_in/patient_information/${sessionID}/follow_up`;
                 console.log("Fetching follow-up info from:", apiUrl);
 
                 const response = await fetch(apiUrl, {
@@ -57,7 +57,7 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment({
 
                 if (!response.ok) {
                     if (response.status === 404) {
-                        console.log(`No follow-up info found for patient ${patientID}.`);
+                        console.log(`No follow-up info found for patient ${sessionID}.`);
                         // Clear selections if no follow-up found
                         setSelectedDepartment('');
                         setSelectedDoctor('');
@@ -94,8 +94,8 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment({
         };
 
         fetchFollowUpData();
-        // Dependencies: fetch when patientID changes, or when setters change (though unlikely)
-    }, [patientID, setSelectedDepartment, setSelectedDoctor, setReasonToVisit]);
+        // Dependencies: fetch when sessionID changes, or when setters change (though unlikely)
+    }, [sessionID, setSelectedDepartment, setSelectedDoctor, setReasonToVisit]);
 
     // --- TODO: Fetch actual department and doctor options ---
     const departmentOptions = [

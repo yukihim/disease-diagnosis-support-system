@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'; // Import useMemo
+import React from 'react';
 import './style/measurementCard.css';
 
 import BoxContainer from '../../../common/boxContainer';
@@ -10,38 +10,25 @@ import BloodPressureIcon from '../../../../assets/images/doctor/bloodPressureIco
 import HuggedText from '../../../common/huggedText';
 import LineChartComponent from '../../../common/lineChart';
 
-
-// ADDED: Fixed mock data array
-const mockBloodPressureData = [
-    { time: '00:00', systolic: 115, diastolic: 75 },
-    { time: '02:00', systolic: 118, diastolic: 78 },
-    { time: '04:00', systolic: 122, diastolic: 80 },
-    { time: '06:00', systolic: 125, diastolic: 82 },
-    { time: '08:00', systolic: 130, diastolic: 85 }, // Borderline high
-    { time: '10:00', systolic: 128, diastolic: 84 },
-    { time: '12:00', systolic: 120, diastolic: 79 },
-    { time: '14:00', systolic: 112, diastolic: 72 }, // Lower
-    { time: '16:00', systolic: 110, diastolic: 70 },
-    { time: '18:00', systolic: 114, diastolic: 74 },
-    { time: '20:00', systolic: 116, diastolic: 76 },
-    { time: '22:00', systolic: 119, diastolic: 77 },
-];
-
-// Blood Pressure = SYSTOLIC/DIASTOLIC
-// Define safe range primarily for Systolic for the reference area
+// Define safe ranges
 const SAFE_RANGE_BP_SYSTOLIC = { low: 90, high: 120 };
-// You might have a separate range check for diastolic if needed for status text
 const SAFE_RANGE_BP_DIASTOLIC = { low: 60, high: 80 };
 
-function BloodPressure() {
-    // Use the fixed mock data directly
-    const mockData = mockBloodPressureData;
-    
-    const latestMeasurement = mockData.length > 0 ? mockData[mockData.length - 1] : null;
+// REMOVED: filterDataForLastMinute function
+
+// Accept data prop
+function BloodPressure({ data = [] }) { // Default to empty array
+
+    // *** Use the full data array directly for charts ***
+    const chartData = data;
+    // console.log(`[${new Date().toLocaleTimeString()}] BloodPressure component received data:`, JSON.stringify(data));
+
+    // Use the full data array to get the absolute latest measurement
+    const latestMeasurement = data.length > 0 ? data[data.length - 1] : null;
     const latestSystolic = latestMeasurement ? latestMeasurement.systolic : 'N/A';
     const latestDiastolic = latestMeasurement ? latestMeasurement.diastolic : 'N/A';
 
-    // Determine status based on both (example logic)
+    // Determine status based on the latest measurement
     let latestStatus = 'N/A';
     let statusColor = '#818181'; // Grey for N/A
     if (latestMeasurement) {
@@ -53,25 +40,24 @@ function BloodPressure() {
         } else if (latestSystolic > SAFE_RANGE_BP_SYSTOLIC.high || latestDiastolic > SAFE_RANGE_BP_DIASTOLIC.high) {
             latestStatus = 'High';
             statusColor = '#F44336';
-        } else {
+        } else { // Covers low systolic OR low diastolic OR both
             latestStatus = 'Low';
             statusColor = '#FF9800'; // Orange for low
         }
     }
 
-
     return (
         <BoxContainer className='cardBox bloodPressure'>
             <BoxContainerTitle className='cardTitle'>
-                <img src={BloodPressureIcon} alt="Blood Pressure Icon" className='cardIcon' /> {/* Changed class to cardIcon */}
+                <img src={BloodPressureIcon} alt="Blood Pressure Icon" className='cardIcon' />
                 Blood Pressure
             </BoxContainerTitle>
 
             <BoxContainerContent className='cardContent'>
-                {/* Display Latest Stats */}
+                {/* Display Latest Stats (using original latest value) */}
                 <div className="measurementStats">
                     <div className="measurementValue">
-                        <HuggedText text={`${latestSystolic}/${latestDiastolic}`} font_size="32px" font_weight="400" color="#272927" />
+                        <HuggedText text={latestMeasurement ? `${latestSystolic}/${latestDiastolic}` : 'N/A'} font_size="32px" font_weight="400" color="#272927" />
                         <HuggedText text='mmHg' font_size="16px" font_weight="400" color="#818181" />
                     </div>
                     <div className="measurementStatus" style={{ backgroundColor: statusColor }}>
@@ -79,16 +65,36 @@ function BloodPressure() {
                     </div>
                 </div>
 
-                {/* Add Line Chart */}
-                <div className="chartContainer" style={{ marginTop: '15px', width: '100%', height: '300px' }}>
-                    <LineChartComponent
-                        data={mockData}
-                        dataKeys={['systolic', 'diastolic']} // Pass both keys
-                        unit="mmHg" // Unit is the same for both
-                        safeRange={SAFE_RANGE_BP_SYSTOLIC} // Reference area based on systolic
-                        chartName={['Systolic', 'Diastolic']} // Names for legend
-                        height={300}
-                    />
+                {/* *** Display TWO separate charts *** */}
+                <div className="chartContainer" style={{ marginTop: '15px', width: '100%' }}>
+                    {chartData.length > 0 ? (
+                        <>
+                            {/* Systolic Chart */}
+                            <div style={{ height: '200px', marginBottom: '10px' }}> {/* Adjust height/margin */}
+                                <LineChartComponent
+                                    data={chartData} // Use full data
+                                    dataKeys={['systolic']}
+                                    unit="mmHg"
+                                    safeRange={SAFE_RANGE_BP_SYSTOLIC} // Use systolic range
+                                    chartName="Systolic BP" // Updated name
+                                    height={200} // Reduced height
+                                />
+                            </div>
+                            {/* Diastolic Chart */}
+                            <div style={{ height: '200px' }}> {/* Adjust height */}
+                                <LineChartComponent
+                                    data={chartData} // Use full data
+                                    dataKeys={['diastolic']}
+                                    unit="mmHg"
+                                    safeRange={SAFE_RANGE_BP_DIASTOLIC} // Use diastolic range
+                                    chartName="Diastolic BP" // Updated name
+                                    height={200} // Reduced height
+                                />
+                            </div>
+                        </>
+                    ) : (
+                         <div style={{ textAlign: 'center', paddingTop: '50px', color: '#818181' }}>No data available</div>
+                    )}
                 </div>
             </BoxContainerContent>
         </BoxContainer>

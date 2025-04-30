@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Import Cookies
 import './style/doctorFinalizingDiagnosisForPatient.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -12,105 +13,89 @@ import DoctorFinalizingDiagnosisForPatientDiagnosisRecommendation from './doctor
 import DoctorFinalizingDiagnosisForPatientFinalDiagnosis from './doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientFinalDiagnosis';
 import DoctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons from './doctorFinalizingDiagnosisForPatient/doctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons';
 
+const API_BASE_URL = "http://localhost:5001/doctor";
+
 function DoctorFinalizingDiagnosisForPatient() {
     const history = useHistory();
-    
     const location = useLocation();
-    const patientData = location.state || {};
-    
-    const [patientReasonToVisit, setpatientReasonToVisit] = useState("");
-    const [patientSymptoms, setPatientSymptoms] = useState("");
-    const [patientDiagnosisRecommendation, setPatientDiagnosisRecommendation] = useState([]);
 
-    const [finalDiagnosis, setFinalDiagnosis] = useState("");
-    
-    useEffect(() => {
-        fetchPatientReasonToVisit();
-        fetchPatientSymptoms();
-        fetchDiagnosisRecommendation();
-        fetchPreliminaryDiagnosis();
-    }, []);
-    
-    // Fetch Reason to Visit from API
-    const fetchPatientReasonToVisit = async () => {
+    // Retrieve all data passed from the previous page's state
+    const {
+        sessionID,
+        systemRecommendations: passedRecommendations,
+        preliminaryDiagnosis: passedPreliminaryDiagnosis,
+        patientReasonToVisit: passedReasonToVisit,
+        patientSymptoms: passedSymptoms,
+        ...restPatientData
+    } = location.state || {};
+
+    // State for this component, initialized with passed data
+    const [patientReasonToVisit, setPatientReasonToVisit] = useState(passedReasonToVisit || "");
+    const [patientSymptoms, setPatientSymptoms] = useState(passedSymptoms || "");
+    const [patientDiagnosisRecommendation, setPatientDiagnosisRecommendation] = useState(passedRecommendations || []);
+    const [finalDiagnosis, setFinalDiagnosis] = useState(passedPreliminaryDiagnosis || "");
+
+    // Reintroduce states for API submission
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState(null); // Renamed from validationError for clarity
+
+    // Handler for the "Finalize Diagnosis & Continue" button click - Saves via API then navigates
+    const handleFinalizeDiagnosis = async () => {
+        // Basic validation: Ensure final diagnosis is not empty
+        if (!finalDiagnosis || finalDiagnosis.trim() === '') {
+            setSubmitError("Final diagnosis cannot be empty.");
+            return; // Stop execution if validation fails
+        }
+        if (!sessionID) {
+            setSubmitError("Session ID is missing. Cannot finalize diagnosis.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        setSubmitError(null);
+        const token = Cookies.get('token');
+
+        if (!token) {
+            setSubmitError("Authentication token not found.");
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint');
-            // const data = await response.json();
-            // setpatientReasonToVisit(data);
-            
-            // Mock data for demonstration
-            const mockData = "High fever, dry cough, and difficulty breathing.";
-            
-            setpatientReasonToVisit(mockData);
+            console.log("API Call: Setting Final Diagnosis for", sessionID);
+            const response = await fetch(`${API_BASE_URL}/finalize_diagnosis/set_final_diagnosis/${sessionID}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ diagnosis: finalDiagnosis }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `Failed to set final diagnosis: ${response.statusText}`);
+            }
+
+            console.log("API Call: Final Diagnosis Set Successfully. Navigating...");
+
+            // Navigate to the prescription page AFTER successful API call
+            history.push({
+                pathname: '/doctor/prescription_and_procedure', // Corrected typo
+                state: {
+                    ...location.state, // Pass along all data received
+                    finalDiagnosis: finalDiagnosis // Ensure the final diagnosis is passed
+                },
+            });
+
         } catch (error) {
-            console.error('Error fetching patient reason to visit:', error);
+            console.error("Error finalizing diagnosis:", error);
+            setSubmitError(error.message || "An unexpected error occurred while saving the diagnosis.");
+        } finally {
+            setIsSubmitting(false); // Stop loading indicator regardless of success/failure
         }
     };
 
-    // Fetch Patient Symptoms from API
-    const fetchPatientSymptoms = async () => {
-        try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint');
-            // const data = await response.json();
-            // setpatientReasonToVisit(data);
-            
-            // Mock data for demonstration
-            const mockData = "Influenza (Flu)";
-            
-            setPatientSymptoms(mockData);
-        } catch (error) {
-            console.error('Error fetching patient symptoms:', error);
-        }
-    };
-
-    // Fetch Diagnosis Recommendationfrom API
-    const fetchDiagnosisRecommendation = async () => {
-        try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint');
-            // const data = await response.json();
-            // setpatientReasonToVisit(data);
-            
-            // Mock data for demonstration
-            const mockData = [
-                { disease: 'Influenza (Flu)', probabilities: '60%' },
-                { disease: 'Strep Throat', probabilities: '20%' },
-                { disease: 'Sore Throat', probabilities: '20%' },
-            ];
-            
-            setPatientDiagnosisRecommendation(mockData);
-        } catch (error) {
-            console.error('Error fetching patient diagnosis recommendation:', error);
-        }
-    };
-
-    // Fetch Diagnosis from API
-    const fetchPreliminaryDiagnosis = async () => {
-        try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint');
-            // const data = await response.json();
-            // setpatientReasonToVisit(data);
-            
-            // Mock data for demonstration
-            const mockData = "Influenza (Flu)";
-            
-            setFinalDiagnosis(mockData);
-        } catch (error) {
-            console.error('Error fetching diagnosis recommendation:', error);
-        }
-    };
-
-    // Handler for "Send for Test" button
-    const onClickFinalizeDiagnosis = () => {
-        history.push({
-            pathname: '/doctor/precription_and_procedure',
-            state: patientData,
-        });
-    };
-    
     return (
         <BoxContainer className='doctorFinalizingDiagnosisForPatientBox'>
             <BoxContainerTitle className='doctorFinalizingDiagnosisForPatient'>
@@ -118,20 +103,29 @@ function DoctorFinalizingDiagnosisForPatient() {
             </BoxContainerTitle>
 
             <BoxContainerContent className='doctorFinalizingDiagnosisForPatientContent'>
-                {/* Reason to visit */}
+                {/* Display Reason to visit */}
                 <DoctorPatientDiagnosingReasonToVisit patientReasonToVisit={patientReasonToVisit} />
 
-                {/* Symptoms */}
+                {/* Display Symptoms */}
                 <DoctorFinalizingDiagnosisForPatientSymptoms patientSymptoms={patientSymptoms} />
 
-                {/* Diagnosis Recommendation */}
+                {/* Display Diagnosis Recommendation */}
                 <DoctorFinalizingDiagnosisForPatientDiagnosisRecommendation patientDiagnosisRecommendation={patientDiagnosisRecommendation} />
 
-                {/* Finalizing Diagnosis */}
-                <DoctorFinalizingDiagnosisForPatientFinalDiagnosis doctorFinalizingDiagnosisForPatientFinalDiagnosis={finalDiagnosis} setDoctorFinalizingDiagnosisForPatientFinalDiagnosis={setFinalDiagnosis} />
-                
-                {/* End Diagnosis Session Button */}
-                <DoctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons onClickFinalizeDiagnosis={onClickFinalizeDiagnosis} />
+                {/* Finalizing Diagnosis Input */}
+                <DoctorFinalizingDiagnosisForPatientFinalDiagnosis
+                    doctorFinalizingDiagnosisForPatientFinalDiagnosis={finalDiagnosis}
+                    setDoctorFinalizingDiagnosisForPatientFinalDiagnosis={setFinalDiagnosis}
+                />
+
+                {/* Display Submission Error */}
+                {submitError && <div style={{ color: 'red', marginTop: '10px' }}>{submitError}</div>}
+
+                {/* Finalize Diagnosis Session Button - Pass loading state */}
+                <DoctorFinalizingDiagnosisForPatientFinalizeDiagnosisSessionButtons
+                    onClickFinalizeDiagnosis={handleFinalizeDiagnosis}
+                    disabled={isSubmitting} // Pass the submitting state to disable button
+                />
             </BoxContainerContent>
         </BoxContainer>
     );

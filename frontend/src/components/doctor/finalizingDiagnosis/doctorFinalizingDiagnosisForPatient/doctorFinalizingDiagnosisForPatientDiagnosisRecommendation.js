@@ -14,7 +14,7 @@ const systemRecommendationDiseaseTableHeader = [
 function DoctorFinalizingDiagnosisForPatientDiagnosisRecommendation({ patientDiagnosisRecommendation }) {
     return (
         <div className="systemRecommendation">
-            <HuggedText text="System Recommendation:" font_size="14px" font_weight="600" color="#000000" />
+            <HuggedText text="System Recommendation:" font_size="14px" font_weight="600" color="#4E4B66" />
 
             <div className="systemRecommendationTable">
                 {/* Table header */}
