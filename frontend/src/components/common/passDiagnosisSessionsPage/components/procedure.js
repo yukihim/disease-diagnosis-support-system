@@ -1,72 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'; // Removed useState, useEffect
 import './style/procedure.css';
 
 import BoxContainer from '../../boxContainer';
 import BoxContainerTitle from '../../boxContainerTitle';
 import BoxContainerContent from '../../boxContainerContent';
 
-import DoctorPrescriptionAndProcedureProceduresCardHeader from '../../../doctor/prescriptionAndProcedure/doctorPrescriptionAndProcedureProceduresCard/doctorPrescriptionAndProcedureProceduresCardHeader'
-import ProcedureTable from './procedureTable/procedureTable';
+import DoctorPrescriptionAndProcedureProceduresCardHeader from '../../../doctor/prescriptionAndProcedure/doctorPrescriptionAndProcedureProceduresCard/doctorPrescriptionAndProcedureProceduresCardHeader';
+import ProcedureTable from './procedureTable/procedureTable'; // Assuming this component exists and accepts data
 
 const patientProcedureTableHeader = [
-    { name: 'Procedure', width: '400px' },
-    { name: 'Date/Time', width: '250px' },
-    { name: 'Note', width: '500px' }
+    { name: 'Procedure', width: '400px' }, // Corresponds to 'procedureName' from backend
+    { name: 'Date/Time', width: '250px' }, // Corresponds to 'dateTime' from backend
+    { name: 'Note', width: '500px' } // Corresponds to 'note' from backend
 ];
 
-function Procedure() {
-    const [procedure, setProcedure] = useState(null);
-    
-    // Fetch data from API
-    const fetchVitalsData = async () => {
-        try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint/patient/vitals');
-            // const data = await response.json();
-            // setProcedure(data);
-            
-            // Mock data for demonstration
-            const mockData = [
-                {
-                    procedure: "Nasal Irrigation",
-                    datetime: "12/13/2024, 08:30 AM",
-                    note: "Patient reported improvement in nasal congestion."
-                },
-                {
-                    procedure: "Nasal Swab",
-                    datetime: "12/15/2024, 09:00 AM",
-                    note: "Swab taken for culture and sensitivity."
-                }
-            ];
-            
-            setProcedure(mockData);
-        } catch (error) {
-            console.error('Error fetching vital signs data:', error);
-        }
-    };
-    
-    useEffect(() => {
-        fetchVitalsData();
-    });
-    
+// Accept procedureData prop
+function Procedure({ procedureData = [] }) { // Default to empty array
+
+    // Removed internal state and fetch logic
+
     return (
-        <BoxContainer className='prescriptionBox'>
-            <BoxContainerTitle className='prescription'>
+        <BoxContainer className='procedureBox'>
+            <BoxContainerTitle className='procedure'>
                 Procedure
             </BoxContainerTitle>
 
-            <BoxContainerContent className='prescriptionContent'>
-                {procedure ? (
+            <BoxContainerContent className='procedureContent'>
+                {/* Check if data exists before rendering table */}
+                {procedureData && procedureData.length > 0 ? (
                     <>
                         <DoctorPrescriptionAndProcedureProceduresCardHeader patientProcedureTableHeader={patientProcedureTableHeader} />
-                        <ProcedureTable 
+                        <ProcedureTable
                             patientProcedureTableHeader={patientProcedureTableHeader}
-                            procedureTableData={procedure}
+                            procedureTableData={procedureData} // Pass data prop
                         />
                     </>
                 ) : (
-                    <div className="no-data">
-                        Procedure data is not available.
+                    <div className="no-data" style={{ textAlign: 'center', padding: '20px', color: '#818181' }}>
+                        Procedure data is not available for this session.
                     </div>
                 )}
             </BoxContainerContent>

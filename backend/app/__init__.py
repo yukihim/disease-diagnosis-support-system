@@ -10,7 +10,7 @@ def create_app():
     
     
     # Enable CORS for all routes with proper settings
-    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
     
     # Import blueprints
     from . import authentication

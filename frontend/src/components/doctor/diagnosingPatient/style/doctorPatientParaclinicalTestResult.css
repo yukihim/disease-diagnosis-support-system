@@ -13,8 +13,8 @@
     width: 100%;
     height: 41px;
 
-    font-weight: 700;
-    font-size: 20px;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 .doctorPatientParaclinicalTestResultContent {
@@ -25,67 +25,30 @@
     min-height: initial;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ... existing styles ... */
-
-.paraclinical-charts-grid {
+.paraclinicalChartsGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
     gap: 20px; /* Space between charts */
     margin-top: 15px;
 }
 
-.paraclinical-chart-container {
+.paraclinicalChartContainer {
     border: 1px solid #eee;
-    padding: 10px;
+    padding: 20px 10px;
     border-radius: 5px;
     background-color: #fff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-.paraclinical-chart-title {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 1em;
-    color: #333;
-    text-align: center;
-}
-
-.paraclinical-chart-info {
+.paraclinicalChartInfo {
     font-size: 0.8em;
     color: #666;
-    margin-top: 8px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 }
 

@@ -19,7 +19,7 @@ function ReceptionistPatientFoundContent({ patientFoundTableHeader, patientFound
                             {row.ssn}
                         </div>
                         <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[2].width }}>
-                            {row.healthInsuranceCode}
+                            {row.hic}
                         </div>
                     </div>
                 ))

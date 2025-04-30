@@ -1,138 +1,4 @@
-// import React, { useState, useEffect } from 'react';
-// import { useHistory, useLocation } from 'react-router-dom';
-// import './style/doctorPatientDiagnosing.css';
-
-// import BoxContainer from '../../common/boxContainer';
-// import BoxContainerTitle from '../../common/boxContainerTitle';
-// import BoxContainerContent from '../../common/boxContainerContent';
-
-// import DoctorPatientDiagnosingReasonToVisit from './doctorPatientDiagnosing/doctorPatientDiagnosingReasonToVisit';
-// import DoctorPatientDiagnosingSymptoms from './doctorPatientDiagnosing/doctorPatientDiagnosingSymptoms';
-// import DoctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosis from './doctorPatientDiagnosing/doctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosisCard';
-// import DoctorPatientDiagnosingSendForTestAndFinalizeDiagnosisButtons from './doctorPatientDiagnosing/doctorPatientDiagnosingSendForTestAndFinalizeDiagnosisButtons';
-
-// function DoctorPatientDiagnosing() {
-//     const history = useHistory();
-//     const location = useLocation();
-
-//     // Get patient data from location state (passed from DoctorIncomingPatient)
-//     const patientData = location.state || {};
-
-//     const [patientReasonToVisit, setpatientReasonToVisit] = useState("");
-//     const [patientSymptoms, setPatientSymptoms] = useState("");
-//     const [preliminaryDiagnosis, setPreliminaryDiagnosis] = useState("");
-
-//     useEffect(() => {
-//         fetchPatientReasonToVisit();
-//     }, []);
-    
-//     // Fetch data from API
-//     const fetchPatientReasonToVisit = async () => {
-//         try {
-//             // Replace with your actual API endpoint
-//             // const response = await fetch('your-api-endpoint');
-//             // const data = await response.json();
-//             // setpatientReasonToVisit(data);
-            
-//             // Mock data for demonstration
-//             const mockData = "High fever, dry cough, and difficulty breathing.";
-            
-//             setpatientReasonToVisit(mockData);
-//         } catch (error) {
-//             console.error('Error fetching patient reason to visit:', error);
-//         }
-//     };
-
-//     // Handler for updating symptoms from child component
-//     const handleSymptomsChange = (symptoms) => {
-//         setPatientSymptoms(symptoms);
-//         console.log("Updated symptoms:", symptoms);
-        
-//         // Here you could also add any processing logic for the symptoms
-//         // For example, sending to an API or updating other state
-//     };
-
-//     // Handler for updating preliminary diagnosis from child component
-//     const handlePreliminaryDiagnosisChange = (diagnosis) => {
-//         setPreliminaryDiagnosis(diagnosis);
-//         console.log("Updated preliminary diagnosis:", diagnosis);
-//     };
-
-//     // Handler for "Send for Test" button
-//     const onClickSendForTest = () => {
-//         console.log("Saving diagnosis data before sending for test");
-        
-//         // You could save this data to localStorage or a global state management solution
-//         // localStorage.setItem('currentDiagnosis', JSON.stringify(diagnosisData));
-        
-//         // Navigate to the send for test page
-//         history.push({
-//             pathname: '/doctor/send_patient_for_test',
-//             state: patientData,
-//         });
-//     };
-    
-//     // Handler for "Finalize Diagnosis" button
-//     const onClickFinalizeDiagnosis = () => {
-//         console.log("Saving diagnosis data before finalizing");
-        
-//         // You could save this data to localStorage or a global state management solution
-//         // localStorage.setItem('currentDiagnosis', JSON.stringify(diagnosisData));
-//         // Create an object with all the diagnosis data
-        
-//         // Navigate to the finalizing diagnosis page
-//         history.push({
-//             pathname: '/doctor/finalizing_diagnosis',
-//             state: patientData,
-//         });
-//     };
-    
-//     return (
-//         <BoxContainer className='doctorPatientDiagnosingBox'>
-//             {/* Design finalize and check in for patient component here */}
-//             <BoxContainerTitle className='doctorPatientDiagnosing'>
-//                 Diagnosis
-//             </BoxContainerTitle>
-
-//             <BoxContainerContent className='doctorPatientDiagnosingContent'>
-//                 {/* Reason to visit */}
-//                 <DoctorPatientDiagnosingReasonToVisit patientReasonToVisit={patientReasonToVisit} />
-
-//                 {/* Enter Symptoms */}
-//                 <DoctorPatientDiagnosingSymptoms patientSymptoms={patientSymptoms} setPatientSymptoms={handleSymptomsChange} />
-
-//                 {/* System recommendation and Preliminary diagnosis */}
-//                 <DoctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosis preliminaryDiagnosis={preliminaryDiagnosis} setPreliminaryDiagnosis={handlePreliminaryDiagnosisChange} />
-
-//                 {/* Send for Test & Finalize Diagnosis Buttons */}
-//                 <DoctorPatientDiagnosingSendForTestAndFinalizeDiagnosisButtons onClickSendForTest={onClickSendForTest} onClickFinalizeDiagnosis={onClickFinalizeDiagnosis} />
-//             </BoxContainerContent>
-//         </BoxContainer>
-//     );
-// }
-
-// export default DoctorPatientDiagnosing;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// filepath: d:\WORK\_SUBJECT\_ĐATN\src\disease-diagnosis-support-system\frontend\src\components\doctor\diagnosingPatient\doctorPatientDiagnosing.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Import useCallback
 import { useHistory, useLocation } from 'react-router-dom';
 import './style/doctorPatientDiagnosing.css';
 
@@ -142,7 +8,7 @@ import BoxContainerContent from '../../common/boxContainerContent';
 
 import DoctorPatientDiagnosingReasonToVisit from './doctorPatientDiagnosing/doctorPatientDiagnosingReasonToVisit';
 import DoctorPatientDiagnosingSymptoms from './doctorPatientDiagnosing/doctorPatientDiagnosingSymptoms';
-import DoctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosis from './doctorPatientDiagnosing/doctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosisCard'; // Corrected import if needed
+import DoctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosis from './doctorPatientDiagnosing/doctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosisCard';
 import DoctorPatientDiagnosingSendForTestAndFinalizeDiagnosisButtons from './doctorPatientDiagnosing/doctorPatientDiagnosingSendForTestAndFinalizeDiagnosisButtons';
 
 function DoctorPatientDiagnosing() {
@@ -156,77 +22,121 @@ function DoctorPatientDiagnosing() {
     const [patientSymptoms, setPatientSymptoms] = useState("");
     const [preliminaryDiagnosis, setPreliminaryDiagnosis] = useState("");
     const [systemRecommendations, setSystemRecommendations] = useState([]); // Add state for recommendations
+    const [isPredicting, setIsPredicting] = useState(false); // Loading state for prediction
+    const [predictionError, setPredictionError] = useState(null); // Error state for prediction
 
+    // Fetch mock reason to visit on mount
     useEffect(() => {
         fetchPatientReasonToVisit();
     }, []);
 
-    // Fetch data from API
+    // Fetch data from API (Mock)
     const fetchPatientReasonToVisit = async () => {
         try {
-            // Replace with your actual API endpoint
-            // const response = await fetch('your-api-endpoint');
-            // const data = await response.json();
-            // setpatientReasonToVisit(data);
-
             // Mock data for demonstration
             const mockData = "High fever, dry cough, and difficulty breathing.";
-
             setpatientReasonToVisit(mockData);
         } catch (error) {
             console.error('Error fetching patient reason to visit:', error);
         }
     };
 
-    // Simple logic to generate recommendations based on symptoms
-    const calculateRecommendations = (symptoms) => {
-        const lowerCaseSymptoms = symptoms.toLowerCase();
-        let recommendations = [];
-
-        if (lowerCaseSymptoms.includes('a')) {
-            recommendations.push(
-                { disease: 'Flu', probabilities: '70%' },
-                { disease: 'COVID-19', probabilities: '20%' },
-                { disease: 'Common Cold', probabilities: '10%' }
-            );
-        }
-        if (lowerCaseSymptoms.includes('b')) {
-            recommendations.push(
-                { disease: 'Strep Throat', probabilities: '50%' },
-                { disease: 'Sore Throat', probabilities: '40%' },
-                { disease: 'COVID-19', probabilities: '10%' }
-            );
-        }
-        if (lowerCaseSymptoms.includes('c')) {
-            recommendations.push(
-                { disease: 'Sore Throat', probabilities: '40%' },
-                { disease: 'COVID-19', probabilities: '30%' },
-                { disease: 'Flu', probabilities: '20%' },
-                { disease: 'Strep Throat', probabilities: '10%' }
-            );
+    // --- Debounce Logic for Predictions ---
+    useEffect(() => {
+        // Don't run the effect if symptoms are empty initially or after clearing
+        if (!patientSymptoms || patientSymptoms.trim() === '') {
+            setSystemRecommendations([]); // Clear recommendations
+            setPredictionError(null);
+            return; // Exit early
         }
 
-        // Add a default or fallback if no specific symptoms match
-        // if (recommendations.length === 0 && lowerCaseSymptoms.trim() !== '') {
-        //      recommendations.push({ disease: 'Common Cold', probabilities: '30%' });
-        // }
+        // Timer
+        const handler = setTimeout(() => {
+            fetchPredictions(patientSymptoms);
+        }, 10000);
 
-        // You might want more complex logic here, adjusting probabilities based on combinations etc.
-        // Or call an API:
-        // fetch('/api/recommendations', { method: 'POST', body: JSON.stringify({ symptoms }) })
-        //  .then(res => res.json())
-        //  .then(data => setSystemRecommendations(data))
-        //  .catch(err => console.error("Error fetching recommendations:", err));
+        // Cleanup function: Clear the timer if the effect runs again before the timer finishes
+        return () => {
+            clearTimeout(handler);
+        };
+        // Dependency array: Re-run the effect only when patientSymptoms changes
+    }, [patientSymptoms]); // Removed fetchPredictions from dependencies as it's wrapped in useCallback now
+    // --- End Debounce Logic ---
 
-        setSystemRecommendations(recommendations);
-    };
+
+    // Call prediction API (wrapped in useCallback)
+    const fetchPredictions = useCallback(async (symptoms) => {
+        if (!symptoms || symptoms.trim() === '') {
+            return; // Already handled by useEffect
+        }
+
+        setIsPredicting(true);
+        setPredictionError(null);
+        setSystemRecommendations([]); // Clear previous recommendations before new fetch
+
+        // Split symptoms string into an array, trimming whitespace
+        const symptomsList = symptoms.split(',').map(s => s.trim()).filter(s => s !== '');
+
+        // Ensure age and sex are available, provide defaults if necessary
+        const age = patientData.age ? parseInt(patientData.age, 10) : 30; // Default age if not provided
+        // Corrected logic for sex: If not Male, assume Female. Provide default 'M' if patientData.sex is missing.
+        const sex = patientData.sex ? (patientData.sex === "Male" ? "M" : "F") : 'M';
+
+        try {
+            const response = await fetch('http://localhost:5002/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    symptoms: symptomsList,
+                    age: age,
+                    sex: sex,
+                }),
+            });
+
+            console.log("Prediction API Response Status:", response.status);
+
+            if (!response.ok) {
+                // Try to parse error message from backend JSON response
+                const errorData = await response.json().catch(() => ({ error: `HTTP error! status: ${response.status}` }));
+                // Use the 'error' field from the backend response if available
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Prediction API Response Data:", data);
+
+            // --- MODIFICATION: Get only top 3 predictions ---
+            // The backend already sorts probabilities descending. Slice the top 3.
+            const top3Probabilities = data.probabilities.slice(0, 3);
+
+            // Format the top 3 prediction data for the state
+            const formattedRecommendations = top3Probabilities.map(item => ({
+                disease: item[0], // disease name is the first element
+                // Format probability to percentage string
+                probabilities: `${(item[1] * 100).toFixed(1)}%` // probability is the second element
+            }));
+
+            setSystemRecommendations(formattedRecommendations);
+
+        } catch (error) {
+            console.error("Error fetching predictions:", error);
+            // Display the error message from the caught error
+            setPredictionError(`Failed to get predictions: ${error.message}`);
+            setSystemRecommendations([]); // Clear recommendations on error
+        } finally {
+            setIsPredicting(false);
+        }
+    // Add dependencies for useCallback: patientData might change if navigating between patients
+    }, [patientData.age, patientData.sex]);
 
 
     // Handler for updating symptoms from child component
     const handleSymptomsChange = (symptoms) => {
+        // Only update the state here. The useEffect will handle calling fetchPredictions.
         setPatientSymptoms(symptoms);
         console.log("Updated symptoms:", symptoms);
-        calculateRecommendations(symptoms); // Calculate recommendations when symptoms change
     };
 
     // Handler for updating preliminary diagnosis from child component
@@ -238,36 +148,31 @@ function DoctorPatientDiagnosing() {
     // Handler for "Send for Test" button
     const onClickSendForTest = () => {
         console.log("Saving diagnosis data before sending for test");
-
-        // You could save this data to localStorage or a global state management solution
-        // const diagnosisData = { patientReasonToVisit, patientSymptoms, preliminaryDiagnosis, systemRecommendations, patientData };
-        // localStorage.setItem('currentDiagnosis', JSON.stringify(diagnosisData));
-
         // Navigate to the send for test page
         history.push({
             pathname: '/doctor/send_patient_for_test',
-            state: patientData, // Pass necessary data
+            state: patientData, // Pass necessary patient data
         });
     };
 
     // Handler for "Finalize Diagnosis" button
     const onClickFinalizeDiagnosis = () => {
         console.log("Saving diagnosis data before finalizing");
-
-        // You could save this data to localStorage or a global state management solution
-        // const diagnosisData = { patientReasonToVisit, patientSymptoms, preliminaryDiagnosis, systemRecommendations, patientData };
-        // localStorage.setItem('currentDiagnosis', JSON.stringify(diagnosisData));
-
         // Navigate to the finalizing diagnosis page
         history.push({
             pathname: '/doctor/finalizing_diagnosis',
-            state: patientData, // Pass necessary data
+            state: {
+                ...patientData, // Keep existing patient data (like sessionID, name, etc.)
+                systemRecommendations: systemRecommendations, // Pass the recommendations
+                preliminaryDiagnosis: preliminaryDiagnosis, // Pass the preliminary diagnosis
+                patientReasonToVisit: patientReasonToVisit, // Pass reason to visit
+                patientSymptoms: patientSymptoms, // Pass symptoms string
+            },
         });
     };
 
     return (
         <BoxContainer className='doctorPatientDiagnosingBox'>
-            {/* Design finalize and check in for patient component here */}
             <BoxContainerTitle className='doctorPatientDiagnosing'>
                 Diagnosis
             </BoxContainerTitle>
@@ -280,11 +185,12 @@ function DoctorPatientDiagnosing() {
                 <DoctorPatientDiagnosingSymptoms patientSymptoms={patientSymptoms} setPatientSymptoms={handleSymptomsChange} />
 
                 {/* System recommendation and Preliminary diagnosis */}
-                {/* Pass recommendations data down */}
                 <DoctorPatientDiagnosingSystemRecommendationAndPreliminaryDiagnosis
                     systemRecommendations={systemRecommendations}
                     preliminaryDiagnosis={preliminaryDiagnosis}
                     setPreliminaryDiagnosis={handlePreliminaryDiagnosisChange}
+                    isLoading={isPredicting} // Pass loading state
+                    error={predictionError} // Pass error state
                 />
 
                 {/* Send for Test & Finalize Diagnosis Buttons */}

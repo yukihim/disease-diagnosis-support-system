@@ -15,7 +15,7 @@ function Find({ method, onChangeSSN, onChangeHealthInsuranceNumber }) {
                 </div>
             ) : method === 'HealthInsuranceNumber' ? (
                 <div className="find">
-                    <input className="findInputBar" type="text" placeholder="Health Insurance Number. For example: HS-4-79-793 778 6132" onChange={onChangeHealthInsuranceNumber} />
+                    <input className="findInputBar" type="text" placeholder="Health Insurance Number. For example: HIC-A" onChange={onChangeHealthInsuranceNumber} />
                     <Button className="findButton">
                         Find Patient
                     </Button>

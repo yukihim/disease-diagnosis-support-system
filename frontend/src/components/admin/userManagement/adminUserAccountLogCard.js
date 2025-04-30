@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react'; // Import useMemo
+import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom'; // Import useLocation
+import Cookies from 'js-cookie'; // Import Cookies
 import './style/adminUserAccountLogCard.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -10,70 +12,116 @@ import AdminUserAccountLogTableHeader from './adminUserAccountLog/adminUserAccou
 import AdminUserAccountLogTableContent from './adminUserAccountLog/adminUserAccountLogTableContent';
 
 const userAccountLogTableHeader = [
-    { name: 'Date', width: '150px' }, // Use 'Date' as key
-    { name: 'Time', width: '100px' }, // Use 'Time' as key
-    { name: 'Action', width: '150px' }, // Use 'Action' as key
+    { name: 'Date', width: '150px', dataKey: 'date' }, // Map 'Date' header to 'date' data field
+    { name: 'Time', width: '100px', dataKey: 'time' }, // Map 'Time' header to 'time' data field
+    { name: 'Action', width: '150px', dataKey: 'action' }, // Map 'Action' header to 'action' data field
 ];
 
-const userAccountLogTableDummyData = [
-    { date: '2024-12-09', time: '12:04 AM', action: 'Updated' },
-    { date: '2024-12-08', time: '11:04 AM', action: 'Logged Out' },
-    { date: '2024-12-07', time: '10:04 AM', action: 'Logged In' },
-    { date: '2024-12-06', time: '9:04 AM', action: 'Logged Out' },
-    { date: '2024-12-05', time: '12:04 PM', action: 'Updated' },
-    { date: '2024-12-04', time: '11:04 AM', action: 'Logged In' },
-    { date: '2024-12-03', time: '1:04 AM', action: 'Logged Out' },
-    { date: '2024-12-02', time: '13:04 AM', action: 'Logged In' }, // Note: 13:04 AM is unusual, might need data cleaning
-    { date: '2024-12-01', time: '12:04 AM', action: 'Created' },
-    // Add more dummy data if needed for testing pagination
-];
+// Remove dummy data
+// const userAccountLogTableDummyData = [ ... ];
 
 const ROWS_PER_PAGE_OPTIONS = [5, 10, 15, 20, 25]; // Define options
 
 function AdminUserAccountLogCard() {
+    const location = useLocation(); // Get location object
+    const userId = location.state?.userId; // Get userId from navigation state
+
+    const [logData, setLogData] = useState([]); // State for API log data
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
+
     const [currentPage, setCurrentPage] = useState(1);
     const [displayData, setDisplayData] = useState([]);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]); // Default to the first option (4)
+    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]); // Default to the first option (5)
+
+    // --- Fetch Log Data ---
+    useEffect(() => {
+        const fetchLogs = async () => {
+            if (!userId) {
+                setError("User ID not found. Cannot fetch logs.");
+                setIsLoading(false);
+                return;
+            }
+
+            setIsLoading(true);
+            setError(null);
+            const token = Cookies.get('token');
+            if (!token) {
+                setError('Authentication token not found.');
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:5001/admin/user_mangement/${userId}/accounts_log`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setLogData(data.logs || []); // Assuming API returns { "logs": [...] }
+            } catch (e) {
+                console.error("Failed to fetch user logs:", e);
+                setError(e.message || 'Failed to fetch user logs.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchLogs();
+    }, [userId]); // Re-fetch if userId changes
 
     // --- Sorting Logic ---
     const sortedData = useMemo(() => {
-        let sortableData = [...userAccountLogTableDummyData]; // Create a mutable copy
+        let sortableData = [...logData]; // Use fetched logData
         if (sortConfig !== null && sortConfig.key !== null) {
-            const key = sortConfig.key; // Get the key from sortConfig (e.g., 'Date', 'Time', 'Action')
+            const key = sortConfig.key; // 'Date', 'Time', 'Action'
 
             sortableData.sort((a, b) => {
                 let aValue, bValue;
 
+                // Determine values based on the sort key
                 if (key === 'Date') {
-                    aValue = new Date(a.date);
-                    bValue = new Date(b.date);
+                    // Combine date and time for more accurate sorting if needed, otherwise just date
+                    aValue = new Date(`${a.date} ${a.time}`); // Combine for datetime sorting
+                    bValue = new Date(`${b.date} ${b.time}`);
                 } else if (key === 'Time') {
-                    // Basic time string comparison - consider parsing for robustness
+                    // Basic time string comparison (HH:MM:SS)
                     aValue = a.time;
                     bValue = b.time;
                 } else if (key === 'Action') {
                     aValue = a.action;
                     bValue = b.action;
                 } else {
+                    // Fallback or handle other potential keys
                     aValue = a[key.toLowerCase()];
                     bValue = b[key.toLowerCase()];
                 }
 
+                // Handle potential undefined/null values
                 const valA = aValue === undefined || aValue === null ? '' : aValue;
                 const valB = bValue === undefined || bValue === null ? '' : bValue;
 
+                // Comparison logic
                 if (valA < valB) {
                     return sortConfig.direction === 'asc' ? -1 : 1;
                 }
                 if (valA > valB) {
                     return sortConfig.direction === 'asc' ? 1 : -1;
                 }
-                return 0;
+                return 0; // Values are equal
             });
         }
         return sortableData;
-    }, [sortConfig]);
+    }, [logData, sortConfig]); // Depend on fetched data and sort config
 
     // Calculate total pages based on current rowsPerPage
     const totalPages = useMemo(() => {
@@ -146,12 +194,18 @@ function AdminUserAccountLogCard() {
                     sortConfig={sortConfig}
                 />
 
-                {/* Table Content - Pass sorted and paginated data */}
-                <AdminUserAccountLogTableContent
-                    userAccountLogTableHeader={userAccountLogTableHeader}
-                    userAccountLogTableData={displayData} // displayData is now sorted and paginated
-                    onClickSession={() => {console.log("nothing")}} // Keep or modify as needed
-                />
+                {/* Table Content - Conditional Rendering */}
+                {isLoading ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>Loading logs...</div>
+                ) : error ? (
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>Error: {error}</div>
+                ) : (
+                    <AdminUserAccountLogTableContent
+                        userAccountLogTableHeader={userAccountLogTableHeader} // Pass updated header
+                        userAccountLogTableData={displayData}
+                        onClickSession={() => {console.log("Log row clicked - implement if needed")}}
+                    />
+                )}
             </BoxContainerContent>
         </BoxContainer>
     );

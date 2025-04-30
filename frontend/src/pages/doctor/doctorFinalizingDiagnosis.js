@@ -36,10 +36,8 @@ function DoctorFinalizingDiagnosis() {
 
             {/* Patient's Vital Signs and Physical Measurements Card */}
             {/* Patient's Paraclinical Test Result Card */}
-            <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", gap: "20px" }}>
-                <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
-                <DoctorPatientParaclinicalTestResult />
-            </div>
+            <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
+            <DoctorPatientParaclinicalTestResult />
 
             {/* Finalizing Diagnosis */}
             <DoctorFinalizingDiagnosisForPatient />

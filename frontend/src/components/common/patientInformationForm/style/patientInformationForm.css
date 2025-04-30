@@ -1,22 +1,7 @@
-/* .patientInformationForm {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: left;
-    width: 100%;
-
-    gap: 10px;
-} */
-
-
-
-
-
-
 .patientInformationForm {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    /* grid-template-columns: repeat(auto-fit, minmax(768px, 1fr)); */
+    /* grid-template-columns: repeat(3, 1fr); */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 10px;
     width: 100%;
 }

@@ -348,6 +348,9 @@ def process_patient_for_prediction_adv(age, sex, evidence_code_value_list):
 
 # --- Flask App Initialization ---
 app = Flask(__name__)
+# Initialize CORS *after* creating the app instance and *before* running it
+from flask_cors import CORS # Import CORS at the top
+CORS(app, resources={r"/predict": {"origins": "*"}}, supports_credentials=True) # Apply CORS specifically to /predict or use /* for all
 
 # --- API Endpoint (No changes needed from last version) ---
 @app.route('/predict', methods=['POST'])
@@ -415,4 +418,5 @@ def predict():
 # --- Run the App ---
 if __name__ == '__main__':
     print("\nStarting Flask App...")
-    app.run(host='0.0.0.0', port=5000, debug=True) # Set debug=False for production
+    
+    app.run(host='0.0.0.0', port=5002, debug=True) # Set debug=False for production

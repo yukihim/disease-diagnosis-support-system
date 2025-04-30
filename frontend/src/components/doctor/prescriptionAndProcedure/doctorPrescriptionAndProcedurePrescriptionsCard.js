@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useState, useEffect
 import './style/doctorPrescriptionAndProcedurePrescriptionsCard.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -21,7 +21,7 @@ const patientPrescriptionTableHeader = [
     { name: 'Note', width: '500px' }
 ];
 
-// Empty prescription row template
+// Define empty prescription structure
 const emptyPrescription = {
     medicine: '',
     morning: '',
@@ -32,10 +32,13 @@ const emptyPrescription = {
     note: ''
 };
 
-function DoctorPrescriptionAndProcedurePrescriptionsCard() {
-    // State to track prescriptions
+
+// Accept callback prop from parent
+function DoctorPrescriptionAndProcedurePrescriptionsCard({ onPrescriptionDataUpdate }) { // Added prop
+
+    // Keep internal state management
     const [prescriptions, setPrescriptions] = useState([
-        { ...emptyPrescription }, // Start with three empty rows
+        { ...emptyPrescription },
         { ...emptyPrescription },
         { ...emptyPrescription }
     ]);
@@ -54,16 +57,32 @@ function DoctorPrescriptionAndProcedurePrescriptionsCard() {
 
     // Function to remove a prescription row
     const handleRemovePrescription = (index) => {
-        const updatedPrescriptions = [...prescriptions];
-        updatedPrescriptions.splice(index, 1);
-        setPrescriptions(updatedPrescriptions);
+        // Prevent removing the last row if needed, or adjust logic
+        if (prescriptions.length > 1) {
+            const updatedPrescriptions = [...prescriptions];
+            updatedPrescriptions.splice(index, 1);
+            setPrescriptions(updatedPrescriptions);
+        } else {
+            // Optionally clear the last row instead of removing it
+             setPrescriptions([{ ...emptyPrescription }]);
+             console.log("Cannot remove the last prescription row. Cleared instead.");
+        }
     };
+
+    // Effect to call the parent's callback whenever prescriptions change
+    useEffect(() => {
+        if (onPrescriptionDataUpdate) {
+            onPrescriptionDataUpdate(prescriptions);
+        }
+    }, [prescriptions, onPrescriptionDataUpdate]); // Dependency array includes prescriptions and the callback
+
 
     return (
         <BoxContainer className='doctorPrescriptionAndProcedurePrescriptionsCardBox'>
             <BoxContainerTitle className='doctorPrescriptionAndProcedurePrescriptionsCard'>
                 Prescriptions
 
+                {/* Use internal handler */}
                 <Button onClick={handleAddPrescription}>
                     <ButtonText>
                         Add
@@ -75,12 +94,12 @@ function DoctorPrescriptionAndProcedurePrescriptionsCard() {
                 {/* Table Header */}
                 <DoctorPrescriptionAndProcedurePrescriptionsCardHeader patientPrescriptionTableHeader={patientPrescriptionTableHeader} />
 
-                {/* Table Content */}
-                <DoctorPrescriptionAndProcedurePrescriptionsCardTable 
-                    patientPrescriptionTableHeader={patientPrescriptionTableHeader} 
-                    patientPrescriptionTableData={prescriptions}
-                    onPrescriptionChange={handlePrescriptionChange}
-                    onRemovePrescription={handleRemovePrescription}
+                {/* Table Content - Use internal state and handlers */}
+                <DoctorPrescriptionAndProcedurePrescriptionsCardTable
+                    patientPrescriptionTableHeader={patientPrescriptionTableHeader}
+                    patientPrescriptionTableData={prescriptions} // Use internal state
+                    onPrescriptionChange={handlePrescriptionChange} // Use internal handler
+                    onRemovePrescription={handleRemovePrescription} // Use internal handler
                 />
             </BoxContainerContent>
         </BoxContainer>

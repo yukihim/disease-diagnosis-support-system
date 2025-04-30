@@ -6,7 +6,7 @@ import HuggedText from '../../../common/huggedText';
 function DoctorPatientDiagnosingSymptoms({ patientSymptoms, setPatientSymptoms }) {
     return (
         <div className="doctorPatientDiagnosingSymptoms">
-            <HuggedText text="Symptoms:" font_size="14px" font_weight="600" color="#000000" />
+            <HuggedText text="Symptoms:" font_size="14px" font_weight="600" color="#4E4B66" />
             <input
                 className="symptomsInput"
                 placeholder="Input the patient symptoms separated by commas ( , ). For example: High fever over 39°C, Coughing."

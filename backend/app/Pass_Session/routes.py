@@ -1,78 +1,65 @@
 from flask import jsonify
-from flask_jwt_extended import jwt_required
-from . import app # Import the blueprint 'app' defined in Pass_Session/__init__.py
+from flask_jwt_extended import jwt_required, get_jwt_identity
+# Removed check_role import as it's no longer used
+# from ..authentication import check_role
+from . import app
+import traceback # Import traceback for better error logging
 
-# --- Mock Data ---
-# Dictionary where keys are sessionIDs (as per updated request)
-# and values are lists of their past sessions (Note: This structure might need rethinking
-# if a sessionID should only map to a single session's details).
-# Keeping the structure for now, assuming the key represents the ID requested.
-mock_pass_sessions_db = {
-    "sess_patient_001_checkup": [ # Example session ID
-        {
-            "sessionDate": "2025-03-15",
-            "sessionType": "Check-up",
-            "personInCharged": "Dr. Smith",
-            "department": "General Medicine",
-            "result": "Stable condition"
-        }
-    ],
-     "sess_patient_001_followup": [
-         {
-            "sessionDate": "2024-11-20",
-            "sessionType": "Follow-up",
-            "personInCharged": "Dr. Jones",
-            "department": "Cardiology",
-            "result": "Blood pressure controlled"
-        }
-    ],
-    "sess_patient_002_emergency": [
-        {
-            "sessionDate": "2025-04-01",
-            "sessionType": "Emergency",
-            "personInCharged": "Dr. Davis",
-            "department": "Emergency Room",
-            "result": "Treated for minor injury"
-        }
-    ],
-    "abc-xyz-123": [ # Matching the test value in the doc - assuming this is now a sessionID
-         {
-            "sessionDate": "2025-01-10",
-            "sessionType": "Consultation",
-            "personInCharged": "Dr. Quan",
-            "department": "Neurology",
-            "result": "Initial assessment"
-        },
-    ]
-    # Add more session IDs and their details as needed
-}
+# --- No Mock Data Needed for this specific endpoint logic ---
 
+# --- API Endpoint ---
 
-# 7.4.3.1 Pass Sessions Table: Get List for Page (Path updated to use sessionID)
-@app.route('/pass_sessions/<string:sessionID>', methods=['GET']) # Changed patientID to sessionID
+# MODIFIED: Always returns a fixed detailed response, ignoring sessionID,
+#           and containing only the requested fields + prescriptions/procedures.
+@app.route('/pass_sessions/<string:sessionID>', methods=['GET'])
 @jwt_required()
-def get_patient_pass_sessions(sessionID): # Changed patientID to sessionID
+def get_pass_session_details(sessionID): # Keep function name for consistency
     """
-    Retrieves details for a specific past medical session based on sessionID.
-    (Note: The original implementation returned a list based on patientID.
-     This is adjusted based on the path change, but mock data structure might need review.)
+    Retrieves a FIXED, hardcoded detailed information object, simulating
+    a past medical session lookup. Includes session summary fields,
+    prescriptions, and procedures.
+    The provided sessionID parameter is ignored.
     """
     try:
-        # In a real application, query the database for the session with the given sessionID
-        # The mock data structure might need adjustment if a sessionID maps to a single session object.
-        session_data = mock_pass_sessions_db.get(sessionID) # Changed patientID to sessionID
+        # --- Define the Fixed Hardcoded Response ---
+        fixed_response_data = {
+            # Session Summary Fields (based on requested headers)
+            "sessionID": "patient_001",
+            "sessionDate": "2024-10-15",
+            "sessionType": "Annual Checkup (Fixed)",
+            "personInCharged": "Dr. Fixed Data",
+            "department": "General Practice (Fixed)",
+            "result": "Routine check, all clear (Fixed)",
+            
+            "finalDiagnosis": {
+                "symptoms": "Fever, fatigue, and pallor (Fixed)",
+                "diagnosis": "Iron deficiency anemia (Fixed)",
+            },
 
-        if session_data is None:
-            # Session ID not found in our mock database
-            return jsonify({"message": f"Session with ID '{sessionID}' not found."}), 404 # Changed message
+            # Prescription Array
+            "prescriptions": [
+                {"medicine": "Ferrous Sulfate 325mg", "morning": "1", "noon": "0", "afternoon": "0", "evening": "0", "duration": "60 days", "note": "Take with Vitamin C or orange juice."},
+                {"medicine": "Multivitamin (OTC)", "morning": "1", "noon": "0", "afternoon": "0", "evening": "0", "duration": "Ongoing", "note": "General supplement."},
+            ],
 
-        # Return the session data found.
-        # If sessionID maps to a single session, the response might just be the object itself,
-        # or still wrapped in a list/object as required by the frontend.
-        # Returning the list as per the current mock data structure.
-        return jsonify({"passSessions": session_data}), 200
+            # Procedure Array
+            "procedures": [
+                {"procedureName": "Blood Draw for CBC", "dateTime": "2024-01-10 10:30 AM", "note": "Standard venipuncture."},
+                {"procedureName": "Nutritional Counseling", "dateTime": "2024-01-10 11:00 AM", "note": "Discussed iron-rich foods."},
+            ]
+            # Removed patientInformation, vitalSigns, testResults, finalDiagnosis
+        }
+        # --- End Fixed Hardcoded Response ---
+
+        # Ignore the sessionID parameter and just return the fixed data
+        print(f"Accessed /pass_sessions/{sessionID}, returning fixed detailed data (summary + prescriptions/procedures).")
+        return jsonify(fixed_response_data), 200
 
     except Exception as e:
-        # Log the exception e for debugging
-        print(f"Error retrieving pass session for session {sessionID}: {e}") # Changed message
-        return jsonify({"message": "An error occurred while retrieving pass session."}), 500
+        # Log the full traceback for better debugging in container logs
+        print(f"Error in get_pass_session_details (fixed response) for requested session {sessionID}:")
+        traceback.print_exc()
+        return jsonify({"message": "An internal error occurred while retrieving fixed session details."}), 500
+
+# Removed the previous mock data definitions as they are no longer needed here
+# Removed the previous route implementation

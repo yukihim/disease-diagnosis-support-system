@@ -7,15 +7,22 @@ import BloodPressure from './doctorMedicalDevicesMeasurements/bloodPressure';
 import BodyTemperature from './doctorMedicalDevicesMeasurements/bodyTemperature';
 import RespiratoryRate from './doctorMedicalDevicesMeasurements/respiratoryRate';
 
-
-function DoctorMedicalDevicesMeasurements() {
+// Accept processed data props
+function DoctorMedicalDevicesMeasurements({
+    bloodSugarData,
+    heartRateData,
+    bloodPressureData,
+    bodyTemperatureData,
+    respiratoryRateData
+}) {
     return (
         <div className="doctorMedicalDevicesMeasurements">
-            <BloodSugar />
-            <HeartRate />
-            <BloodPressure />
-            <BodyTemperature />
-            <RespiratoryRate />
+            {/* Pass specific data down to each card */}
+            <BloodSugar data={bloodSugarData} />
+            <HeartRate data={heartRateData} />
+            <BloodPressure data={bloodPressureData} />
+            <BodyTemperature data={bodyTemperatureData} />
+            <RespiratoryRate data={respiratoryRateData} />
         </div>
     );
 }

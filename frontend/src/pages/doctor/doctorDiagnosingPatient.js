@@ -15,14 +15,11 @@ function DoctorDiagnosingPatient() {
     const history = useHistory();
     const location = useLocation();
 
-    const { patientName } = location.state || {};
-
     function onClickSession(session) {
         history.push({
             pathname: '/view_pass_session',
             state: {
-                patientName: patientName, 
-                patientSessionDate: session.sessionDate,
+                sessionID: session.sessionID, // Pass sessionID
             }
         });
     }
@@ -37,10 +34,12 @@ function DoctorDiagnosingPatient() {
 
             {/* Patient's Vital Signs and Physical Measurements Card */}
             {/* Patient's Paraclinical Test Result Card */}
-            <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", gap: "20px" }}>
+            {/* <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", gap: "20px" }}>
                 <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
                 <DoctorPatientParaclinicalTestResult />
-            </div>
+            </div> */}
+            <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
+            <DoctorPatientParaclinicalTestResult />
 
             {/* Diagnosing Card */}
             <DoctorPatientDiagnosing />

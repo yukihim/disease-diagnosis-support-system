@@ -1,31 +1,39 @@
 import React from 'react';
-
-import TableContent from '../../../common/tableContent';
+import TableContent from '../../../common/tableContent'; // Assuming TableContent is in common folder
+// Import CSS if needed: import './style/adminUserAccountLogTableContent.css';
 
 function AdminUserAccountLogTableContent({ userAccountLogTableHeader, userAccountLogTableData, onClickSession }) {
-    const headers = userAccountLogTableHeader;
+    // No need for separate headers variable
     const data = userAccountLogTableData;
 
     return (
         <TableContent>
             {data.length > 0 ? (
-                data.map((row, index) => (
-                    <div key={index} className="tableContent tableContentPatientFound" onClick={() => onClickSession(row)}>
-                        <div className="tableContentCell" style={{ width: headers[0].width, minWidth: headers[0].width }}>
-                            {row.date}
-                        </div>
-                        <div className="tableContentCell" style={{ width: headers[1].width, minWidth: headers[1].width }}>
-                            {row.time}
-                        </div>
-                        <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[2].width }}>
-                            {row.action}
-                        </div>
+                data.map((row, rowIndex) => (
+                    <div key={rowIndex} className="tableContent tableContentPatientFound" onClick={() => onClickSession(row)}>
+                        {userAccountLogTableHeader.map((header, headerIndex) => {
+                            // Determine the key to access data: prioritize dataKey, fallback to lowercase name
+                            const keyToAccess = header.dataKey || header.name.toLowerCase();
+                            const cellData = row[keyToAccess];
+
+                            return (
+                                <div
+                                    key={headerIndex}
+                                    className="tableContentCell"
+                                    style={{ width: header.width, minWidth: header.width }}
+                                >
+                                    {/* Display data or 'N/A' if undefined/null */}
+                                    {cellData !== undefined && cellData !== null ? cellData : 'N/A'}
+                                </div>
+                            );
+                        })}
                     </div>
                 ))
             ) : (
                 <div className="tableContent">
-                    <div className="tableContentCell">
-                        No data
+                    {/* Adjust the no data message if needed */}
+                    <div className="tableContentCell" style={{ width: '100%', textAlign: 'center' }}>
+                        No log data available for this user
                     </div>
                 </div>
             )}

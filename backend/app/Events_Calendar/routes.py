@@ -1,69 +1,83 @@
 from flask import request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from . import app # Import the blueprint 'app' defined in Events_Calendar/__init__.py
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from . import app
 import datetime
 
 # --- Mock Data ---
-# Dictionary where keys are dates ("YYYY-MM-DD") and values are lists of events for that day.
-mock_calendar_events = {
-    "2025-04-21": [
-        {"time": "09:00", "description": "Team Meeting - Cardiology Dept."},
-        {"time": "11:30", "description": "Patient Consultation - Room 301"},
-        {"time": "14:00", "description": "Surgery - OR 2"},
-        {"time": "16:00", "description": "Shift Handover"}
-    ],
-    "2025-04-22": [
-        {"time": "10:00", "description": "Training Session - New EHR Features"},
-        {"time": "13:00", "description": "Lunch Seminar - Pharma Rep"}
-    ],
-    "2025-04-26": [ # Today's date based on user context
-        {"time": "08:00", "description": "Morning Rounds"},
-        {"time": "10:30", "description": "Review X-Rays - Radiology"},
-        {"time": "15:00", "description": "Admin Paperwork"}
-    ]
-    # Add more dates and events as needed
+mock_user_calendar_events = {
+    "user123abc": {
+        "2025-04-21": [
+            {"time": "09:00", "event": ["Team Meeting - Cardiology Dept.", "Project Update - Cardiology"]},
+            {"time": "11:30", "event": ["Patient Consultation - Room 301"]},
+        ],
+        "2025-04-28": [
+            {"time": "08:00", "event": ["Morning Rounds", "Patient Checkup - Room 202", "Patient Nguyen"],},
+            {"time": "10:30", "event": ["Review X-Rays - Radiology"]},
+        ],
+        "2025-04-29": [ # Add some data for another date
+            {"time": "14:00", "event": ["Follow-up - Patient Tran"]},
+        ]
+    },
+    "user456def": {
+        "2025-04-22": [
+            {"time": "10:00", "event": ["Training Session - New EHR Features"]},
+        ],
+        "2025-04-28": [
+            {"time": "15:00", "event": ["Admin Paperwork"]}
+        ]
+    }
 }
 
 # 7.4.2 Events Calendar API
-@app.route('/calendar_events', methods=['GET']) # Doc table says GET, curl says POST. Using GET as per table.
+# Modified to return events for the date specified in the query parameter 'date=YYYY-MM-DD'.
+# Defaults to today if 'date' parameter is missing or invalid.
+@app.route('/calendar_events', methods=['GET'])
 @jwt_required()
 def get_calendar_events():
     """
-    Retrieves calendar events for a specific day based on query parameters.
+    Retrieves calendar events for the logged-in user for a specific date.
+    Date is obtained from the 'date' query parameter (YYYY-MM-DD). Defaults to today.
+    UserID is obtained from the JWT token.
     """
     try:
-        # Extract query parameters
-        day = request.args.get('day')
-        month = request.args.get('month')
-        year = request.args.get('year')
+        # Get user identity (userID) from JWT token
+        jwt_payload = get_jwt()
+        logged_in_user_id = jwt_payload.get('userID') or get_jwt_identity()
 
-        # Validate parameters
-        if not all([day, month, year]):
-            return jsonify({"message": "Missing required query parameters: day, month, year"}), 400
+        if not logged_in_user_id:
+            return jsonify({"message": "User ID not found in token."}), 401
 
-        # Construct date string (ensure leading zeros for day/month if needed)
-        try:
-            # Validate date components and format
-            date_str = f"{int(year):04d}-{int(month):02d}-{int(day):02d}"
-            # Optional: Further validation if the date itself is valid
-            datetime.date(int(year), int(month), int(day))
-        except ValueError:
-             return jsonify({"message": "Invalid date parameters provided."}), 400
+        # Get date from query parameter, default to today
+        date_str = request.args.get('date') # Get 'date' query parameter
+        target_date = None
 
-        # In a real application, query the database for events on 'date_str' for the logged-in user
-        # user_identity = get_jwt_identity() # Get user info if events are user-specific
+        if date_str:
+            try:
+                # Validate date format
+                target_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+            except ValueError:
+                # Invalid date format, default to today
+                print(f"Invalid date format received: {date_str}. Defaulting to today.")
+                target_date = datetime.date.today()
+                date_str = target_date.strftime("%Y-%m-%d") # Update date_str to today's date string
+        else:
+            # No date parameter provided, use today
+            target_date = datetime.date.today()
+            date_str = target_date.strftime("%Y-%m-%d") # Use today's date string
 
-        events_for_day = mock_calendar_events.get(date_str, []) # Get events or empty list if date not found
+        # Retrieve events for the specific user and target date from the mock data
+        user_events = mock_user_calendar_events.get(logged_in_user_id, {})
+        events_for_date = user_events.get(date_str, []) # Get events for the target date string
 
-        # Get current time for the response (as per documentation)
+        # Get current time for the response (indicates when data was fetched)
         current_time_str = datetime.datetime.now().strftime("%H:%M:%S")
 
         return jsonify({
             "time": current_time_str,
-            "events": events_for_day
+            "event": events_for_date # Return events for the requested/defaulted date
         }), 200
 
     except Exception as e:
-        # Log the exception e for debugging
-        print(f"Error retrieving calendar events: {e}")
+        user_id_for_log = logged_in_user_id if 'logged_in_user_id' in locals() else "unknown"
+        print(f"Error retrieving calendar events for user {user_id_for_log} on date {date_str if 'date_str' in locals() else 'unknown'}: {e}")
         return jsonify({"message": "An error occurred while retrieving calendar events."}), 500

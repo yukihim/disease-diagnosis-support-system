@@ -3,43 +3,50 @@ import './style/patientInformationForm.css';
 
 import SpecificInformationItemWrapper from '../specificInformationItemWrapper';
 
-// Helper function to calculate age from DOB string (DD/MM/YYYY)
+// Helper function to calculate age from DOB string (MM-DD-YYYY or YYYY-MM-DD)
 function calculateAge(dobString) {
-    if (!dobString || typeof dobString !== 'string') return 'N/A'; // Handle missing or invalid input
-    try {
-        const parts = dobString.split('/');
-        if (parts.length !== 3) return 'Invalid Format';
-        const day = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1; // JS months are 0-indexed
-        const year = parseInt(parts[2], 10);
+    if (!dobString) return 'N/A';
 
-        if (isNaN(day) || isNaN(month) || isNaN(year)) return 'Invalid Date Parts';
+    let datePart = dobString.split(' ')[0]; // Handle potential time part if any
+    let parts;
+    let dob;
 
-        const birthDate = new Date(year, month, day);
-         // Basic validation: Check if the constructed date parts match the input
-        if (isNaN(birthDate.getTime()) || birthDate.getDate() !== day || birthDate.getMonth() !== month || birthDate.getFullYear() !== year) {
-             return 'Invalid Date';
+    if (datePart.includes('-')) {
+        parts = datePart.split('-');
+        if (parts.length === 3) {
+            // Check if it's YYYY-MM-DD
+            if (parts[0].length === 4) {
+                dob = new Date(datePart); // Already in a good format (YYYY-MM-DD)
+            }
+            // Check if it's MM-DD-YYYY
+            else if (parts[2].length === 4) {
+                // Format as YYYY-MM-DD for Date object (Month is 0-indexed)
+                dob = new Date(parts[2], parseInt(parts[0], 10) - 1, parts[1]);
+            }
         }
-
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age >= 0 ? age : 'Invalid Date'; // Return calculated age or 'Invalid Date'
-    } catch (error) {
-        console.error("Error calculating age:", error);
-        return 'Error'; // Return 'Error' in case of unexpected issues
     }
+
+
+    if (!dob || isNaN(dob.getTime())) {
+        return 'Invalid DOB'; // Handle invalid date format or value
+    }
+
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+    return age >= 0 ? age : 'Invalid DOB'; // Return calculated age or error
 }
 
 
-const patientFields = [
+// Define all possible fields here
+const allPatientFields = [
     { key: "Name", label: "Name" },
-    // { key: "DOB", label: "DOB" }, // Decide if you still want to show DOB separately
-    { key: "Age", label: "Age" }, // This field will display the calculated age
     { key: "Gender", label: "Gender" },
+    { key: "Age", label: "Age" }, // This field will display the calculated age
+    { key: "DOB", label: "DOB", type: "date" }, // Keep DOB for calculation, add type
     { key: "Type", label: "Type" },
     { key: "Phone Number", label: "Phone Number" },
     { key: "Job", label: "Job" },
@@ -48,13 +55,33 @@ const patientFields = [
     { key: "Height (cm)", label: "Height (cm)" },
     { key: "Weight (kg)", label: "Weight (kg)" },
     { key: "Address", label: "Address" },
-    { key: "Follow-up Date", label: "Follow-up Date" },
+    { key: "Follow-up Date", label: "Follow-up Date", type: "date" },
 ];
 
-function PatientInformationForm({ patientInformation }) {
+// Accept fieldsToShow prop
+function PatientInformationForm({ patientInformation, fieldsToShow }) {
+    // If patientInformation is null or undefined, render nothing or a placeholder
+    if (!patientInformation) {
+        return <div className="patientInformationForm">No patient data available.</div>;
+    }
+
+    // Filter the fields based on the fieldsToShow prop
+    // If fieldsToShow is not provided, default to showing all fields (or handle as needed)
+    const fieldsToRender = fieldsToShow
+        ? allPatientFields.filter(field => fieldsToShow.includes(field.key))
+        : allPatientFields; // Default to all if prop not passed
+
     return (
         <div className="patientInformationForm">
-            {patientFields.map(field => {
+            {fieldsToRender.map(field => {
+                // Skip rendering DOB itself if Age is being calculated/shown, unless DOB is explicitly in fieldsToShow
+                if (field.key === "DOB" && fieldsToRender.some(f => f.key === "Age")) {
+                    // Only render DOB if it's specifically requested in fieldsToShow
+                    if (!fieldsToShow || !fieldsToShow.includes("DOB")) {
+                         return null;
+                    }
+                }
+
                 let displayValue;
 
                 if (field.key === "Age") {
@@ -66,13 +93,24 @@ function PatientInformationForm({ patientInformation }) {
                 }
 
                 // Ensure a fallback for undefined/null values from data
-                displayValue = (displayValue !== undefined && displayValue !== null) ? displayValue : 'N/A';
+                // Keep "None" as is if it's the value for Follow-up Date
+                if (field.key === "Follow-up Date" && displayValue === "None") {
+                    // Keep "None"
+                } else {
+                     displayValue = (displayValue !== undefined && displayValue !== null && displayValue !== '') ? displayValue : 'N/A';
+                }
+
 
                 return (
                     <SpecificInformationItemWrapper
                         key={field.key}
                         item={field.label}
                         itemValue={displayValue}
+                        // Pass isEditing={false} if this form is always read-only
+                        isEditing={false}
+                        // Pass fieldType if SpecificInformationItemWrapper uses it for formatting
+                        fieldType={field.type}
+                        customStyle={{ gridColumn: field.label == "Address" ? "1 / -1" : "span 1" }}
                     />
                 );
             })}

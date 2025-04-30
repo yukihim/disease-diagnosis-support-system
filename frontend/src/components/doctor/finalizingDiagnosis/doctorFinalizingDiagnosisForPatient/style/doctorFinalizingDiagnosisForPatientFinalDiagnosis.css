@@ -27,6 +27,6 @@
     /* This color applies only to the placeholder */
     color: rgba(0, 0, 0, 0.3);
 
-    text-align: right;
-    font-size: 1px;
+    text-align: left;
+    font-size: 14px;
 }

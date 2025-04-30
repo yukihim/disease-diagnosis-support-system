@@ -56,6 +56,8 @@
 
     min-height: initial;
     min-width: 100px;
+
+    gap: 10px;
 }
 
 .measurementStats {
@@ -88,67 +90,6 @@
     gap: 10px;
     border-radius: 5px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

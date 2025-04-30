@@ -1,7 +1,5 @@
 import React from 'react';
-// import './style/prescriptionContent.css';
-
-import TableContent from '../../../tableContent'
+import TableContent from '../../../tableContent';
 
 function PrescriptionContent({ patientPrescriptionTableHeader, prescriptionTableData }) {
     const headers = patientPrescriptionTableHeader;
@@ -9,9 +7,9 @@ function PrescriptionContent({ patientPrescriptionTableHeader, prescriptionTable
 
     return (
         <TableContent>
-            {data.length > 0 ? (
+            {data && data.length > 0 ? ( // Added check for data existence
                 data.map((row, index) => (
-                    <div key={index} className="tableContent tableContentIncomingPatient">
+                    <div key={index} className="tableContent tableContentIncomingPatient"> {/* Adjust className if needed */}
                         <div className="tableContentCell" style={{ width: headers[0].width, minWidth: headers[0].width }}>
                             {row.medicine}
                         </div>
@@ -28,18 +26,19 @@ function PrescriptionContent({ patientPrescriptionTableHeader, prescriptionTable
                             {row.evening}
                         </div>
                         <div className="tableContentCell" style={{ width: headers[5].width, minWidth: headers[5].width }}>
-                            {row.durations}
+                            {row.duration} {/* Corrected from durations */}
                         </div>
                         <div className="tableContentCell" style={{ width: headers[6].width, minWidth: headers[6].width }}>
                             {row.note}
                         </div>
-                        <div style={{ width: "30px", height: "30px"}}></div>
+                        {/* Empty header cell for the remove button column */}
+                        <div className="tableHeaderCell removeCell" style={{ width: '30px', minWidth: '30px' }}></div>
                     </div>
                 ))
             ) : (
                 <div className="tableContent">
-                    <div className="tableContentCell">
-                        No data
+                    <div className="tableContentCell" style={{ textAlign: 'center', width: '100%' }}>
+                        No prescriptions recorded.
                     </div>
                 </div>
             )}

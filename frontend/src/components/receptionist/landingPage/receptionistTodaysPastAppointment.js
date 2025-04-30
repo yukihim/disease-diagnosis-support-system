@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react'; // Import useMemo
+import React, { useState, useEffect, useMemo } from 'react';
+import Cookies from 'js-cookie'; // Import Cookies
 
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 
-import ReceptionistTodaysPastAppointmentOverview from './receptionistTodaysPastAppointment/receptionistTodaysPastAppointmentOverview'; // Import Overview
+import ReceptionistTodaysPastAppointmentOverview from './receptionistTodaysPastAppointment/receptionistTodaysPastAppointmentOverview';
 import ReceptionistTodaysPastAppointmentPagination from './receptionistTodaysPastAppointment/receptionistTodaysPastAppointmentPagination';
 import ReceptionistTodaysPastAppointmentHeader from './receptionistTodaysPastAppointment/receptionistTodaysPastAppointmentHeader';
 import ReceptionistTodaysPastAppointmentContent from './receptionistTodaysPastAppointment/receptionistTodaysPastAppointmentContent';
@@ -12,44 +13,92 @@ import ReceptionistTodaysPastAppointmentContent from './receptionistTodaysPastAp
 const pastAppointmentTableHeader = [
     { name: 'Name', width: '130px' },
     { name: 'Time', width: '70px' },
-    { name: 'Status', width: '80px' },
+    { name: 'Status', width: '80px' }, // Assuming 'status' is returned by the API
 ];
 
-const pastAppointmentTableDummyData = [
-    { name: 'Lê Văn A', time: '07:00 AM', status: 'Checked' },
-    { name: 'Lê Văn B', time: '07:15 AM', status: 'Unchecked' },
-    { name: 'Lê Văn C', time: '07:30 AM', status: 'Checked' },
-    { name: 'Lê Văn D', time: '07:45 AM', status: 'Checked' },
-    { name: 'Lê Văn E', time: '08:00 AM', status: 'Unchecked' },
-    { name: 'Lê Văn F', time: '08:15 AM', status: 'Checked' },
-];
+// Remove dummy data
+// const pastAppointmentTableDummyData = [ ... ];
 
-const ROWS_PER_PAGE_OPTIONS = [2, 4, 6]; // Define options for rows per page
+const ROWS_PER_PAGE_OPTIONS = [2, 4, 6];
 
 function ReceptionistTodaysPastAppointment() {
     const [currentPage, setCurrentPage] = useState(1);
     const [displayData, setDisplayData] = useState([]);
-    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]); // Default to the first option (2)
+    const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]);
+    const [pastAppointmentData, setPastAppointmentData] = useState([]); // State for fetched data
+    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [error, setError] = useState(null); // Error state
 
-    // Calculate count (can be memoized if data changes)
-    const pastAppointmentCount = pastAppointmentTableDummyData.length;
+    // Fetch data from API
+    useEffect(() => {
+        const fetchPastAppointments = async () => {
+            setIsLoading(true);
+            setError(null);
+            const token = Cookies.get('token'); // Get token from cookie
 
-    // Calculate total pages based on current rowsPerPage
+            if (!token) {
+                setError("User not authenticated.");
+                setIsLoading(false);
+                setPastAppointmentData([]);
+                return;
+            }
+
+            try {
+                // API endpoint from backend routes.py
+                const apiUrl = 'http://localhost:5001/receptionist/landing_page/todays_past_appointment';
+                console.log("Fetching past appointments from:", apiUrl);
+
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Add Authorization header
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("API Response Data (Past Appointments):", data);
+
+                // Assuming the API returns { "pastAppointments": [...] }
+                // The backend is expected to filter appointments to only include those before the current time today.
+                setPastAppointmentData(data.pastAppointments || []);
+
+            } catch (err) {
+                console.error("Error fetching past appointments:", err);
+                setError(err.message || "Failed to fetch past appointments.");
+                setPastAppointmentData([]); // Reset data on error
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchPastAppointments();
+    }, []); // Empty dependency array to run only once on mount
+
+    // Calculate count based on fetched data
+    const pastAppointmentCount = pastAppointmentData.length;
+
+    // Calculate total pages based on fetched data and current rowsPerPage
     const totalPages = useMemo(() => {
-        return Math.ceil(pastAppointmentTableDummyData.length / rowsPerPage);
-    }, [rowsPerPage]); // Recalculate when rowsPerPage changes
+        return Math.ceil(pastAppointmentData.length / rowsPerPage);
+    }, [pastAppointmentData, rowsPerPage]); // Depend on fetched data
 
-    // Update displayed data when page or rowsPerPage changes
+    // Update displayed data when page, rowsPerPage, or fetched data changes
     useEffect(() => {
         const startIndex = (currentPage - 1) * rowsPerPage;
-        const endIndex = Math.min(startIndex + rowsPerPage, pastAppointmentTableDummyData.length);
-        setDisplayData(pastAppointmentTableDummyData.slice(startIndex, endIndex));
-    }, [currentPage, rowsPerPage]); // Add rowsPerPage dependency
+        const endIndex = Math.min(startIndex + rowsPerPage, pastAppointmentData.length);
+        setDisplayData(pastAppointmentData.slice(startIndex, endIndex));
+    }, [currentPage, rowsPerPage, pastAppointmentData]); // Depend on fetched data
 
     // Reset to first page when rowsPerPage changes
     useEffect(() => {
         setCurrentPage(1);
-    }, [rowsPerPage]); // Reset page if rowsPerPage changes
+    }, [rowsPerPage]);
 
     function handlePageChange(newPage) {
         if (newPage >= 1 && newPage <= totalPages) {
@@ -70,24 +119,33 @@ function ReceptionistTodaysPastAppointment() {
             </BoxContainerTitle>
 
             <BoxContainerContent>
-                {/* Overview - Pass the calculated count */}
+                {/* Overview - Pass the count from fetched data */}
                 <ReceptionistTodaysPastAppointmentOverview pastAppointmentCount={pastAppointmentCount} />
 
-                {/* Pagination - Add rows per page functionality */}
+                {/* Pagination */}
                 <ReceptionistTodaysPastAppointmentPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
-                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS} // Pass options
-                    currentRowsPerPage={rowsPerPage} // Pass current value
-                    onRowsPerPageChange={handleRowsPerPageChange} // Pass handler
+                    rowsPerPageOptions={ROWS_PER_PAGE_OPTIONS}
+                    currentRowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleRowsPerPageChange}
                 />
 
                 {/* Table header */}
                 <ReceptionistTodaysPastAppointmentHeader pastAppointmentTableHeader={pastAppointmentTableHeader} />
 
-                {/* Table content */}
-                <ReceptionistTodaysPastAppointmentContent pastAppointmentTableHeader={pastAppointmentTableHeader} pastAppointmentTableData={displayData} />
+                {/* Table content - Conditional Rendering */}
+                {isLoading ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>Loading past appointments...</div>
+                ) : error ? (
+                    <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>Error: {error}</div>
+                ) : (
+                    <ReceptionistTodaysPastAppointmentContent
+                        pastAppointmentTableHeader={pastAppointmentTableHeader}
+                        pastAppointmentTableData={displayData} // Use paginated data
+                    />
+                )}
             </BoxContainerContent>
         </BoxContainer>
     );

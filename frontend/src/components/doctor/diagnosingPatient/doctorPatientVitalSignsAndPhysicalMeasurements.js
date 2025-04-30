@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Added useCallback
+import { useLocation } from 'react-router-dom'; // For accessing location state
+import Cookies from 'js-cookie'; // Assuming you might need Cookies for API calls
 import './style/doctorPatientVitalSignsAndPhysicalMeasurements.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -6,102 +8,123 @@ import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
 import DropDownBox from '../../common/dropDownBox'; // Import DropDownBox
 
+import Button from '../../common/button'; // Import Button if needed
+import ButtonText from '../../common/buttonText'; // Import ButtonText if needed
+
 import DoctorPatientVitalSignsAndPhysicalMeasurementsCard from './doctorPatientVitalSignsAndPhysicalMeasurements/doctorPatientVitalSignsAndPhysicalMeasurementsCard';
 
-function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
-    // patientVitalsHistory stores an array of past measurements
+// Define the structure of vitals expected (keys for measurements only)
+const vitalSignsKeys = [
+    "Blood Pressure (mmHg)",
+    "Pulse (beats/minute)",
+    "Breathing Rate (breaths/minute)",
+    "Temperature (°C)",
+    "BMI",
+    "Oxygen Saturation (%)"
+];
+
+// Helper to create an empty structure for editable vitals
+const createEmptyVitalsStructure = () => vitalSignsKeys.reduce((acc, key) => {
+    acc[key] = "";
+    return acc;
+}, {});
+
+
+function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) { // Added sessionID prop
+    const location = useLocation(); // Use location to get sessionID
+    // patientVitalsHistory stores an array of past measurements (flat structure)
     const [patientVitalsHistory, setPatientVitalsHistory] = useState([]);
     // selectedVitalsIndex tracks which measurement set is selected (for doctor)
     const [selectedVitalsIndex, setSelectedVitalsIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false); // Controls nurse's edit mode
-    const [editableVitals, setEditableVitals] = useState({}); // Holds values for nurse input
+    const [editableVitals, setEditableVitals] = useState(createEmptyVitalsStructure()); // Holds values for nurse input
     const [isSaving, setIsSaving] = useState(false);
+    const [error, setError] = useState(null); // Added error state
 
-    // Define the structure of vitals expected
-    const vitalSignsStructure = {
-        "Blood Pressure (mmHg/mmHg)": "",
-        "Pulse (beats/minute)": "",
-        "Breathing Rate (breaths/minute)": "",
-        "Temperature (°C)": "",
-        "BMI": "",
-        "Oxygen Saturation (%)": ""
-    };
+    const sessionID = location.state?.sessionID; // Get sessionID from location state
 
-    // Fetch data from API
-    const fetchVitalsData = async () => {
+    // Fetch data from API - Wrapped in useCallback
+    const fetchVitalsData = useCallback(async () => {
+        // Need sessionID or patientID to fetch specific patient data
+        if (!sessionID) {
+            setError("Session ID not provided. Cannot fetch vitals.");
+            setPatientVitalsHistory([]);
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null); // Clear previous errors
+        const token = Cookies.get('token'); // Get token for auth
+        if (!token) {
+            setError("User not authenticated.");
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            setIsLoading(true);
-            // Replace with your actual API endpoint to get *all relevant* vitals history
-            // const response = await fetch('your-api-endpoint/patient/vitals/history');
-            // const data = await response.json(); // Assuming data is an array sorted newest first
-
-            // Mock data for demonstration (array of measurements)
-            const mockHistoryData = [
-                { // Newest
-                    timestamp: "2025-04-18 10:30 AM",
-                    measurements: {
-                        "Blood Pressure (mmHg)": "125/82 mmHg",
-                        "Pulse (beats/minute)": "75 beats/minute",
-                        "Breathing Rate (breaths/minute)": "17 breaths/minute",
-                        "Temperature (°C)": "37.0 °C",
-                        "BMI": "23.1", // Assuming BMI might be recalculated or re-entered
-                        "Oxygen Saturation (%)": "97%"
-                    }
-                },
-                { // Older
-                    timestamp: "2025-04-18 08:15 AM",
-                    measurements: {
-                        "Blood Pressure (mmHg)": "120/80 mmHg",
-                        "Pulse (beats/minute)": "72 beats/minute",
-                        "Breathing Rate (breaths/minute)": "16 breaths/minute",
-                        "Temperature (°C)": "36.8 °C",
-                        "BMI": "22.9",
-                        "Oxygen Saturation (%)": "98%"
-                    }
-                },
-                 { // Even Older
-                    timestamp: "2025-04-17 04:00 PM",
-                    measurements: {
-                        "Blood Pressure (mmHg)": "118/78 mmHg",
-                        "Pulse (beats/minute)": "70 beats/minute",
-                        "Breathing Rate (breaths/minute)": "16 breaths/minute",
-                        "Temperature (°C)": "36.7 °C",
-                        "BMI": "22.9",
-                        "Oxygen Saturation (%)": "99%"
-                    }
+            // --- API Call ---
+            const apiUrl = `http://localhost:5001/doctor/diagnosis/vital_signs/${sessionID}`;
+            // console.log("PATIENT VITAL SIGNS _ Fetching vitals from:", apiUrl);
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
-            ];
+            });
 
-            // Simulate network delay
-            setTimeout(() => {
-                setPatientVitalsHistory(mockHistoryData);
-                // Reset selection to the newest entry (index 0)
-                setSelectedVitalsIndex(0);
+            // console.log("PATIENT VITAL SIGNS _ API response status:", response.status); // Log the response status
 
-                // Initialize editableVitals for the nurse (always starts fresh)
-                if (userRole === 'nurse') {
-                    setEditableVitals({ ...vitalSignsStructure });
-                    // Decide if nurse starts in edit mode or needs to click button
-                    setIsEditing(true); // Option: Start nurse in edit mode
-                }
+            if (!response.ok) {
+                let errorMsg = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.message || errorData.error || errorMsg;
+                } catch (e) { /* Ignore parsing error */ }
+                throw new Error(errorMsg);
+            }
 
-                setIsLoading(false);
-            }, 500);
+            const data = await response.json(); // Assuming data is {"vitalSigns": [...]}
+            const vitalsData = data.vitalSigns || []; // Default to empty array if key is missing
 
-        } catch (error) {
-            console.error('Error fetching vital signs history:', error);
+            // Assuming backend keys match vitalSignsKeys and timestamp is 'timeMeasured'
+             const formattedVitalsData = vitalsData.map(record => ({
+                timestamp: record.timeMeasured, // Use the key from backend response
+                "Blood Pressure (mmHg)": record.bloodPressure,
+                "Pulse (beats/minute)": record.pulse,
+                "Breathing Rate (breaths/minute)": record.breathingRate,
+                "Temperature (°C)": record.temperature,
+                "BMI": record.bmi,
+                "Oxygen Saturation (%)": record.oxygenSaturation
+            }));
+
+
+            setPatientVitalsHistory(formattedVitalsData);
+            // Reset selection to the newest entry (index 0) if data exists
+            setSelectedVitalsIndex(formattedVitalsData.length > 0 ? 0 : -1); // Use -1 if no data
+
+            // Initialize editableVitals for the nurse (always starts fresh)
+            if (userRole === 'nurse') {
+                setEditableVitals(createEmptyVitalsStructure());
+                setIsEditing(false); // Nurse must click button to start
+            }
+
+        } catch (err) {
+            console.error('Error fetching vital signs history:', err);
+            setError(err.message || "Failed to fetch vital signs.");
             setPatientVitalsHistory([]); // Ensure empty array on error
             if (userRole === 'nurse') {
-                setEditableVitals({ ...vitalSignsStructure }); // Reset to empty on error
+                setEditableVitals(createEmptyVitalsStructure()); // Reset to empty on error
             }
+        } finally {
             setIsLoading(false);
         }
-    };
+    }, [sessionID, userRole]); // Add sessionID and userRole as dependencies
 
     useEffect(() => {
         fetchVitalsData();
-    }, []); // Rerun effect if userRole changes
+    }, [fetchVitalsData]); // Depend on the memoized fetch function
 
     const handleInputChange = (key, value) => {
         setEditableVitals(prev => ({
@@ -111,57 +134,86 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
     };
 
     // Handle saving NEW vitals (Nurse)
-    const handleSaveVitals = async () => {
+    const handleSaveVitals = useCallback(async () => {
+        if (!sessionID) {
+             setError("Session ID not provided. Cannot save vitals.");
+             return;
+        }
+        setIsSaving(true);
+        setError(null);
+        const token = Cookies.get('token');
+        if (!token) {
+            setError("User not authenticated.");
+            setIsSaving(false);
+            return;
+        }
+
         try {
-            setIsSaving(true);
-            console.log("Saving new vitals:", editableVitals);
-            // Replace with your actual API endpoint to save NEW vitals
-            // const response = await fetch('your-api-endpoint/patient/vitals', {
+            // console.log("Saving new vitals:", editableVitals);
+            // Replace with your actual API endpoint to save NEW vitals (likely a Nurse endpoint)
+            // Example: const apiUrl = `http://localhost:5001/nurse/input_vital_sign/${sessionID}`;
+            // Need to map frontend keys back to backend expected keys if they differ
+            const payload = {
+                bloodPressure: editableVitals["Blood Pressure (mmHg)"],
+                pulse: editableVitals["Pulse (beats/minute)"],
+                breathingRate: editableVitals["Breathing Rate (breaths/minute)"],
+                temperature: editableVitals["Temperature (°C)"],
+                bmi: editableVitals["BMI"],
+                oxygenSaturation: editableVitals["Oxygen Saturation (%)"]
+            };
+
+            // const response = await fetch(apiUrl, {
             //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(editableVitals) // Send only the new measurements
+            //     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(payload) // Send mapped payload
             // });
-            // if (!response.ok) throw new Error('Failed to save vitals');
-            // const savedData = await response.json(); // API should return the newly saved record with timestamp
+            // if (!response.ok) {
+            //      let errorMsg = `HTTP error! status: ${response.status}`;
+            //      try { const errorData = await response.json(); errorMsg = errorData.message || errorMsg; } catch(e){}
+            //      throw new Error(errorMsg);
+            // }
+            // const savedData = await response.json(); // API might return the saved record or just success
 
             // Mock successful save
             await new Promise(resolve => setTimeout(resolve, 1000));
 
+            // Use a consistent timestamp format (ideally from server response)
             const now = new Date();
-            const formattedDate = now.toLocaleDateString('en-US', {
-                year: 'numeric', month: '2-digit', day: '2-digit',
-                hour: '2-digit', minute: '2-digit', hour12: true
-            }).replace(',', '');
+            const timestamp = now.toISOString(); // Example: "2025-05-01T10:30:00.000Z"
 
             const newlySavedVitals = {
-                timestamp: formattedDate, // Use server timestamp if possible
-                measurements: { ...editableVitals }
+                timestamp: timestamp, // Use server timestamp if possible
+                ...editableVitals // Spread the measurement values
             };
 
             // Add the new record to the history (client-side) and refetch or update state
             setPatientVitalsHistory(prev => [newlySavedVitals, ...prev]);
-            setSelectedVitalsIndex(0); // Select the newly added record for doctor view consistency
+            setSelectedVitalsIndex(0); // Select the newly added record
             setIsEditing(false); // Exit edit mode
-            setEditableVitals({ ...vitalSignsStructure }); // Clear the form
-            setIsSaving(false);
+            setEditableVitals(createEmptyVitalsStructure()); // Clear the form
+
             // Optionally: Trigger a refetch if needed: fetchVitalsData();
 
-        } catch (error) {
-            console.error('Error saving vital signs data:', error);
+        } catch (err) {
+            console.error('Error saving vital signs data:', err);
+            setError(err.message || "Failed to save vital signs.");
+        } finally {
             setIsSaving(false);
         }
-    };
+    }, [editableVitals, sessionID, fetchVitalsData]); // Include dependencies
 
-    // const handleCancelEdit = () => {
-    //     setIsEditing(false);
-    //     // Reset editableVitals to empty structure
-    //     setEditableVitals({ ...vitalSignsStructure });
-    // };
+    const handleCancelEdit = () => {
+        setIsEditing(false);
+        // Reset editableVitals to empty structure
+        setEditableVitals(createEmptyVitalsStructure());
+        setError(null); // Clear any previous save errors
+    };
 
     const handleStartEditing = () => {
         // Start with a blank slate for new measurements
-        setEditableVitals({ ...vitalSignsStructure });
+        setEditableVitals(createEmptyVitalsStructure());
         setIsEditing(true);
+        setError(null); // Clear errors when starting edit
     };
 
     // Handle dropdown change (Doctor)
@@ -171,53 +223,44 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
 
     // Generate options for dropdown (Doctor)
     const vitalsOptions = patientVitalsHistory.map((vitals, index) => ({
-        label: `Measurement at ${vitals.timestamp}`,
+        // Format timestamp for display if needed
+        label: `Measurement at ${new Date(vitals.timestamp).toLocaleString()}`, // Example formatting
         value: index.toString()
     }));
 
     // Get the currently selected vitals data for display (Doctor)
-    const currentSelectedVitals = patientVitalsHistory[selectedVitalsIndex];
+    // Extract only the measurement keys for the card component
+    const currentSelectedVitalsData = patientVitalsHistory[selectedVitalsIndex];
+    const measurementsForCard = currentSelectedVitalsData
+        ? vitalSignsKeys.reduce((acc, key) => {
+              acc[key] = currentSelectedVitalsData[key] ?? ''; // Use nullish coalescing for default
+              return acc;
+          }, {})
+        : null;
+
+    // Get the latest measurements for Nurse view mode
+    const latestVitalsData = patientVitalsHistory.length > 0 ? patientVitalsHistory[0] : null;
+    const latestMeasurementsForCard = latestVitalsData
+        ? vitalSignsKeys.reduce((acc, key) => {
+              acc[key] = latestVitalsData[key] ?? '';
+              return acc;
+          }, {})
+        : null;
+
 
     return (
         <BoxContainer className='doctorPatientVitalSignsAndPhysicalMeasurementsBox'>
             <BoxContainerTitle className='doctorPatientVitalSignsAndPhysicalMeasurements'>
                 Patient's Vital Signs
-                {userRole === 'doctor' && isLoading &&
+                {isLoading &&
                     <span className="loading-indicator"> Loading...</span>
                 }
-                {userRole === 'nurse' && (
-                    <div className="nurse-controls">
-                        {!isEditing ? (
-                            <button
-                                className="edit-button"
-                                onClick={handleStartEditing}
-                                disabled={isLoading || isSaving}
-                            >
-                                Remeasuring Vital Signs
-                            </button>
-                        ) : (
-                            <>
-                                <button
-                                    className="save-button"
-                                    onClick={handleSaveVitals}
-                                    disabled={isSaving || isLoading}
-                                >
-                                    {isSaving ? 'Saving...' : 'Save Measurements'}
-                                </button>
-                                {/* <button
-                                    className="cancel-button"
-                                    onClick={handleCancelEdit}
-                                    disabled={isSaving || isLoading}
-                                >
-                                    Cancel
-                                </button> */}
-                            </>
-                        )}
-                    </div>
-                )}
             </BoxContainerTitle>
 
             <BoxContainerContent className='doctorPatientVitalSignsAndPhysicalMeasurementsContent'>
+                {/* Error Display */}
+                {error && <div className="error-message" style={{ color: 'red', marginBottom: '10px' }}>Error: {error}</div>}
+
                 {/* Loading Indicator */}
                 {isLoading && <div className="loading-indicator">Loading vital signs history...</div>}
 
@@ -235,19 +278,21 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
                                 />
                             )}
                             {/* Display Selected Vitals */}
-                            {currentSelectedVitals && (
+                            {measurementsForCard && (
                                 <>
+                                    {/* Optional: Display timestamp separately if needed */}
                                     {/* <div className="vitalsTimestamp">
-                                        Recorded at: {currentSelectedVitals.timestamp}
+                                        Recorded at: {new Date(currentSelectedVitalsData.timestamp).toLocaleString()}
                                     </div> */}
                                     <DoctorPatientVitalSignsAndPhysicalMeasurementsCard
-                                        patientVitalSignsAndPhysicalMeasurements={currentSelectedVitals.measurements}
+                                        // Pass only the measurement key-value pairs
+                                        patientVitalSignsAndPhysicalMeasurements={measurementsForCard}
                                     />
                                 </>
                             )}
                         </>
                     ) : (
-                        <div className="no-data">No vital signs history available</div>
+                        <div className="no-data">No data</div> // Show only if no error
                     )
                 )}
 
@@ -255,9 +300,10 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
                 {!isLoading && userRole === 'nurse' && (
                     isEditing ? (
                         // Nurse Edit Form for NEW vitals
-                        <div className="editable-vitals-form">
-                            {Object.keys(editableVitals).map(key => (
-                                <div className="vital-input-group" key={key}>
+                        <div className="editableVitalsForm">
+                            {/* Map over the defined keys to ensure order and completeness */}
+                            {vitalSignsKeys.map(key => (
+                                <div className="vitalInputGroup" key={key}>
                                     <label>{key}</label>
                                     <input
                                         type="text"
@@ -271,19 +317,53 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) {
                         </div>
                     ) : (
                         // Nurse View Mode (Show last recorded data if available, or prompt to enter)
-                        patientVitalsHistory.length > 0 ? (
-                             <>
-                                <div className="vitalsTimestamp">
-                                    Last recorded: {patientVitalsHistory[0].timestamp} {/* Show newest */}
+                        latestMeasurementsForCard ? (
+                            <>
+                                <div className="vitalsTimestamp" style={{ marginBottom: '10px', fontSize: '0.9em', color: '#555' }}>
+                                    Last recorded: {new Date(latestVitalsData.timestamp).toLocaleString()} {/* Show newest */}
                                 </div>
                                 <DoctorPatientVitalSignsAndPhysicalMeasurementsCard
-                                    patientVitalSignsAndPhysicalMeasurements={patientVitalsHistory[0].measurements}
+                                    patientVitalSignsAndPhysicalMeasurements={latestMeasurementsForCard}
                                 />
-                             </>
+                            </>
                         ) : (
-                             <div className="no-data">No vital signs recorded yet. Click 'Enter New Vitals'.</div>
+                             !error && <div className="no-data">No vital signs recorded yet. Click 'Enter New Vitals'.</div> // Show only if no error
                         )
                     )
+                )}
+
+
+                {/* Nurse Controls */}
+                {userRole === 'nurse' && !isLoading && ( // Hide controls while loading initial data
+                    <div className="nurseControls" style={{ marginTop: '15px', display: 'flex', gap: '10px' }}>
+                        {!isEditing ? (
+                            <Button
+                                className="editButton" // Consider specific styling
+                                onClick={handleStartEditing}
+                                disabled={isSaving} // Disable if a save is somehow in progress (unlikely here)
+                            >
+                                <ButtonText>Enter New Vitals</ButtonText>
+                            </Button>
+                        ) : (
+                            <>
+                                <Button
+                                    className="saveButton" // Consider specific styling
+                                    onClick={handleSaveVitals}
+                                    disabled={isSaving}
+                                >
+                                    <ButtonText>{isSaving ? 'Saving...' : 'Save Measurements'}</ButtonText>
+                                </Button>
+                                <Button
+                                    className="cancelButton" // Consider specific styling
+                                    onClick={handleCancelEdit}
+                                    disabled={isSaving} // Disable cancel during save
+                                    style={{ backgroundColor: '#6c757d' }} // Example secondary button color
+                                >
+                                    <ButtonText>Cancel</ButtonText>
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 )}
             </BoxContainerContent>
         </BoxContainer>
