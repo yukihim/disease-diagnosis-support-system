@@ -304,7 +304,7 @@ function ReceptionistPatientInformation() {
                  )}
 
                 {/* Personal Information Section */}
-                <BoxContainer className='receptionistPatientInformationBox'>
+                <BoxContainer className='receptionistPatientInformationBox1'>
                     <BoxContainerTitle className='receptionistPatientInformation'>
                         Personal Information
                         <div style={{ display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'right' }}>

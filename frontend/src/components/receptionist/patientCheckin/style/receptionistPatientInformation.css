@@ -1,4 +1,4 @@
-.receptionistPatientInformationBox {
+.receptionistPatientInformationBox1 {
     width: 100%;
     height: 100%;
     max-height: initial;
@@ -10,6 +10,17 @@
 
     position: sticky;
     top: 0;
+}
+
+.receptionistPatientInformationBox {
+    width: 100%;
+    height: 100%;
+    max-height: initial;
+    min-height: initial;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .receptionistPatientInformation {
