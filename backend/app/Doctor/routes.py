@@ -269,7 +269,7 @@ mock_vital_signs = {
         {"timeMeasured": "2024-07-22 10:30:00", "bloodPressure": "130/85", "pulse": 80, "breathingRate": 18, "temperature": 37.0, "bmi": 23.5, "oxygenSaturation": 97},
     ],
     "session_1": [ # Example using doctor's specific session ID
-         {"timeMeasured": "2024-07-23 09:00:00", "bloodPressure": "125/82", "pulse": 70, "breathingRate": 17, "temperature": 37.1, "bmi": 21.0, "oxygenSaturation": 99},
+        {"timeMeasured": "2024-07-23 09:00:00", "bloodPressure": "125/82", "pulse": 70, "breathingRate": 17, "temperature": 37.1, "bmi": 21.0, "oxygenSaturation": 99},
     ]
 }
 
@@ -886,7 +886,7 @@ def get_event_list(inpatientID):
         event_list.sort(key=lambda x: x["time"], reverse=True)
 
         # Doc specifies 'vitalSigns' as the response field name, which is confusing but followed here.
-        return jsonify({"vitalSigns": event_list}), 200
+        return jsonify({"events": event_list}), 200
 
     except Exception as e:
         print(f"Error retrieving event list for inpatient {inpatientID}: {e}")
