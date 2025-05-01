@@ -67,7 +67,7 @@ function DoctorEventsCapturing({ inpatientID }) {
             } else {
                 const data = await response.json();
                 // Sort events by time (descending - newest first) before setting state
-                const sortedEvents = (data.vitalSigns || []).sort((a, b) => new Date(b.time) - new Date(a.time));
+                const sortedEvents = (data.events || []).sort((a, b) => new Date(b.time) - new Date(a.time));
                 const formattedData = sortedEvents.map(event => ({
                     eventID: event.eventID,
                     time: new Date(event.time).toLocaleString(), // Format time nicely
