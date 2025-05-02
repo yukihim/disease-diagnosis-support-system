@@ -79,13 +79,7 @@ function DoctorEventsCapturingTable({ patientEventCapturedTableHeader, patientEv
                             ) : (
                                 // Display existing note or "Add Note" button
                                 row.note ? (
-                                    // Allow editing existing notes
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                                        <span style={{ flexGrow: 1, marginRight: '8px', whiteSpace: 'pre-wrap' }}>{row.note}</span>
-                                        <Button className="buttonText editNote" onClick={() => handleAddNoteClick(index)}>
-                                            <ButtonText>Edit</ButtonText>
-                                        </Button>
-                                    </div>
+                                    <span style={{ whiteSpace: 'pre-wrap' }}>{row.note}</span> // Display the note text
                                 ) : (
                                     <Button className="buttonText addNote" onClick={() => handleAddNoteClick(index)}>
                                         <ButtonText>Add Note</ButtonText>

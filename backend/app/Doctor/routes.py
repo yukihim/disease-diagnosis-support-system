@@ -926,16 +926,6 @@ def add_inpatient_event_note(inpatientID):
 
         # Check if the specific event exists for this inpatient
         if event_id not in mock_inpatient_events[inpatientID]:
-            # If event doesn't exist, should we create it or return error?
-            # Let's assume we update/create the note for the given eventID.
-            # If the event itself needs creating first, that's a different endpoint/logic.
-            # For now, just update/add the note to the specified event ID.
-            # If the event ID doesn't exist, this will effectively create it with just a note.
-            # A better approach might be to have separate 'add event' and 'add/edit note' endpoints.
-            # Let's stick to the current logic: update note if event exists, otherwise error?
-            # Doc implies adding a note to an *existing* event. Let's return 404 if event ID not found.
-            # return jsonify({"message": f"Event ID '{event_id}' not found for patient '{inpatientID}'."}), 404 # Event not found for this patient
-            # --- OR --- Allow creating the note even if eventID is new for this patient
             if 'event' not in mock_inpatient_events[inpatientID].get(event_id, {}):
                 # If the event doesn't exist, create a placeholder
                 mock_inpatient_events[inpatientID][event_id] = {"event": "Note Added", "time": time.time()}
@@ -954,3 +944,55 @@ def add_inpatient_event_note(inpatientID):
         event_id_for_error = data.get('eventID', 'unknown') if 'data' in locals() else 'unknown'
         print(f"Error adding inpatient event note for inpatient {inpatientID}, event {event_id_for_error}: {e}")
         return jsonify({"message": "An error occurred while adding the event note."}), 500
+
+
+
+# NEW API: Inpatient Monitoring: Add Event
+@app.route('/inpatient_monitoring/add_event/<string:inpatientID>', methods=['POST'])
+@jwt_required()
+@check_role(['doctor', 'nurse'])
+def add_inpatient_event(inpatientID):
+    """Adds a new clinical event for a specific inpatient."""
+    try:
+        # Check if the inpatientID is known
+        if inpatientID not in mock_inpatient_events:
+            return jsonify({"message": f"Patient with ID '{inpatientID}' not found."}), 404
+
+        data = request.get_json()
+        if not data:
+            return jsonify({"message": "Missing JSON payload."}), 400
+
+        event_description = data.get('event')
+        initial_note = data.get('note', '') # Optional initial note, defaults to empty
+
+        if not event_description or not isinstance(event_description, str):
+            return jsonify({"message": "Invalid or missing 'event' description field in request body."}), 400
+        if not isinstance(initial_note, str):
+             return jsonify({"message": "Optional 'note' field must be a string if provided."}), 400
+
+        # Generate a unique event ID
+        new_event_id = f"event_{uuid.uuid4().hex[:8]}"
+        current_time = time.time()
+
+        # Create the new event structure
+        new_event = {
+            "event": event_description,
+            "note": initial_note,
+            "time": current_time
+        }
+
+        # Add the event to the mock data
+        if inpatientID not in mock_inpatient_events:
+            mock_inpatient_events[inpatientID] = {} # Create entry if first event for this patient
+        mock_inpatient_events[inpatientID][new_event_id] = new_event
+
+        print(f"Doctor added new event '{new_event_id}' for inpatient {inpatientID}: {event_description}")
+
+        # Return success response with the new event ID
+        return jsonify({
+            "message": "Event added successfully",
+        }), 200 # 200 Created status code
+
+    except Exception as e:
+        print(f"Error adding inpatient event for inpatient {inpatientID}: {e}")
+        return jsonify({"message": "An error occurred while adding the event."}), 500

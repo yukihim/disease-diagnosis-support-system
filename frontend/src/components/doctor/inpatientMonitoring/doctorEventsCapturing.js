@@ -5,6 +5,8 @@ import './style/doctorEventsCapturing.css';
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
+import Button from '../../common/button'; // Import Button
+import ButtonText from '../../common/buttonText'; // Import ButtonText
 
 import DoctorEventsCapturingPagination from './doctorEventsCapturing/doctorEventsCapturingPagination';
 import DoctorEventsCapturingHeader from './doctorEventsCapturing/doctorEventsCapturingHeader';
@@ -25,13 +27,15 @@ function DoctorEventsCapturing({ inpatientID }) {
     const [error, setError] = useState(null);
     const [isSavingNote, setIsSavingNote] = useState(false);
     const [saveNoteError, setSaveNoteError] = useState(null);
+    const [isAddingEvent, setIsAddingEvent] = useState(false); // State for adding event loading
+    const [addEventError, setAddEventError] = useState(null); // State for adding event error
 
     // --- Pagination State ---
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_OPTIONS[0]); // Default to first option
 
     const fetchEvents = useCallback(async () => {
-        // ... (fetchEvents implementation remains the same) ...
+        // ...existing code...
         if (!inpatientID) {
             setError("Inpatient ID not provided.");
             return;
@@ -75,7 +79,7 @@ function DoctorEventsCapturing({ inpatientID }) {
                     note: event.note
                 }));
                 setEventData(formattedData);
-                setError(null);
+                setError(null); // Clear fetch error on success
             }
         } catch (err) {
             console.error("Error fetching inpatient events:", err);
@@ -132,6 +136,7 @@ function DoctorEventsCapturing({ inpatientID }) {
         // ... (rest of the API call logic remains the same) ...
         setIsSavingNote(true);
         setSaveNoteError(null);
+        setAddEventError(null); // Clear add event error when saving note
 
         const token = Cookies.get('token');
         if (!token) {
@@ -177,11 +182,82 @@ function DoctorEventsCapturing({ inpatientID }) {
         }
     };
 
+    // --- handleAddEvent (API call) ---
+    const handleAddEvent = async () => {
+        if (!inpatientID) {
+            setAddEventError("Cannot add event: Inpatient ID is missing.");
+            return;
+        }
+
+        const eventName = window.prompt("Enter the name of the event:");
+        if (!eventName) {
+            // User cancelled or entered empty event name
+            return;
+        }
+
+        const eventNote = window.prompt("Enter an optional note for the event (leave blank if none):");
+        // Note can be null (if cancelled) or empty string, both are acceptable for the backend
+
+        setIsAddingEvent(true);
+        setAddEventError(null);
+        setSaveNoteError(null); // Clear save note error when adding event
+
+        const token = Cookies.get('token');
+        if (!token) {
+            setAddEventError("Authentication token not found.");
+            setIsAddingEvent(false);
+            return;
+        }
+
+        console.log(`Attempting to add event for inpatient ${inpatientID}: "${eventName}", Note: "${eventNote || ''}"`);
+
+        try {
+            const response = await fetch(`http://localhost:5001/doctor/inpatient_monitoring/add_event/${inpatientID}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    event: eventName,
+                    note: eventNote || '' // Send empty string if note is null or empty
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+                throw new Error(errorData.message || `Failed to add event: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            console.log("Event added successfully via API:", result);
+
+            // Refresh the event list to show the new event
+            await fetchEvents(); // Re-fetch data
+
+        } catch (err) {
+            console.error("Error adding event:", err);
+            setAddEventError(err.message || "An unexpected error occurred adding the event.");
+        } finally {
+            setIsAddingEvent(false);
+        }
+    };
+
 
     return (
         <BoxContainer className='doctorEventsCapturingBox'>
+            {/* Modified Title Section */}
             <BoxContainerTitle className='doctorEventsCapturing'>
-                Events Captured
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <span>Events Captured</span>
+                    <Button
+                        className="buttonText addEvent"
+                        onClick={handleAddEvent}
+                        disabled={isAddingEvent || isLoading} // Disable if adding or fetching
+                    >
+                        <ButtonText>{isAddingEvent ? 'Adding...' : 'Add Event'}</ButtonText>
+                    </Button>
+                </div>
             </BoxContainerTitle>
 
             <BoxContainerContent className='doctorEventsCapturingContent'>
@@ -195,8 +271,10 @@ function DoctorEventsCapturing({ inpatientID }) {
                     onRowsPerPageChange={handleRowsPerPageChange}
                 />
 
-                {/* Display Save Note Error */}
-                {saveNoteError && <div style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>Save Error: {saveNoteError}</div>}
+                {/* Display Status/Error Messages */}
+                {addEventError && <div style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>Add Event Error: {addEventError}</div>}
+                {isAddingEvent && <div style={{ color: 'blue', marginBottom: '10px', textAlign: 'center' }}>Adding event...</div>}
+                {saveNoteError && <div style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>Save Note Error: {saveNoteError}</div>}
                 {isSavingNote && <div style={{ color: 'blue', marginBottom: '10px', textAlign: 'center' }}>Saving note...</div>}
 
                 {/* Table Header */}
