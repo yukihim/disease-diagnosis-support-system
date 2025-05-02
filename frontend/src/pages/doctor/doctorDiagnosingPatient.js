@@ -1,9 +1,13 @@
 // File: src/components/doctorDiagnosingPatient.js
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Import Cookies
 import "./style/doctorDiagnosingPatient.css";
 
 import PageLayout from '../../components/common/pageLayout';
+
+import Button from '../../components/common/button';
+import ButtonText from '../../components/common/buttonText';
 
 import PatientInformationCard from '../../components/common/patientInformationCard';
 import PatientPassSessions from '../../components/common/patientPassSessions/patientPassSessions';
@@ -14,6 +18,37 @@ import DoctorPatientDiagnosing from '../../components/doctor/diagnosingPatient/d
 function DoctorDiagnosingPatient() {
     const history = useHistory();
     const location = useLocation();
+    const sessionID = location.state?.sessionID; // Get sessionID from location state
+
+    const [startDiagnosing, setStartDiagnosing] = useState(false);
+
+    const onClickStartDiagnosing = (async () => {
+        setStartDiagnosing(true);
+
+        const token = Cookies.get('token');
+        if (!token) {
+            return;
+        }
+
+        try {
+            // Call api to set state to 3 which is Diagnosis On Going
+            const response = await fetch(`http://localhost:5001/doctor/diagnosis/start_diagnosing/${sessionID}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            if (response.ok) {
+                console.log("Set Patient state to 'Diagnosis On Going' successfully.");
+            } else {
+                console.error("Error setting Patient state to 'Diagnosis On Going':", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }, []);
 
     function onClickSession(session) {
         history.push({
@@ -34,15 +69,16 @@ function DoctorDiagnosingPatient() {
 
             {/* Patient's Vital Signs and Physical Measurements Card */}
             {/* Patient's Paraclinical Test Result Card */}
-            {/* <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", gap: "20px" }}>
-                <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
-                <DoctorPatientParaclinicalTestResult />
-            </div> */}
             <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
             <DoctorPatientParaclinicalTestResult />
 
-            {/* Diagnosing Card */}
-            <DoctorPatientDiagnosing />
+            { startDiagnosing ? (
+                <Button className="startDiagnosing" onClick={onClickStartDiagnosing}>
+                    <ButtonText>Start Diagnosing</ButtonText>
+                </Button>
+            ) : (
+                <DoctorPatientDiagnosing />
+            )}
         </PageLayout>
     );
 }

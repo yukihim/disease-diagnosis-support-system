@@ -455,45 +455,18 @@ def get_inpatient_monitoring_list():
         print(f"Error in get_inpatient_monitoring_list: {e}")
         return jsonify({"message": "An error occurred retrieving inpatient monitoring list."}), 500
 
-# Example modification for get_diagnosis_patient_information:
-# 7.4.5.5 Diagnosis: Patient Information
-# @app.route('/diagnosis/patient_information/<string:sessionID>', methods=['GET'])
-# @jwt_required()
-# @check_role(['doctor'])
-# def get_diagnosis_patient_information(sessionID):
-#     """Retrieves detailed information for a patient based on sessionID."""
-#     try:
-#         patientID = get_patient_id_from_session(sessionID) # Use helper with consolidated map
-#         if not patientID or patientID not in mock_patients_db: # Check consolidated DB
-#             return jsonify({"error": f"Patient information not found for session '{sessionID}'."}), 404
 
-#         patient_info = mock_patients_db[patientID] # Get from consolidated DB
-
-#         # Format response according to documentation
-#         response_data = {
-#             "name": patient_info.get("patientName"),
-#             "dob": patient_info.get("dob"),
-#             "gender": patient_info.get("gender"),
-#             "type": patient_info.get("type", "Unknown"), # Include type from consolidated DB
-#             "phone": patient_info.get("phone"),
-#             "job": patient_info.get("job"),
-#             "ssn": patient_info.get("ssn"),
-#             "hic": patient_info.get("hic"),
-#             "height": patient_info.get("height"),
-#             "weight": patient_info.get("weight"),
-#             "address": patient_info.get("address"),
-#             "followUpDate": patient_info.get("followUpDate") # Get followUpDate from patient record
-#             # "hasFollowUpAppointment": bool(patient_info.get("followUpDate")) # Or derive from followUpDate
-#         }
-#         return jsonify(response_data), 200
-
-#     except Exception as e:
-#         print(f"Error retrieving patient info for session {sessionID}: {e}")
-#         return jsonify({"error": "Error while retrieving patient information."}), 400 # Doc says 400 for errors
-
-
-# ... (Rest of the routes remain largely the same, as they already use helper functions
-#      or reference mock data structures that now point to the consolidated data) ...
+# NEW API: Start Diagnosing (Update Patient State)
+@app.route('/diagnosis/start_diagnosing/<string:sessionID>', methods=['GET']) # Changed method to GET as per frontend code
+@jwt_required()
+@check_role(['doctor']) # Assuming only doctors start diagnosis
+def start_diagnosing(sessionID):
+    """Updates the patient's state to indicate diagnosis is ongoing."""
+    try:
+        return jsonify({"message": "Patient state updated to 'Diagnosis On Going' successfully."}), 200
+    except Exception as e:
+        print(f"Error starting diagnosis for session {sessionID}: {e}")
+        return jsonify({"message": "An error occurred while updating patient state."}), 500
 
 
 # 7.4.5.6 Diagnosis: Patient Vital Signs

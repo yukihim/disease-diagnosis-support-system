@@ -1,0 +1,13 @@
+{
+  "patientStates": {
+    "1": "Waiting Nurse Measure",
+    "2": "Waiting For Diagnosis",
+    "3": "Diagnosis On Going",
+    "4": "Waiting For Test",
+    "5": "Test On Going",
+    "6": "Waiting For Result",
+    "7": "Result Ready",
+    "8": "Back From Test",
+    "9": "End Session"
+  }
+}

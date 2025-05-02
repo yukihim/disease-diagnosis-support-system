@@ -151,7 +151,7 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) { // Added
         try {
             // console.log("Saving new vitals:", editableVitals);
             // Replace with your actual API endpoint to save NEW vitals (likely a Nurse endpoint)
-            // Example: const apiUrl = `http://localhost:5001/nurse/input_vital_sign/${sessionID}`;
+            const apiUrl = `http://localhost:5001/nurse/input_vital_sign/${sessionID}`;
             // Need to map frontend keys back to backend expected keys if they differ
             const payload = {
                 bloodPressure: editableVitals["Blood Pressure (mmHg)"],
@@ -162,16 +162,16 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) { // Added
                 oxygenSaturation: editableVitals["Oxygen Saturation (%)"]
             };
 
-            // const response = await fetch(apiUrl, {
-            //     method: 'POST',
-            //     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(payload) // Send mapped payload
-            // });
-            // if (!response.ok) {
-            //      let errorMsg = `HTTP error! status: ${response.status}`;
-            //      try { const errorData = await response.json(); errorMsg = errorData.message || errorMsg; } catch(e){}
-            //      throw new Error(errorMsg);
-            // }
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload) // Send mapped payload
+            });
+            if (!response.ok) {
+                 let errorMsg = `HTTP error! status: ${response.status}`;
+                 try { const errorData = await response.json(); errorMsg = errorData.message || errorMsg; } catch(e){}
+                 throw new Error(errorMsg);
+            }
             // const savedData = await response.json(); // API might return the saved record or just success
 
             // Mock successful save
@@ -192,7 +192,8 @@ function DoctorPatientVitalSignsAndPhysicalMeasurements({ userRole }) { // Added
             setIsEditing(false); // Exit edit mode
             setEditableVitals(createEmptyVitalsStructure()); // Clear the form
 
-            // Optionally: Trigger a refetch if needed: fetchVitalsData();
+            // Optionally: Trigger a refetch if needed:
+            fetchVitalsData();
 
         } catch (err) {
             console.error('Error saving vital signs data:', err);

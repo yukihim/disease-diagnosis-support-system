@@ -136,22 +136,23 @@ function ParaclinicalIncomingPatient() {
 
     function handleRowsPerPageChange(newRowsPerPage) {
         setRowsPerPage(newRowsPerPage);
-        // setCurrentPage(1) is handled by the useEffect hook above
     }
 
     function onClickIncomingPatient(patient) {
+        console.log("ParaclinicalIncomingPatient _ Clicked patient:", patient);
+
         // Navigate to the patient test page, passing sessionID
         history.push({
             pathname: '/paraclinical/paraclinical_patient_test',
             state: {
-                sessionID: patient.sessionID, // Pass sessionID
+                sessionID: patient.sessionID,
+                patientState: patient.state
             }
         });
     }
 
     const handleFilterChange = (filterType) => {
         setCurrentFilter(filterType);
-        // setCurrentPage(1) is handled by the useEffect hook above
     };
 
     return (

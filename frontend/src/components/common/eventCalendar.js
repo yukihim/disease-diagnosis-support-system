@@ -96,10 +96,7 @@ function EventCalendar({ selectedDate }) {
     return (
         <BoxContainer className='eventCalendarBox'>
             <BoxContainerTitle className='eventCalendar'>
-                {/* Keep showing the selected date */}
                 Event Calendar for Date: {formattedDate}
-                {/* Optionally show the 'as of' time if available */}
-                {eventsData.time && <span style={{ fontSize: '0.8em', marginLeft: '10px' }}>(Data as of: {eventsData.time})</span>}
             </BoxContainerTitle>
 
             <BoxContainerContent className='eventCalendarContent'>

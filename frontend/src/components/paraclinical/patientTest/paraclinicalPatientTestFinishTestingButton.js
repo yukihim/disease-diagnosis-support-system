@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import Button from '../../common/button';
 import ButtonText from '../../common/buttonText';
 
-function ParaclinicalPatientTestFinishTestingButton() {
+function ParaclinicalPatientTestFinishTestingButton({ patientState }) {
     const history = useHistory();
 
     const onClickGoBack = () => {
@@ -14,11 +14,15 @@ function ParaclinicalPatientTestFinishTestingButton() {
     };
 
     return (
-        <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickGoBack}>
-            <ButtonText>
-                Finish Testing
-            </ButtonText>
-        </Button>
+        <>
+            {patientState === 7 && (
+                <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickGoBack}>
+                    <ButtonText>
+                        Finish Testing
+                    </ButtonText>
+                </Button>
+            )}
+        </>
     );
 }
 

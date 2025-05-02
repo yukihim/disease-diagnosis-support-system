@@ -541,49 +541,9 @@ def get_incoming_patient_list():
     Supports filtering by state and pagination.
     """
     try:
-        state_filter = request.args.get('state')
-        page = request.args.get('page', type=int)
-        per_page = request.args.get('per_page', type=int)
-
-        # Start with the full list containing detailed info
-        filtered_patients = mock_incoming_patients
-
-        # Apply state filtering if provided and valid
-        if state_filter and state_filter != 'all':
-            valid_states = PATIENT_STATES.values()
-            if state_filter in valid_states:
-                filtered_patients = [p for p in filtered_patients if p.get('state') == state_filter]
-            # else: # If state filter is invalid, return all (or handle as error)
-                # pass
-
-        total_items = len(filtered_patients)
-
-        # Apply pagination if page and per_page are provided and valid
-        if page is not None and per_page is not None and page > 0 and per_page > 0:
-            start_index = (page - 1) * per_page
-            end_index = start_index + per_page
-            paginated_patients = filtered_patients[start_index:end_index]
-            total_pages = (total_items + per_page - 1) // per_page
-            response_data = {
-                "incomingPatient": paginated_patients,
-                "pagination": {
-                    "page": page,
-                    "per_page": per_page,
-                    "total_items": total_items,
-                    "total_pages": total_pages
-                }
-            }
-        else:
-            # Return all filtered patients if pagination params are missing/invalid
-            response_data = {
-                "incomingPatient": filtered_patients,
-                "pagination": {
-                    "page": 1,
-                    "per_page": total_items if total_items > 0 else 1, # Avoid division by zero
-                    "total_items": total_items,
-                    "total_pages": 1 if total_items > 0 else 0
-                }
-            }
+        response_data = {
+            "incomingPatient": mock_incoming_patients,
+        }
 
         return jsonify(response_data), 200
     except Exception as e:

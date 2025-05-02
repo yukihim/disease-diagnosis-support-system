@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import PageLayout from '../../components/common/pageLayout';
 
 // Import paraclinical patient test components
@@ -8,6 +9,10 @@ import ParaclinicalPatientTestTestingCard from '../../components/paraclinical/pa
 import ParaclinicalPatientTestFinishTestingButton from '../../components/paraclinical/patientTest/paraclinicalPatientTestFinishTestingButton';
 
 function ParaclinicalPatientTest() {
+    const location = useLocation();
+    const [patientState, setPatientState] = useState(location.state?.patientState); // Default state
+    console.log("ParaclinicalPatientTest _ Patient State:", patientState);
+
     return (
         <PageLayout requiredRole="paraclinical" useGrid={false}>
             {/* Patient Information Card */}
@@ -20,7 +25,7 @@ function ParaclinicalPatientTest() {
             <ParaclinicalPatientTestTestingCard />
 
             {/* Finish Testing Button */}
-            <ParaclinicalPatientTestFinishTestingButton />
+            <ParaclinicalPatientTestFinishTestingButton patientState={patientState} />
         </PageLayout>
     );
 }

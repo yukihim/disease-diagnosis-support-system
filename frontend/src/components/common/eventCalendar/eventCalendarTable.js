@@ -4,7 +4,7 @@ import './style/eventCalendarTable.css';
 import TableContent from '../tableContent';
 
 function EventCalendarTable({ eventCalendarTableHeader, eventCalendarTableData, onClickSession }) {
-    console.log("eventCalendarTableData", eventCalendarTableData);
+    // console.log("eventCalendarTableData", eventCalendarTableData);
     const headers = eventCalendarTableHeader;
     const data = eventCalendarTableData;
 

@@ -47,7 +47,6 @@ def get_pass_session_details(sessionID): # Keep function name for consistency
                 {"procedureName": "Blood Draw for CBC", "dateTime": "2024-01-10 10:30 AM", "note": "Standard venipuncture."},
                 {"procedureName": "Nutritional Counseling", "dateTime": "2024-01-10 11:00 AM", "note": "Discussed iron-rich foods."},
             ]
-            # Removed patientInformation, vitalSigns, testResults, finalDiagnosis
         }
         # --- End Fixed Hardcoded Response ---
 

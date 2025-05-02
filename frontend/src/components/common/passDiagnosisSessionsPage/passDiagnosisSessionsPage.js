@@ -126,7 +126,7 @@ function PassDiagnosisSessionsPage() {
                 vitalSignsData={vitalSigns} // Pass fetched vital signs
             />
             <DoctorPatientParaclinicalTestResult
-                 testResultsData={testResults} // Pass fetched test results
+                testResultsData={testResults} // Pass fetched test results
             />
             <DoctorPrescriptionAndProcedureDiagnosisResult
                 patientSymptoms={finalDiagnosis.symptoms} // Pass symptom from finalDiagnosis

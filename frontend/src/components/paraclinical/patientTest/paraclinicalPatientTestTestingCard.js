@@ -11,12 +11,11 @@ import DropDownBox from '../../common/dropDownBox';
 // Define API base URL (replace with environment variable in real app)
 const API_BASE_URL = 'http://localhost:5001';
 
-function ParaclinicalPatientTestTestingCard() {
+function ParaclinicalPatientTestTestingCard({ patientState }) {
     const location = useLocation();
     // Assume sessionID and patientState are passed via location state
     const sessionID = location.state?.sessionID;
-    const patientState = location.state?.patientState;
-    const isResultReady = patientState === 'Test Result Ready';
+    const isResultReady = patientState === 7;
 
     const [patientTestStructures, setPatientTestStructures] = useState([]); // Renamed from patientTestResults
     const [selectedTestIndex, setSelectedTestIndex] = useState(0);
@@ -96,7 +95,7 @@ function ParaclinicalPatientTestTestingCard() {
         setLocalTestResults(initialLocalResults);
         // Reset index only if necessary, e.g., if structures changed significantly
         if (selectedTestIndex >= initialLocalResults.length) {
-             setSelectedTestIndex(0);
+            setSelectedTestIndex(0);
         }
 
     }, [patientTestStructures]); // Rerun only when structure is fetched/processed
@@ -123,33 +122,6 @@ function ParaclinicalPatientTestTestingCard() {
             updatedResults[selectedTestIndex].testFields[fieldIndex].value = value;
             setLocalTestResults(updatedResults);
         }
-    };
-
-    // Generate random value (Backend now handles this, keep for reference or potential fallback)
-    const generateRandomValue = (range) => {
-        // This function is likely obsolete now as backend handles generation.
-        // Kept for reference or potential future client-side fallback.
-        if (range && typeof range.low === 'number' && typeof range.high === 'number') {
-            const lowerBound = range.low;
-            const upperBound = range.high;
-            const value = lowerBound + Math.random() * (upperBound - lowerBound);
-            const abnormalChance = Math.random();
-            if (abnormalChance > 0.9) {
-                return (upperBound + (Math.random() * upperBound * 0.2)).toFixed(1);
-            } else if (abnormalChance > 0.8) {
-                const deviation = Math.abs(lowerBound * 0.2) + 0.1;
-                return (lowerBound - (Math.random() * deviation)).toFixed(1);
-            }
-            const precision = (upperBound - lowerBound) < 10 ? 1 : ((upperBound - lowerBound) < 100 ? 0 : 0); // Adjust precision
-            return value.toFixed(precision);
-        }
-        if (range && range.low === 'negative' && range.high === 'negative') {
-            return Math.random() > 0.1 ? 'negative' : 'positive'; // 10% chance positive
-        }
-        if (range && !range.low && !range.high) { // Likely a string field
-             return "Normal"; // Or some other default string
-        }
-        return "N/A";
     };
 
 
@@ -193,6 +165,8 @@ function ParaclinicalPatientTestTestingCard() {
 
             const data = await response.json();
             const measurements = data.measurements; // Array of { key, label, value }
+
+            console.log('Fetched measurements:', measurements);
 
             // Update localTestResults with fetched values
             const updatedResults = [...localTestResults];
