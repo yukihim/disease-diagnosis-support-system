@@ -11,8 +11,7 @@ import PatientPassSessions from '../../components/common/patientPassSessions/pat
 import DoctorEventsCapturing from '../../components/doctor/inpatientMonitoring/doctorEventsCapturing';
 import DoctorGoBackAndBeginDiagnosisSession from '../../components/doctor/inpatientMonitoring/doctorGoBackAndBeginDiagnosisSession';
 
-// Define API_BASE_URL directly
-const API_BASE_URL = "http://localhost:5001/doctor";
+
 const POLLING_INTERVAL = 5000; // Fetch data every 5000ms (5 seconds)
 
 function DoctorInpatientMonitoring() {

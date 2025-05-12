@@ -10,7 +10,7 @@ import ButtonText from '../../common/buttonText';
 import DoctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination from './doctorPrescriptionAndProcedureEndDiagnosisSessionButton/doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination';
 
 // Accept onClick and the new callback prop
-function DoctorPrescriptionAndProcedureEndDiagnosisSessionButton({ onClickEndDiagnosisSession, onFollowUpDateUpdate }) { // Added onFollowUpDateUpdate prop
+function DoctorPrescriptionAndProcedureEndDiagnosisSessionButton({ onClickAdmitToHospital, onClickEndDiagnosisSession, onFollowUpDateUpdate }) { // Added onFollowUpDateUpdate prop
     return (
         <BoxContainer className='doctorPrescriptionAndProcedurePrescriptionsCardBox'>
             <BoxContainerTitle className='doctorPrescriptionAndProcedurePrescriptionsCard'>
@@ -24,11 +24,17 @@ function DoctorPrescriptionAndProcedureEndDiagnosisSessionButton({ onClickEndDia
                 />
 
                 {/* End Diagnosis Session Button */}
-                <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickEndDiagnosisSession}>
-                    <ButtonText>
-                        End Diagnosis Session
-                    </ButtonText>
-                </Button>
+                <div style={{ display: "flex", justifyContent: "center", gap: "20px" }}>
+                    <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickAdmitToHospital}>
+                        <ButtonText>Admit to Hospital</ButtonText>
+                    </Button>
+
+                    <Button className="sendForTestAndFinalizingDiagnosis" onClick={onClickEndDiagnosisSession}>
+                        <ButtonText>
+                            End Diagnosis Session
+                        </ButtonText>
+                    </Button>
+                </div>
             </BoxContainerContent>
         </BoxContainer>
     );

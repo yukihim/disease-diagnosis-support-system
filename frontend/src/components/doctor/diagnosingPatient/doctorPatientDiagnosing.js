@@ -51,14 +51,16 @@ function DoctorPatientDiagnosing() {
         }
 
         // Timer
-        const handler = setTimeout(() => {
-            fetchPredictions(patientSymptoms);
-        }, 10000);
+        // const handler = setTimeout(() => {
+        //     fetchPredictions(patientSymptoms);
+        // }, 10000);
+
+        fetchPredictions(patientSymptoms);
 
         // Cleanup function: Clear the timer if the effect runs again before the timer finishes
-        return () => {
-            clearTimeout(handler);
-        };
+        // return () => {
+        //     clearTimeout(handler);
+        // };
         // Dependency array: Re-run the effect only when patientSymptoms changes
     }, [patientSymptoms]); // Removed fetchPredictions from dependencies as it's wrapped in useCallback now
     // --- End Debounce Logic ---
@@ -78,9 +80,9 @@ function DoctorPatientDiagnosing() {
         const symptomsList = symptoms.split(',').map(s => s.trim()).filter(s => s !== '');
 
         // Ensure age and sex are available, provide defaults if necessary
-        const age = patientData.age ? parseInt(patientData.age, 10) : 30; // Default age if not provided
+        const age = patientData.age ? parseInt(patientData.age, 10) : null;
         // Corrected logic for sex: If not Male, assume Female. Provide default 'M' if patientData.sex is missing.
-        const sex = patientData.sex ? (patientData.sex === "Male" ? "M" : "F") : 'M';
+        const sex = patientData.sex ? (patientData.sex === "Male" ? "M" : "F") : null;
 
         try {
             const response = await fetch('http://localhost:5002/predict', {
@@ -115,7 +117,7 @@ function DoctorPatientDiagnosing() {
             const formattedRecommendations = top3Probabilities.map(item => ({
                 disease: item[0], // disease name is the first element
                 // Format probability to percentage string
-                probabilities: `${(item[1] * 100).toFixed(1)}%` // probability is the second element
+                probabilities: `${(item[1] * 100).toFixed(1)}%`
             }));
 
             setSystemRecommendations(formattedRecommendations);
