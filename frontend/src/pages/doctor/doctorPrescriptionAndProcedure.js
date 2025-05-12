@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
@@ -13,7 +13,7 @@ import DoctorPrescriptionAndProcedurePrescriptionsCard from '../../components/do
 import DoctorPrescriptionAndProcedureProceduresCard from '../../components/doctor/prescriptionAndProcedure/doctorPrescriptionAndProcedureProceduresCard';
 import DoctorPrescriptionAndProcedureEndDiagnosisSessionButton from '../../components/doctor/prescriptionAndProcedure/doctorPrescriptionAndProcedureEndDiagnosisSessionButton';
 
-const API_BASE_URL = "http://localhost:5001/doctor";
+const API_BASE_URL = "http://localhost:5001/doctor/prescription_and_procedure";
 
 function DoctorPrescriptionAndProcedure() {
     const history = useHistory();
@@ -51,7 +51,6 @@ function DoctorPrescriptionAndProcedure() {
 
 
     function onClickSession(session) {
-        // ... existing code ...
         history.push({
             pathname: '/view_pass_session',
             state: {
@@ -59,6 +58,27 @@ function DoctorPrescriptionAndProcedure() {
                 patientSessionDate: session.sessionDate,
                 sessionID: session.sessionID
             }
+        });
+    }
+
+    const onClickAdmitToHospital = async () => {
+        setError(null);
+        const token = Cookies.get('token');
+
+        if (!sessionID) {
+            setError("Session ID is missing. Cannot submit to hospital.");
+            console.error("Session ID is missing from location state.");
+            return;
+        }
+        if (!token) {
+            setError("Authentication token not found. Please log in again.");
+            return;
+        }
+
+        console.log("Fake onClickAdmitToHospital not done");
+
+        history.push({
+            pathname: '/doctor/homepage',
         });
     }
 
@@ -117,7 +137,7 @@ function DoctorPrescriptionAndProcedure() {
             // Call Set Prescription API
             if (nonEmptyPrescriptions.length > 0) {
                 console.log("Sending prescriptions:", JSON.stringify({ prescription: nonEmptyPrescriptions }));
-                const presResponse = await fetch(`${API_BASE_URL}/prescription_and_procedure/set_prescription/${sessionID}`, {
+                const presResponse = await fetch(`${API_BASE_URL}/set_prescription/${sessionID}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -139,7 +159,7 @@ function DoctorPrescriptionAndProcedure() {
             // Call Set Procedure API
             if (nonEmptyProcedures.length > 0) {
                 console.log("Sending procedures:", JSON.stringify({ procedure: nonEmptyProcedures }));
-                const procResponse = await fetch(`${API_BASE_URL}/prescription_and_procedure/set_procedure/${sessionID}`, {
+                const procResponse = await fetch(`${API_BASE_URL}/set_procedure/${sessionID}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -205,26 +225,27 @@ function DoctorPrescriptionAndProcedure() {
     return (
         <PageLayout requiredRole="doctor" useGrid={false}>
             {/* ... existing cards ... */}
-             <PatientInformationCard patientName={patientName} />
-             <PatientPassSessions role="doctor" onClickSession={onClickSession} />
-             <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
-             <DoctorPatientParaclinicalTestResult />
-             <DoctorPrescriptionAndProcedureDiagnosisResult
-                 patientSymptoms={patientSymptoms}
-                 finalDiagnosis={finalDiagnosis}
-             />
-             <DoctorPrescriptionAndProcedurePrescriptionsCard
-                onPrescriptionDataUpdate={handlePrescriptionDataUpdate}
-             />
-             <DoctorPrescriptionAndProcedureProceduresCard
-                onProcedureDataUpdate={handleProcedureDataUpdate}
-             />
+            <PatientInformationCard patientName={patientName} />
+            <PatientPassSessions role="doctor" onClickSession={onClickSession} />
+            <DoctorPatientVitalSignsAndPhysicalMeasurements userRole="doctor" />
+            <DoctorPatientParaclinicalTestResult />
+            <DoctorPrescriptionAndProcedureDiagnosisResult
+                patientSymptoms={patientSymptoms}
+                finalDiagnosis={finalDiagnosis}
+            />
+            <DoctorPrescriptionAndProcedurePrescriptionsCard
+            onPrescriptionDataUpdate={handlePrescriptionDataUpdate}
+            />
+            <DoctorPrescriptionAndProcedureProceduresCard
+            onProcedureDataUpdate={handleProcedureDataUpdate}
+            />
 
             {/* Display error message if any */}
             {error && <div style={{ color: 'red', marginTop: '10px', textAlign: 'center' }}>{error}</div>}
 
             {/* End Diagnosis Session Button - Pass the update callback */}
             <DoctorPrescriptionAndProcedureEndDiagnosisSessionButton
+                onClickAdmitToHospital={onClickAdmitToHospital}
                 onClickEndDiagnosisSession={onClickEndDiagnosisSession}
                 onFollowUpDateUpdate={handleFollowUpDateUpdate} // Pass callback
             />

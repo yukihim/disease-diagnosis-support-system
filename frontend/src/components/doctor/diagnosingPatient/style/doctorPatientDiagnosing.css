@@ -21,7 +21,7 @@
     width: 100%;
     height: auto;
 
-    max-height: 441px;
+    /* max-height: 441px; */
     min-height: initial;
 
     gap: 30px;
