@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import { useState, useEffect } from 'react';
 import './style/doctorPrescriptionAndProcedureProceduresCard.css';
 
 import BoxContainer from '../../common/boxContainer';

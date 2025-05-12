@@ -1,4 +1,3 @@
-import React from 'react';
 import './style/doctorTodaysAppointmentTableContent.css';
 
 import TableContent from '../../../common/tableContent';

@@ -1,4 +1,3 @@
-import React from 'react';
 import './style/doctorTodaysAppointmentOverview.css';
 
 import TodaysAppointmentAmount from './components/todaysAppointmentAmount';

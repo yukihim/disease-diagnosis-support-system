@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'; // Import useCallback
+import { useState, useEffect, useMemo, useCallback } from 'react'; // Import useCallback
 import Cookies from 'js-cookie'; // Import Cookies
 
 import BoxContainer from '../../common/boxContainer';
@@ -15,9 +15,6 @@ const patientSentForParaclinicalTestTableHeader = [
     { name: 'Test', width: '150px' },
     { name: 'State', width: '170px' }
 ];
-
-// Remove dummy data
-// const patientSentForParaclinicalTestTableDummyData = [ ... ];
 
 const ROWS_PER_PAGE_OPTIONS = [3, 5, 7]; // Define options for rows per page
 const API_BASE_URL = 'http://localhost:5001/doctor'; // Define base URL for doctor API
