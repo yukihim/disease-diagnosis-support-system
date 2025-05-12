@@ -1,0 +1,4 @@
+admission_date,room_number,status,note,patient_id,doctor_id
+2025-04-26 10:00:00,101,normal,No note,7,2
+2025-04-26 10:00:00,102,normal,No note,8,2
+2025-04-26 10:00:00,103,normal,No note,9,2

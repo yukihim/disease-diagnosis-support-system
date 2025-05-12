@@ -1,0 +1,7 @@
+session_id,user_id,health_insurance_number
+1,2,HIN456789
+2,2,HIN123456
+3,2,HIN123457
+4,2,HIN987654
+5,2,HIN100001
+6,2,HIN100002

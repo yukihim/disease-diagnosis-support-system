@@ -64,7 +64,7 @@ function PatientPassSessions({ role, onClickSession }) {
 
             try {
                 // Use the correct endpoint: /pass_sessions/<sessionID>
-                const apiUrl = `http://localhost:5001/pass_sessions/${sessionID}`;
+                const apiUrl = `http://localhost:5001/doctor/diagnosis/patient_history/${sessionID}`;
                 console.log("PatientPassSessions _ Fetching pass sessions from:", apiUrl);
 
                 const response = await fetch(apiUrl, {
@@ -86,7 +86,7 @@ function PatientPassSessions({ role, onClickSession }) {
 
                 // The backend returns a single object, wrap it in an array
                 // Check if data is not null/undefined before wrapping
-                setAllSessionsData(data ? [data] : []);
+                setAllSessionsData(data ? data : []);
 
             } catch (err) {
                 console.error("Error fetching pass sessions:", err);

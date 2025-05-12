@@ -9,32 +9,37 @@ services:
         - my-bridge-network
     volumes:
       - my-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "flask", "-d", "ProductionDatabase"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  pgadmin: # Waits for db
-    image: dpage/pgadmin4
-    ports:
-      - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    networks:
-        - my-bridge-network
-    depends_on:
-      - db # Ensures db is started before pgadmin
+  # pgadmin: # Waits for db
+  #   image: dpage/pgadmin4
+  #   ports:
+  #     - "5050:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   networks:
+  #       - my-bridge-network
+  #   depends_on:
+  #     - db # Ensures db is started before pgadmin
 
-  ai: # Waits for db (pgadmin can start concurrently or after db)
-    build:
-      context: ./ai
-      dockerfile: Dockerfile
-    ports:
-      - "5002:5002" # AI runs on host port 5002, container port 5002
-    networks:
-      - my-bridge-network
-    environment:
-      - GEMINI_API_KEY=AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY # Or use Docker secrets
-      - GEMINI_MODEL=gemini-2.0-flash
-    depends_on:
-      - db # Ensures db is started before ai
+  # ai: # Waits for db (pgadmin can start concurrently or after db)
+  #   build:
+  #     context: ./ai
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5002:5002" # AI runs on host port 5002, container port 5002
+  #   networks:
+  #     - my-bridge-network
+  #   environment:
+  #     - GEMINI_API_KEY=AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY # Or use Docker secrets
+  #     - GEMINI_MODEL=gemini-2.0-flash
+  #   depends_on:
+  #     - db # Ensures db is started before ai
   frontend: # No dependencies
     build:
       context: ./frontend
@@ -51,7 +56,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "5001:5000"
+      - "5002:5000"
     environment:
       - FLASK_APP=app.py # Corrected based on previous context
       - FLASK_ENV=development
@@ -62,8 +67,12 @@ services:
     networks:
       - my-bridge-network
     depends_on:
-      - db # Ensures db is started before app
-      - ai # Ensures ai is started before app
+      db:
+        condition: service_healthy # Wait for db to be healthy
+      # ai:
+      #   condition: service_healthy # Wait for ai to be healthy
+        
+      
 
 volumes:
     my-db-data:

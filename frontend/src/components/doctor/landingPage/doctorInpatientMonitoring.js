@@ -62,12 +62,15 @@ function DoctorInpatientMonitoring({ userRole }) {
                 }
             });
 
+            console.log("INPATIENT MONITORING _ API Response:", response);
+
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
                 throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
+            console.log("INPATIENT MONITORING _ API Response Data (Inpatient Monitoring):", data.inpatientMonitoring);
             // console.log("INPATIENT MONITORING _ API Response Data (Inpatient Monitoring):", data);
 
             // Assuming the backend returns the list in 'inpatientMonitoring' array

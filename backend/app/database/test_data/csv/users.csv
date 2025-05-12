@@ -1,0 +1,4 @@
+user_name,password,first_name,last_name,date_of_birth,phone,gender,street,district,city,department,role,is_active,is_verified,is_deleted,created_at
+admin,admin,Admin,Admin,2000-01-01,0123456789,male,123 Main St,District 1,City A,Department A,admin,True,True,False,2025-03-31 00:00:00
+doctor,doctor,Doctor,Doctor,2000-01-01,0123456789,male,123 Main St,District 1,City A,Department A,doctor,True,True,False,2025-03-31 00:00:00
+thinh,thinh,Paraclinical_test,Doctor,2000-01-01,0123456789,male,123 Main St,District 1,City A,Department A,paraclinical_technician,True,True,False,2025-03-31 00:00:00

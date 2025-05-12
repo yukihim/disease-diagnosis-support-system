@@ -1,0 +1,13 @@
+name,ssn,health_insurance_number,street,district,city,phone,gender,date_of_birth,job,height,weight
+Phuong Xuong Thinh,123-45-6789,HIN456789,123 Maple Street,Greenwood,Seattle,555-1234,Female,1990-04-15,Software Engineer,170,65
+Pham Le Quan,987-65-4321,HIN987654,456 Oak Avenue,Sunset,Portland,555-5678,Male,1985-09-23,Data Scientist,180,75
+Phuong Xuong Thinh,321-54-9876,HIN123456,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Product Manager,165,60
+Phuong Xuong Thinh,321-54-9877,HIN123457,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Designer,160,55
+Nguyen thanh minh,321-54-9871,HIN100001,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Marketing Specialist,175,70
+Nguyen thanh minh 2,321-54-9878,HIN100002,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Sales Executive,172,68
+Nguyen thanh minh 2,321-54-9879,HIN100003,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,HR Manager,169,66
+Nguyen thanh minh 2,321-54-9875,HIN100004,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Nurse,167,64
+Nguyen thanh minh 2,321-54-9874,HIN100005,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Pharmacist,171,69
+Appointment Patient 1,321-54-9873,HIN100006,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Doctor,174,72
+Appointment Patient 2,321-54-9872,HIN100007,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Therapist,168,65
+Appointment Patient 3,321-54-9865,HIN100008,789 Pine Road,Downtown,San Francisco,555-9012,Female,1997-12-02,Surgeon,173,71

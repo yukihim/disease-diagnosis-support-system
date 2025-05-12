@@ -10,7 +10,7 @@ def create_app():
     
     
     # Enable CORS for all routes with proper settings
-    CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+    CORS(app, resources={r"/*/": {"origins": "http://localhost:3000"}}, supports_credentials=True)
     
     # Import blueprints
     from . import authentication
@@ -25,8 +25,8 @@ def create_app():
     from . import Receptionist
     app.register_blueprint(Receptionist.app, url_prefix=Receptionist.url_prefix)
     
-    from . import Doctor
-    app.register_blueprint(Doctor.app, url_prefix=Doctor.url_prefix)
+    from . import doctor
+    app.register_blueprint(doctor.app, url_prefix=doctor.url_prefix)
     
     from . import Nurse
     app.register_blueprint(Nurse.app, url_prefix=Nurse.url_prefix)    

@@ -212,8 +212,8 @@ def get_available_doctor_list():
 
 # 7.4.4.5 Find Patient Page: Find Patient by SSN
 @app.route('/find_patient/ssn', methods=['POST'])
-@jwt_required()
-@check_role(['receptionist'])
+# @jwt_required()
+# @check_role(['receptionist'])
 def find_patient_by_ssn():
     """
     Finds patients by Social Security Number (case-insensitive, whitespace-insensitive, partial match).
@@ -251,6 +251,9 @@ def find_patient_by_ssn():
 
     except Exception as e:
         print(f"Error finding patient by SSN: {e}")
+        import traceback
+        import logging
+        logging.error(traceback.format_exc())
         return jsonify({"string": "Error while searching for patient by SSN."}), 500 # Use 500 for unexpected server errors
 
 # 7.4.4.6 Find Patient Page: Find Patient by Health Insurance Code
@@ -295,6 +298,7 @@ def find_patient_by_hic():
     except Exception as e:
         print(f"Error finding patient by HIC: {e}")
         return jsonify({"string": "Error while searching for patient by HIC."}), 500 # Use 500 for unexpected server errors
+
 
 
 

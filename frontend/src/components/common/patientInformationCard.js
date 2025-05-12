@@ -89,8 +89,9 @@ function PatientInformationCard() {
 
             try {
                 // Use the sessionID (which might be ID or name) in the URL
-                const apiUrl = `http://localhost:5001/receptionist/finalize_check_in/patient_information/${sessionID}`;
+                const apiUrl = `http://localhost:5001/doctor/diagnosis/patient_information/${sessionID}`;
                 // console.log("Fetching patient info for card from:", apiUrl);
+
 
                 const response = await fetch(apiUrl, {
                     method: 'GET',
@@ -99,6 +100,8 @@ function PatientInformationCard() {
                         'Content-Type': 'application/json'
                     }
                 });
+                // print th response data
+                console.log("RECEPTIONIST PATIENT INFORMATION _ API Response:", response);
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
@@ -107,19 +110,22 @@ function PatientInformationCard() {
                 }
 
                 const data = await response.json();
-                // console.log("RECEPTIONIST PATIENT INFORMATION _ API Response Data (Patient Info Card):", data);
+                
+                console.log("RECEPTIONIST PATIENT INFORMATION _ API Response Data (Patient Info Card):", data);
 
                 // Format data from backend keys to frontend keys
                 const formattedData = { ...initialPatientState }; // Start with default structure
+
                 for (const backendKey in backendToFrontendKeyMap) {
                     if (data.hasOwnProperty(backendKey)) {
                         const frontendKey = backendToFrontendKeyMap[backendKey];
                         // Use nullish coalescing to handle null/undefined from API, default to empty string
+                        console.log(data[backendKey], "===>>>", backendKey, "===>>>", frontendKey);
                         formattedData[frontendKey] = data[backendKey] ?? "";
                     }
                 }
-                // Add sessionID or sessionID if needed elsewhere, though not directly in the form fields
-                // formattedData.identifier = sessionID;
+                console.log("Formatted Patient Information:", formattedData);
+                
 
                 setPatientInformation(formattedData);
 
