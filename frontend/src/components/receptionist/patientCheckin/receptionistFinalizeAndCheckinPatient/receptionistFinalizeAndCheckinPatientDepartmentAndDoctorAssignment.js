@@ -120,20 +120,22 @@ function ReceptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment({
     }
 
     return (
-        <div className="receptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment">
+        <div>
             {error && <div className="error-message" style={{color: 'red', marginBottom: '10px'}}>Error loading default assignment: {error}</div>}
-            <ChooseBox
-                text="Choose Department:"
-                options={departmentOptions}
-                selectedValue={selectedDepartment} // Use prop value
-                setSelectedValue={setSelectedDepartment} // Use prop setter
-            />
-            <ChooseBox
-                text="Choose Doctor:"
-                options={doctorOptions}
-                selectedValue={selectedDoctor} // Use prop value
-                setSelectedValue={setSelectedDoctor} // Use prop setter
-            />
+            <div className="receptionistFinalizeAndCheckinPatientDepartmentAndDoctorAssignment">
+                <ChooseBox
+                    text="Choose Department:"
+                    options={departmentOptions}
+                    selectedValue={selectedDepartment} // Use prop value
+                    setSelectedValue={setSelectedDepartment} // Use prop setter
+                />
+                <ChooseBox
+                    text="Choose Doctor:"
+                    options={doctorOptions}
+                    selectedValue={selectedDoctor} // Use prop value
+                    setSelectedValue={setSelectedDoctor} // Use prop setter
+                />
+            </div>
         </div>
     );
 }
