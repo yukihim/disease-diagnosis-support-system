@@ -1,5 +1,3 @@
-import React from 'react';
-
 import TableHeader from '../../../common/tableHeader';
 
 function DoctorTodaysAppointmentTableHeader({ todaysAppointmentTableHeader }) {

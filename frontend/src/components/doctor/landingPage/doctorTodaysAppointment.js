@@ -17,11 +17,8 @@ const todaysAppointmentTableHeader = [
     { name: 'Condition', width: '100px' }
 ];
 
-// Remove dummy data
-// const todaysAppointmentTableDummyData = [ ... ];
-
-const ROWS_PER_PAGE_OPTIONS = [3, 5, 7]; // Define options for rows per page
-const API_BASE_URL = 'http://localhost:5001/doctor'; // Define base URL for doctor API
+const ROWS_PER_PAGE_OPTIONS = [3, 5, 7];
+const API_BASE_URL = 'http://localhost:5001/doctor';
 
 function DoctorTodaysAppointment() {
     const history = useHistory();

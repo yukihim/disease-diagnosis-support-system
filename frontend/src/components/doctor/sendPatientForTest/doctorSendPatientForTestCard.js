@@ -109,12 +109,18 @@ function DoctorSendPatientForTestCard({ sessionID }) {
                     onNoteChange={handleNoteChange}
                 />
 
+                {/* Display Submission Error Message */}
+                {submitError && (
+                    <div style={{ color: 'red', marginTop: '10px', textAlign: 'center', padding: '5px' }}>
+                        {submitError}
+                    </div>
+                )}
+
                 {/* Cancel or Confirm button - Pass handlers and submission state */}
                 <DoctorSendPatientForTestCancelOrConfirmButton
                     onClickCancelSendForTest={onClickCancelSendForTest}
                     onClickConfirmSendForTest={onClickConfirmSendForTest}
                     isSubmitting={isSubmitting}
-                    submitError={submitError}
                 />
             </BoxContainerContent>
         </BoxContainer>

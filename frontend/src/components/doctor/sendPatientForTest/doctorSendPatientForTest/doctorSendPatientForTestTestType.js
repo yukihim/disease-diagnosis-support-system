@@ -1,10 +1,11 @@
-import React from 'react'; // Removed useState
+import API_BASE_URL from '../../../../config';
+import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie'; // Import Cookies
 import './style/doctorSendPatientForTestTestType.css';
 
 import HuggedText from '../../../common/huggedText';
 
 // --- Constants ---
-// (Keep grouped_test_options and helper functions as they are)
 // --- Full grouped_test_options ---
 const grouped_test_options = {
     'Blood Tests': [
@@ -272,7 +273,45 @@ const allTestOptionsFlat = getAllTestOptionsFlat();
 
 // Accept props: selectedTestValues, onTestTypeToggle
 function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle }) {
-    // Removed internal state
+    const [testList, setTestList] = useState([]); // State for fetched test list
+
+    const fetchTestList = async () => {
+        const token = Cookies.get('token');
+        if (!token) {
+            // setError("User not authenticated.");
+            return;
+        }
+
+        try {
+            const apiUrl = `${API_BASE_URL}/doctor/send_for_test/get_test_list`;
+
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            setTestList(data.test_list || []); // Assuming the backend returns the list in 'test_list' array
+        } catch (err) {
+            console.error("Error fetching test list:", err);
+            // setError(err.message || "Failed to fetch test list.");
+            setTestList([]);
+        }
+    };
+
+    useEffect(() => {
+        fetchTestList();
+    }, []); // Fetch test list on component mount
+
 
     // Derive selected labels from selected values
     const selectedTestLabels = selectedTestValues.map(value => {

@@ -1,4 +1,3 @@
-import React from 'react';
 import './style/doctorSendPatientForTestCancelOrConfirmButton.css';
 
 import Button from '../../../common/button';
@@ -9,13 +8,7 @@ function DoctorSendPatientForTestCancelOrConfirmButton({
     onClickCancelSendForTest,
     onClickConfirmSendForTest,
     isSubmitting,
-    submitError
 }) {
-    if(submitError) {
-        console.error("Error in DoctorSendPatientForTestCancelOrConfirmButton:", submitError);
-        alert("An error occurred: " + submitError);
-    }
-
     return (
         <div className="doctorSendPatientForTestCancelOrConfirmButton">
             <Button className="sendForTestAndFinalizingDiagnosis cancelBig" onClick={onClickCancelSendForTest} disabled={isSubmitting}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import { useState, useEffect } from 'react'; // Import useEffect
 import './style/doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination.css';
 
 import HuggedText from '../../../common/huggedText';

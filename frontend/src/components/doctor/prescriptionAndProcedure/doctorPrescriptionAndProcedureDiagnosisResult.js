@@ -1,4 +1,3 @@
-import React from 'react'; // Removed useState, useEffect
 import './style/doctorPrescriptionAndProcedureDiagnosisResult.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -11,9 +10,6 @@ import DoctorPrescriptionAndProcedureDiagnosisResultFinalDiagnosis from './docto
 
 // Accept props from parent
 function DoctorPrescriptionAndProcedureDiagnosisResult({ patientSymptoms, finalDiagnosis }) {
-
-    // Removed internal state and useEffect for fetching mock data
-    // Removed fetchPatientSymptoms and fetchFinalDiagnosis functions
 
     return (
         <BoxContainer className='doctorPrescriptionAndProcedureDiagnosisResultBox'>

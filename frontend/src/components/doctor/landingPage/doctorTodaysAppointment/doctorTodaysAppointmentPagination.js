@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ComponentPagination from '../../../common/componentPagination';
 import PrevButton from '../../../common/prevButton';
 import NextButton from '../../../common/nextButton';

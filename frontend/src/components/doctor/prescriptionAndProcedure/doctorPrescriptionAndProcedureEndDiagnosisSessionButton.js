@@ -1,5 +1,3 @@
-import React from 'react';
-
 import BoxContainer from '../../common/boxContainer';
 import BoxContainerTitle from '../../common/boxContainerTitle';
 import BoxContainerContent from '../../common/boxContainerContent';
@@ -9,8 +7,7 @@ import ButtonText from '../../common/buttonText';
 
 import DoctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination from './doctorPrescriptionAndProcedureEndDiagnosisSessionButton/doctorPrescriptionAndProcedureEndDiagnosisSessionFollowUpExamination';
 
-// Accept onClick and the new callback prop
-function DoctorPrescriptionAndProcedureEndDiagnosisSessionButton({ onClickAdmitToHospital, onClickEndDiagnosisSession, onFollowUpDateUpdate }) { // Added onFollowUpDateUpdate prop
+function DoctorPrescriptionAndProcedureEndDiagnosisSessionButton({ onClickAdmitToHospital, onClickEndDiagnosisSession, onFollowUpDateUpdate }) {
     return (
         <BoxContainer className='doctorPrescriptionAndProcedurePrescriptionsCardBox'>
             <BoxContainerTitle className='doctorPrescriptionAndProcedurePrescriptionsCard'>

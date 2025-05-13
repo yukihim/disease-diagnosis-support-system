@@ -1,4 +1,3 @@
-import React from 'react';
 import './style/doctorPrescriptionAndProcedureDiagnosisResultFinalDiagnosis.css';
 
 import HuggedText from '../../../common/huggedText';
