@@ -117,7 +117,8 @@ function DoctorPatientDiagnosing() {
             const formattedRecommendations = top3Probabilities.map(item => ({
                 disease: item[0], // disease name is the first element
                 // Format probability to percentage string
-                probabilities: `${(item[1] * 100).toFixed(1)}%`
+                icd_code: item[1], // ICD code is the second element
+                probabilities: `${(item[2] * 100).toFixed(1)}%`
             }));
 
             setSystemRecommendations(formattedRecommendations);
