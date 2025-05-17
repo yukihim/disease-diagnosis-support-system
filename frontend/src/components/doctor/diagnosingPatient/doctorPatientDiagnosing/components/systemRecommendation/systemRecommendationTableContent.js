@@ -15,6 +15,9 @@ function SystemRecommendationTableContent({ systemRecommendationDiseaseTableHead
                             {row.disease}
                         </div>
                         <div className="tableContentCell" style={{ width: headers[1].width, minWidth: headers[1].width }}>
+                            {row.icd_code}
+                        </div>
+                        <div className="tableContentCell" style={{ width: headers[2].width, minWidth: headers[2].width }}>
                             {row.probabilities}
                         </div>
                     </div>
