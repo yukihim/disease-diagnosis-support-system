@@ -2,7 +2,8 @@
     width: 100%;
     height: auto;
 
-    background-color: #009951;
+    /* background-color: #009951; */
+    background: rgba(0, 128, 128, 1);
 
     .headerContent {
         width: 100%;

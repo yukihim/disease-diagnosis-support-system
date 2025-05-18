@@ -109,16 +109,16 @@ function DoctorPatientDiagnosing() {
             const data = await response.json();
             console.log("Prediction API Response Data:", data);
 
-            // --- MODIFICATION: Get only top 3 predictions ---
-            // The backend already sorts probabilities descending. Slice the top 3.
-            const top3Probabilities = data.probabilities.slice(0, 3);
+            // --- MODIFICATION: Get only top 5 predictions ---
+            // The backend already sorts probabilities descending. Slice the top 5.
+            const topProbabilities = data.probabilities.slice(0, 5);
 
-            // Format the top 3 prediction data for the state
-            const formattedRecommendations = top3Probabilities.map(item => ({
-                disease: item[0], // disease name is the first element
-                // Format probability to percentage string
-                icd_code: item[1], // ICD code is the second element
-                probabilities: `${(item[2] * 100).toFixed(1)}%`
+            // Format the top 5 prediction data for the state
+            const formattedRecommendations = topProbabilities.map(item => ({
+                disease: item[0],
+                symptoms: item[1],
+                icd_code: item[2],
+                probabilities: `${(item[3] * 100).toFixed(1)}%`
             }));
 
             setSystemRecommendations(formattedRecommendations);
