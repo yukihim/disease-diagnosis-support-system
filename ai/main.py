@@ -470,7 +470,8 @@ import google.generativeai as genai
 
 # --- Configuration ---
 MODEL_DIR = './saved_model2/'
-EVIDENCE_JSON_PATH = os.path.join('Dataset', 'release_evidences.json') # Path to your original evidence JSON
+EVIDENCE_JSON_PATH = os.path.join('Dataset', 'release_evidences.json')
+CONDITIONS_JSON_PATH = os.path.join('Dataset', 'release_conditions.json')
 icd10codes={
   "URTI": "J06.9",
   "Viral pharyngitis": "J02.9",
@@ -547,6 +548,14 @@ try:
         print(f"*** CRITICAL ERROR: Full evidence JSON not found at {EVIDENCE_JSON_PATH}. Symptom mapping and processing WILL FAIL. ***")
         full_evidence_data = None # Or exit() if it's absolutely required
         
+    if os.path.exists(CONDITIONS_JSON_PATH):
+        with open(CONDITIONS_JSON_PATH, 'r', encoding='utf-8') as f:
+            conditions_data = json.load(f)
+        print(f"Loaded conditions data from {CONDITIONS_JSON_PATH}.")
+    else:
+        print(f"*** WARNING: Conditions JSON not found at {CONDITIONS_JSON_PATH}. Cannot add symptom lists to response. ***")
+        conditions_data = {}
+        
     # --- Load ICD-10 Codes ---
     icd10_codes_map = icd10codes
 
@@ -557,13 +566,13 @@ except Exception as e: print(f"\n***\nError loading ML components: {e}"); exit()
 
 # --- NEW: Configure Gemini ---
 try:
-    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", 'AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY')
     # GEMINI_API_KEY = "AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY" # Example, use environment variable
     if not GEMINI_API_KEY:
         raise ValueError("GEMINI_API_KEY environment variable not set.")
 
     genai.configure(api_key=GEMINI_API_KEY)
-    GEMINI_MODEL = os.environ.get("GEMINI_MODEL", 'gemini-1.5-flash-latest') # Default if not set
+    GEMINI_MODEL = os.environ.get("GEMINI_MODEL", 'gemini-2.0-flash') # Default if not set
     gemini_model = genai.GenerativeModel(GEMINI_MODEL)
 
     print(f"Gemini API configured successfully using model: {GEMINI_MODEL}")
@@ -572,11 +581,7 @@ except Exception as e:
     print("Please ensure the google-generativeai library is installed and GEMINI_API_KEY environment variable is set.")
     exit()
 
-# --- REMOVED Pre-processing Block for numerical_c_codes_for_pred ---
-# The check will now happen inline within process_patient_for_prediction_adv
 
-
-# --- REVISED Function to build the prompt for Gemini ---
 # --- (No changes needed here, still uses full_evidence_data) ---
 def build_gemini_prompt(user_symptoms_list, full_evidence_data_arg):
     """Constructs the prompt for the Gemini API, including full evidence data."""
@@ -652,9 +657,8 @@ def build_gemini_prompt(user_symptoms_list, full_evidence_data_arg):
     return prompt
 
 
-# --- VERIFIED FIX 1: Function to call Gemini and parse result with Markdown stripping ---
-# --- (No changes needed here, still uses full_evidence_data) ---
-def map_symptoms_with_gemini(user_symptoms_list):
+# --- Function to call Gemini and parse result with Markdown stripping ---
+def map_symptom_list_to_symptom_codes_with_gemini(user_symptoms_list):
     """Calls Gemini API to map symptoms and parses the result."""
     # ... (function body remains the same as before) ...
     if not user_symptoms_list:
@@ -724,6 +728,8 @@ def map_symptoms_with_gemini(user_symptoms_list):
         print(f"Error calling Gemini API: {e}")
         return None, [f"LLM API call failed: {e}"]
 
+def map_symptom_codes_to_symptom_list(symptom_codes):
+    pass
 
 # --- REVISED process_patient_for_prediction_adv ---
 # --- ADD full_evidence_data parameter and inline check ---
@@ -862,7 +868,7 @@ def predict():
     except Exception as e: print(f"Error parsing request: {e}"); return jsonify({"error": "Bad Request: Invalid JSON."}), 400
 
     # *** STEP 1: Use Gemini to map symptoms to codes ***
-    evidence_codes_and_values, mapping_errors = map_symptoms_with_gemini(user_symptoms)
+    evidence_codes_and_values, mapping_errors = map_symptom_list_to_symptom_codes_with_gemini(user_symptoms)
 
     if evidence_codes_and_values is None:
         error_detail = ", ".join(mapping_errors) if mapping_errors else "Unknown mapping error"
@@ -905,7 +911,14 @@ def predict():
     formatted_probabilities = []
     for disease_name, probability in sorted_probs:
         icd_code = icd10_codes_map.get(disease_name, "N/A") # Get ICD-10 code, default to "N/A" if not found
-        formatted_probabilities.append([disease_name, icd_code, probability])
+        
+        symptom_list = []
+        if conditions_data and disease_name in conditions_data:
+            symptoms_dict = conditions_data[disease_name].get("symptoms", {})
+            symptom_list = list(symptoms_dict.keys())
+        
+        formatted_probabilities.append([disease_name, symptom_list, icd_code, probability])
+        print(f"Formatted probability entry: {formatted_probabilities[-1]}") # DEBUG
     # --- END MODIFICATION ---
 
     response = {

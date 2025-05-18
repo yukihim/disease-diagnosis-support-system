@@ -15,6 +15,7 @@ COPY main.py /app/
 COPY saved_model2/ /app/saved_model2/
 # Create the Dataset directory and copy the specific JSON file into it
 COPY Dataset/release_evidences.json /app/Dataset/release_evidences.json
+COPY Dataset/release_conditions.json /app/Dataset/release_conditions.json
 # --- End specific copies ---
 
 # Expose the port the app runs on (using 5002 to avoid conflict with backend)
