@@ -136,11 +136,11 @@ You can run individual services locally. A running PostgreSQL instance is requir
 
 Use these credentials (from test data) to sign in:
 
-- **doctor** / `test`
-- **receptionist1** / `test`
-- **nurse** / `test`
-- **paraclinical** / `test`
-- **admin** / `test`
+- **doctor** / `doctor`
+- **receptionist** / `receptionist`
+- **nurse** / `nurse`
+- **paraclinical** / `paraclinical`
+- **admin** / `admin`
 
 
 ### API Overview
@@ -249,6 +249,6 @@ Specify your project license here.
 
 - Google Generative AI (Gemini) for symptom-to-evidence mapping
 - scikit-learn/XGBoost for the ML model
-- 
+- Dataset use it the project is from \href{https://arxiv.org/abs/2205.09148}{here}
 
 
