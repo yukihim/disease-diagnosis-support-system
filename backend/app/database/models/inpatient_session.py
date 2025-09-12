@@ -40,6 +40,9 @@ class Inpatient_session(BaseModel):
     doctor_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     doctor = relationship("Users", back_populates="inpatient_session")
 
+    devices = relationship("Monitoring_Devices", back_populates="session")
+    
+
     ##############################
     ##                          ##
     ##        Constraint        ##
@@ -47,17 +50,6 @@ class Inpatient_session(BaseModel):
     ##############################
     CheckConstraint("patient_id IN (SELECT id FROM patients WHERE status = 'inpatient')", name="check_patient_id")
     CheckConstraint("doctor_id IN (SELECT id FROM users WHERE role = 'doctor')", name="check_doctor_id")
-    ##############################
-    ##                          ##
-    ##       Constructor        ##
-    ##                          ##
-    ##############################
+    
 
-    def __init__(self, admission_date, room_number, status, note,patient_id,doctor_id,discharge_date=None):
-        self.admission_date = admission_date
-        self.discharge_date = discharge_date
-        self.room_number = room_number
-        self.status = status
-        self.note = note
-        self.patient_id = patient_id
-        self.doctor_id = doctor_id
+    

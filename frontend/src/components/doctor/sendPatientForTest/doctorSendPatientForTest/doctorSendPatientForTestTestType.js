@@ -272,7 +272,7 @@ const getAllTestOptionsFlat = () => {
 const allTestOptionsFlat = getAllTestOptionsFlat();
 
 // Accept props: selectedTestValues, onTestTypeToggle
-function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle }) {
+function DoctorSendPatientForTestTestType({selectedTest=[], onTestTypeToggle }) {
     const [testList, setTestList] = useState([]); // State for fetched test list
 
     const fetchTestList = async () => {
@@ -283,7 +283,7 @@ function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle
         }
 
         try {
-            const apiUrl = `${API_BASE_URL}/doctor/send_for_test/get_test_list`;
+            const apiUrl = `${API_BASE_URL}/doctor/send_for_test/test_list`;
 
             const response = await fetch(apiUrl, {
                 method: 'GET',
@@ -297,10 +297,14 @@ function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle
                 const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
                 throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
-
+            console.log("DoctorSendPatientForTestTestType _ API Response:", response);
+            
             const data = await response.json();
+            
+            // map key, value to test_typ
+            
 
-            setTestList(data.test_list || []); // Assuming the backend returns the list in 'test_list' array
+            setTestList(data || []); // Assuming the backend returns the list in 'test_list' array
         } catch (err) {
             console.error("Error fetching test list:", err);
             // setError(err.message || "Failed to fetch test list.");
@@ -314,9 +318,9 @@ function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle
 
 
     // Derive selected labels from selected values
-    const selectedTestLabels = selectedTestValues.map(value => {
-        const option = allTestOptionsFlat.find(opt => opt.value === value);
-        return option ? option.label : value; // Fallback to value if label not found
+    const selectedTestLabels = selectedTest.map(test => {
+        const option = allTestOptionsFlat.find(opt => opt.value === test.test_id);
+        return option ? option.label : test.test_name; // Fallback to value if label not found
     });
 
     return (
@@ -325,21 +329,33 @@ function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle
             <HuggedText text="Select Test Types:" font_size="16px" font_weight="700" color="#4E4B66" margin_bottom="15px" />
 
             <div className="test-groups-container">
-                {Object.entries(grouped_test_options).map(([categoryName, tests]) => (
+                {Object.entries(testList).map(([categoryName, tests]) => (
                     <div key={categoryName} className="test-group-column">
                         <HuggedText text={categoryName} font_size="14px" font_weight="600" color="#4E4B66" margin_bottom="10px" />
                         <div className="test-options-list">
-                            {tests.map((option) => (
-                                <div key={option.value} className="test-option-item">
+                            {tests.map((test) => (
+                                <div key={test.test_name} className="test-option-item">
                                     <input
                                         type="checkbox"
-                                        id={`test-${option.value}`} // Use value for unique ID
-                                        value={option.value} // value attribute is good practice
+                                        id={test.test_id} // Use value for unique ID
+                                        value={test.test_name} // value attribute is good practice
                                         // Use props for checked state and onChange handler
-                                        checked={selectedTestValues.includes(option.value)}
-                                        onChange={() => onTestTypeToggle(option.value)}
+                                        checked={selectedTest.some(selectedItem => selectedItem.test_id === test.test_id)}
+                                        onChange={() => {
+                                            console.log("selectedTest", selectedTest);
+                                            // Check if test is already selected
+                                            const isSelected = selectedTest.some(selectedItem => selectedItem.test_id === test.test_id);
+                                            if (isSelected) {
+                                                // If already selected, remove it
+                                                const filteredTests = selectedTest.filter(selectedItem => selectedItem.test_id !== test.test_id);
+                                                onTestTypeToggle(filteredTests);
+                                            } else {
+                                                // If not selected, add it
+                                                onTestTypeToggle([...selectedTest, {test_name: test.test_name, test_id: test.test_id}]);
+                                            }
+                                        }}
                                     />
-                                    <label htmlFor={`test-${option.value}`}>{option.label}</label>
+                                    <label htmlFor={test.test_id}>{test.test_name}</label>
                                 </div>
                             ))}
                         </div>
@@ -348,10 +364,10 @@ function DoctorSendPatientForTestTestType({ selectedTestValues, onTestTypeToggle
             </div>
 
             {/* Display selected tests */}
-            {selectedTestLabels.length > 0 && (
+            {selectedTest.length > 0 && (
                 <div className="selected-tests-display">
                     <HuggedText text="Selected Tests:" font_size="14px" font_weight="600" color="#4E4B66" margin_bottom="5px" />
-                    <p>{selectedTestLabels.join(', ')}</p>
+                    <p>{selectedTest.map(test => test.test_name).join(', ')}</p>
                 </div>
             )}
         </div>

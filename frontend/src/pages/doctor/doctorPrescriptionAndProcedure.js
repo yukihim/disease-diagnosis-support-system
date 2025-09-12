@@ -13,7 +13,9 @@ import DoctorPrescriptionAndProcedurePrescriptionsCard from '../../components/do
 import DoctorPrescriptionAndProcedureProceduresCard from '../../components/doctor/prescriptionAndProcedure/doctorPrescriptionAndProcedureProceduresCard';
 import DoctorPrescriptionAndProcedureEndDiagnosisSessionButton from '../../components/doctor/prescriptionAndProcedure/doctorPrescriptionAndProcedureEndDiagnosisSessionButton';
 
-const API_BASE_URL = "http://localhost:5001/doctor/prescription_and_procedure";
+
+import API_BASE_URL from '../../config';
+
 
 function DoctorPrescriptionAndProcedure() {
     const history = useHistory();
@@ -100,28 +102,49 @@ function DoctorPrescriptionAndProcedure() {
         // --- Prepare Prescription Data ---
         const prescriptionsToSend = currentPrescriptions;
         const nonEmptyPrescriptions = prescriptionsToSend.filter(p =>
-            p.medicine?.trim() !== '' ||
-            p.morning?.trim() !== '' ||
-            p.noon?.trim() !== '' ||
-            p.afternoon?.trim() !== '' ||
-            p.evening?.trim() !== '' ||
-            p.duration?.trim() !== '' ||
-            p.note?.trim() !== ''
-        );
+            (p.medicineId && p.medicineId !== '') ||
+            (p.morning && p.morning.trim() !== '') ||
+            (p.noon && p.noon.trim() !== '') ||
+            (p.afternoon && p.afternoon.trim() !== '') ||
+            (p.evening && p.evening.trim() !== '') ||
+            (p.duration && p.duration.trim() !== '') ||
+            (p.note && p.note.trim() !== '')
+        ).map(p => {
+            // Find medicine name for display in the backend logs if needed
+            // This is also preparing for potential backend changes
+            const medicineName = p.medicineName || ''; // Use medicineName if available
+            
+            // Return the format the backend expects
+            return {
+                medicine: p.medicineId, // Use medicineId as medicine identifier
+                morning: p.morning || '',
+                noon: p.noon || '',
+                afternoon: p.afternoon || '',
+                evening: p.evening || '',
+                duration: p.duration || '',
+                note: p.note || ''
+            };
+        });
 
         // --- Prepare Procedure Data ---
         const proceduresToSend = currentProcedures;
         const nonEmptyProcedures = proceduresToSend
             .filter(p =>
-                p.procedure?.trim() !== '' ||
-                p.datetime?.trim() !== '' ||
-                p.note?.trim() !== ''
+                (p.procedureId && p.procedureId !== '') ||
+                (p.datetime && p.datetime.trim() !== '') ||
+                (p.note && p.note.trim() !== '')
             )
-            .map(p => ({
-                procedureName: p.procedure,
-                dateTime: p.datetime,
-                note: p.note
-            }));
+            .map(p => {
+                // Use procedureName if available, otherwise fall back to old procedure field
+                const procedureName = p.procedureName || p.procedure || '';
+                
+                return {
+                    procedureId: p.procedureId || '',
+                    procedureName: procedureName,
+                    dateTime: p.datetime || '',
+                    note: p.note || ''
+                };
+            });
 
         // --- Prepare Follow-up Data ---
         // The state `currentFollowUpDate` already holds the 'YYYY-MM-DD' string
@@ -132,12 +155,16 @@ function DoctorPrescriptionAndProcedure() {
         let prescriptionSuccess = false;
         let procedureSuccess = false;
         let followUpSuccess = false; // Added flag for follow-up
+        
+        console.log("nonEmptyPrescriptions", nonEmptyPrescriptions);
+        console.log("nonEmptyProcedures", nonEmptyProcedures);
+        console.log("followUpDateToSend", followUpDateToSend);
 
         try {
             // Call Set Prescription API
             if (nonEmptyPrescriptions.length > 0) {
                 console.log("Sending prescriptions:", JSON.stringify({ prescription: nonEmptyPrescriptions }));
-                const presResponse = await fetch(`${API_BASE_URL}/set_prescription/${sessionID}`, {
+                const presResponse = await fetch(`${API_BASE_URL}/doctor/prescription_and_procedure/set_prescription/${sessionID}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -159,13 +186,13 @@ function DoctorPrescriptionAndProcedure() {
             // Call Set Procedure API
             if (nonEmptyProcedures.length > 0) {
                 console.log("Sending procedures:", JSON.stringify({ procedure: nonEmptyProcedures }));
-                const procResponse = await fetch(`${API_BASE_URL}/set_procedure/${sessionID}`, {
+                const procResponse = await fetch(`${API_BASE_URL}/doctor/prescription_and_procedure/set_procedure/${sessionID}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ procedure: nonEmptyProcedures }),
+                    body: JSON.stringify({ procedures: nonEmptyProcedures }),
                 });
                 if (!procResponse.ok) {
                     const errorData = await procResponse.json().catch(() => ({ message: `HTTP error! status: ${procResponse.status}` }));
@@ -177,11 +204,11 @@ function DoctorPrescriptionAndProcedure() {
                 console.log("No non-empty procedures to send.");
                 procedureSuccess = true;
             }
-
+            console.log("followUpDateToSend", followUpDateToSend);
             // Call Set Follow Up API (only if a date is selected)
             if (followUpDateToSend) {
                 console.log("Sending follow-up date:", JSON.stringify({ date: followUpDateToSend }));
-                const followUpResponse = await fetch(`${API_BASE_URL}/prescription_and_procedure/set_follow_up/${sessionID}`, {
+                const followUpResponse = await fetch(`${API_BASE_URL}/doctor/prescription_and_procedure/set_follow_up/${sessionID}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -200,10 +227,18 @@ function DoctorPrescriptionAndProcedure() {
                 followUpSuccess = true; // Consider success if no date was set
             }
 
+            
 
             // Check if all were successful
             if (prescriptionSuccess && procedureSuccess && followUpSuccess) {
                 alert("Diagnosis session ended successfully! Prescriptions, procedures, and follow-up date saved.");
+                fetch(`${API_BASE_URL}/doctor/end_session/${sessionID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
                 history.push('/doctor/homepage'); // Redirect only after all successful calls
             } else {
                  console.log("One or more API calls failed. Check error message.");

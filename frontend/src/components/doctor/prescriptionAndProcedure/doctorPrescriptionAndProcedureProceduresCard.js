@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './style/doctorPrescriptionAndProcedureProceduresCard.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -17,11 +17,13 @@ const patientProcedureTableHeader = [
     { name: 'Note', width: '500px' } // Ensure Note header exists if needed
 ];
 
-// Empty procedure row template - Added note
+// Empty procedure row template - Updated with procedureId and procedureName
 const emptyProcedure = {
-    procedure: '',
+    procedureId: '',
+    procedureName: '',
+    procedure: '', // Keep for backward compatibility
     datetime: '',
-    note: '' // Added note field
+    note: ''
 };
 
 // Accept callback prop from parent
@@ -31,15 +33,21 @@ function DoctorPrescriptionAndProcedureProceduresCard({ onProcedureDataUpdate })
         { ...emptyProcedure } // Start with one empty row
     ]);
 
-    // Function to add a new procedure row
-    const handleAddProcedure = () => {
-        setProcedures([...procedures, { ...emptyProcedure }]);
-    };
+    // Function to add a new procedure row - wrapped in useCallback to prevent infinite loops
+    const handleAddProcedure = useCallback(() => {
+        setProcedures(prevProcedures => [...prevProcedures, { ...emptyProcedure }]);
+    }, []);
 
     // Function to update a procedure row
     const handleProcedureChange = (index, field, value) => {
         const updatedProcedures = [...procedures];
         updatedProcedures[index][field] = value;
+        
+        // If procedureId changes, also update the procedure field for backward compatibility
+        if (field === 'procedureId') {
+            updatedProcedures[index].procedure = value;
+        }
+        
         setProcedures(updatedProcedures);
     };
 
@@ -63,6 +71,21 @@ function DoctorPrescriptionAndProcedureProceduresCard({ onProcedureDataUpdate })
             onProcedureDataUpdate(procedures);
         }
     }, [procedures, onProcedureDataUpdate]); // Dependency array includes procedures and the callback
+
+    // Add event listener for adding a new procedure via Enter/Tab key
+    useEffect(() => {
+        const handleProcedureAddEvent = () => {
+            handleAddProcedure();
+        };
+        
+        // Add event listener
+        document.addEventListener('onProcedureAdd', handleProcedureAddEvent);
+        
+        // Cleanup function to remove event listener
+        return () => {
+            document.removeEventListener('onProcedureAdd', handleProcedureAddEvent);
+        };
+    }, [handleAddProcedure]); // Only depend on the stable callback
 
     return (
         <BoxContainer className='doctorPrescriptionAndProcedureProceduresCardBox'>

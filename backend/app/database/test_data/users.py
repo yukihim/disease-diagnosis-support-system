@@ -34,8 +34,7 @@ def create_user():
         new_user = Users(
             user_name=user["user_name"],
             password=generate_password_hash(user["password"]),
-            first_name=user["first_name"],
-            last_name=user["last_name"],
+            name=user["name"],
             date_of_birth=user["date_of_birth"],
             phone=user["phone"],
             gender=user["gender"],
@@ -48,6 +47,7 @@ def create_user():
             is_verified=user["is_verified"],
             is_deleted=user["is_deleted"],
             created_at=user["created_at"],
+            specialization=user["specialization"],
         )
 
         db.session.add(new_user)

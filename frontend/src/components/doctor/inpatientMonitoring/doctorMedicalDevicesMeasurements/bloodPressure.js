@@ -17,14 +17,22 @@ const SAFE_RANGE_BP_DIASTOLIC = { low: 60, high: 80 };
 // REMOVED: filterDataForLastMinute function
 
 // Accept data prop
-function BloodPressure({ data = [] }) { // Default to empty array
+function BloodPressure({ 
+    deviceList = [], 
+    deviceMeasurements, 
+    deviceStatus,
+    selectedDevice,
+    setSelectedDevice
+}) { // Default to empty array
 
     // *** Use the full data array directly for charts ***
-    const chartData = data;
+    const chartData = deviceMeasurements['blood_pressure'];
     // console.log(`[${new Date().toLocaleTimeString()}] BloodPressure component received data:`, JSON.stringify(data));
 
     // Use the full data array to get the absolute latest measurement
-    const latestMeasurement = data.length > 0 ? data[data.length - 1] : null;
+    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1] : null;
+
+    
     const latestSystolic = latestMeasurement ? latestMeasurement.systolic : 'N/A';
     const latestDiastolic = latestMeasurement ? latestMeasurement.diastolic : 'N/A';
 
@@ -46,11 +54,40 @@ function BloodPressure({ data = [] }) { // Default to empty array
         }
     }
 
+    const handleDeviceChange = (event) => {
+        const device = deviceList['blood_pressure'].find(device => device.id === parseInt(event.target.value));
+        setSelectedDevice({ ...selectedDevice, blood_pressure: device });
+    };
+
     return (
         <BoxContainer className='cardBox bloodPressure'>
             <BoxContainerTitle className='cardTitle'>
-                <img src={BloodPressureIcon} alt="Blood Pressure Icon" className='cardIcon' />
-                Blood Pressure
+                <div className='cardTitleContent'>
+                    <img src={BloodPressureIcon} alt="Blood Pressure Icon" className='cardIcon' />
+                    <span>Blood Pressure</span>
+                </div>
+                <div className='cardTitleDeviceStatus'>
+                    <select 
+                        value={selectedDevice.blood_pressure}
+                        onChange={handleDeviceChange}
+                        className='selectDevice'
+                    >
+                    {deviceList['blood_pressure'].map((device) => (
+                        <option key={device.id} value={device.id}>
+                            {device.name}
+                        </option>
+                    ))}
+                    </select>
+                    <div className='deviceStatus'>
+                        <div className='deviceStatusIcon'
+                        style={{
+                            backgroundColor: deviceStatus.blood_pressure ? '#4CAF50' : '#F44336'
+                        }}></div>
+                        <span className='deviceStatusText'>
+                            {deviceStatus.blood_pressure ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                </div>
             </BoxContainerTitle>
 
             <BoxContainerContent className='cardContent'>
@@ -63,6 +100,7 @@ function BloodPressure({ data = [] }) { // Default to empty array
                     <div className="measurementStatus" style={{ backgroundColor: statusColor }}>
                         <HuggedText text={latestStatus} font_size="16px" font_weight="400" color="#FFF" />
                     </div>
+                    
                 </div>
 
                 {/* *** Display TWO separate charts *** */}

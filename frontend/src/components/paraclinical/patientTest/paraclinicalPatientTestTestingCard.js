@@ -11,7 +11,7 @@ import DropDownBox from '../../common/dropDownBox';
 // Define API base URL (replace with environment variable in real app)
 const API_BASE_URL = 'http://localhost:5001';
 
-function ParaclinicalPatientTestTestingCard({ patientState }) {
+function ParaclinicalPatientTestTestingCard({patientState, setPatientState }) {
     const location = useLocation();
     // Assume sessionID and patientState are passed via location state
     const sessionID = location.state?.sessionID;
@@ -55,8 +55,10 @@ function ParaclinicalPatientTestTestingCard({ patientState }) {
                 const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
                 throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
+            
 
             const data = await response.json();
+            console.log('Fetched test structure:', data);
             // Process API data: Use provided value if exists, else default to empty string
             const structuresWithValues = data.patientTests.map(test => ({
                 ...test,
@@ -149,13 +151,17 @@ function ParaclinicalPatientTestTestingCard({ patientState }) {
 
         try {
             // Use testName for the query parameter
+            console.log('currentTest:', currentTest);
             const testName = currentTest.testName;
-            const response = await fetch(`${API_BASE_URL}/paraclinical/patient_test/${sessionID}/measuring?testName=${encodeURIComponent(testName)}`, {
-                method: 'GET',
+            const response = await fetch(`${API_BASE_URL}/paraclinical/patient_test/${sessionID}/test_measurement`, {
+                method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({
+                    testName: testName
+                })
             });
 
             if (!response.ok) {
@@ -180,6 +186,8 @@ function ParaclinicalPatientTestTestingCard({ patientState }) {
                     console.warn(`Measurement key "${measurement.key}" not found in local test fields for ${testName}`);
                 }
             });
+
+            setPatientState(7);
 
             setLocalTestResults(updatedResults);
 

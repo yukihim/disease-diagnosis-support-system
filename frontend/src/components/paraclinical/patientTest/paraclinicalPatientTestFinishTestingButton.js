@@ -1,16 +1,41 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Import Cookies
 import Button from '../../common/button';
 import ButtonText from '../../common/buttonText';
+import API_BASE_URL from '../../../config';
 
 function ParaclinicalPatientTestFinishTestingButton({ patientState }) {
     const history = useHistory();
+    const location = useLocation();
+    const sessionID = location.state?.sessionID;
 
-    const onClickGoBack = () => {
-        alert("Testing Finished");
+    const onClickGoBack = async () => {
+        const token = Cookies.get('token');
+        if (!token) {
+            
+            return;
+        }
 
-        history.push('/paraclinical/homepage');
+        const response = await fetch(`${API_BASE_URL}/paraclinical/patient_test/${sessionID}/end_test`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            alert("Testing Finished");
+            history.push('/paraclinical/homepage');
+        } else {
+            alert('Failed to finish testing');
+        }
+        
+        
+
+        // history.push('/paraclinical/homepage');
     };
 
     return (

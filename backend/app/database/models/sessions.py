@@ -22,22 +22,30 @@ class Sessions(BaseModel):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(DateTime, nullable=False, default=func.now())
-    status = Column(String(50), nullable=False, default="incoming")
+
+    state = Column(Integer, nullable=False, default=1)
+    # patientStates = {
+    #     1: "Waiting Nurse Measure",
+    #     2: "Waiting For Diagnosis",
+    #     3: "Diagnosis On Going",
+    #     4: "Waiting For Test",
+    #     5: "Test On Going",
+    #     6: "Waiting For Result",
+    #     7: "Result Ready",
+    #     8: "Back From Test",
+    #     9: "End Session"
+    # }
 
     note = Column(String(50), nullable=False, default="No note")
-    type = Column(String(50), nullable=False, default="outpatient")
-    from_room = Column(String(50) , nullable=False, default="receptionist")
+    type = Column(String(50), nullable=False, default="Outpatient")
+    from_room = Column(String(50), nullable=False, default="receptionist")
+    department=Column(String(50), nullable=False, default="Cardiology")
 
     # vital sign
-    blood_pressure = Column(String, nullable=True)
-    heart_rate = Column(Integer, nullable=True)
-    temperature = Column(Float, nullable=True)
-    breathing_rate = Column(Integer, nullable=True)
-    oxygen_saturation = Column(Float, nullable=True)
 
 
-    preliminary_diagnosis = Column(String(50))
-
+    preliminary_diagnosis = Column(String, nullable=True, default="")
+    final_diagnosis = Column(String, nullable=True, default="")
 
     follow_up_date = Column(DateTime, nullable=True)
 
@@ -46,12 +54,15 @@ class Sessions(BaseModel):
     ##       Relationship       ##
     ##                          ##
     ##############################
-
+    medicines_is_prescribed_in_session = relationship("MedicinesIsPrescribedInSession", back_populates="session")
     # One to many relationship with Have_Session
     have_session = relationship("HaveSession", back_populates="session")
     # One to many relationship with SessionsHaveTests
     sessions_have_tests = relationship("SessionsHaveTests", back_populates="session")
-
+    # One to many relationship with Vital_sign
+    vital_signs = relationship("Vital_signs", back_populates="session")
+    # One to many relationship with ProceduresIsPerformedInSession
+    procedures_is_performed_in_session = relationship("ProceduresIsPerformedInSession", back_populates="session")
     ##############################
     ##                          ##
     ##        Constraint        ##
@@ -59,19 +70,10 @@ class Sessions(BaseModel):
     ##############################
 
     CheckConstraint("user_id IN (SELECT id FROM users WHERE role = 'doctor')", name="check_user_id")
-    CheckConstraint("status IN ('incoming', 'on_going','on_test','coming_back_from_test,'completed')", name="check_status")
-    CheckConstraint("type IN ('inpatient', 'outpatient')", name="check_type")
+    CheckConstraint("state IN (1, 2, 3, 4, 8, 9)", name="check_status")
+    CheckConstraint("type IN ('Inpatient', 'Outpatient')", name="check_type")
 
-    ##############################
-    ##                          ##
-    ##       Constructor        ##
-    ##                          ##
-    ##############################
-    def __init__(self, follow_up_date, status):
-        # get current date
-        self.date = func.now()
-        self.follow_up_date = follow_up_date
-        self.status = status
+    
 
 
 

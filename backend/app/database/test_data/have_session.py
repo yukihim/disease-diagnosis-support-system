@@ -17,20 +17,30 @@ def create_have_session():
     from ... import db
     import pandas as pd
     # to list of dict
-    df = pd.read_csv(file_path)
-    list_test_data = df.to_dict(orient='records')
+    df = pd.read_csv(file_path, chunksize=1000, encoding='utf-8')
+    # divide the csv into 10000 row each to insert
 
-    for have_session in list_test_data:
-        for key, value in have_session.items():
-            if pd.isna(value):
-                have_session[key] = None
-        new_have_session = HaveSession(
-            session_id=have_session["session_id"],
-            user_id=have_session["user_id"],
-            health_insurance_number=have_session["health_insurance_number"],
-        )
-        db.session.add(new_have_session)
-    db.session.commit()
+    for chunk in df:
+        list_test_data = chunk.to_dict(orient='records')
+
+        for have_session in list_test_data:
+            for key, value in have_session.items():
+                if pd.isna(value):
+                    have_session[key] = None
+
+            from ...database.models import Patients
+
+            patient = Patients.query.filter_by(health_insurance_number=have_session["health_insurance_number"]).first()
+
+            new_have_session = HaveSession(
+                session_id=have_session["session_id"],
+                user_id=have_session["user_id"],
+                patient_id=patient.id
+            )
+            db.session.add(new_have_session)
+        db.session.commit()
+
+
     return True
 
 

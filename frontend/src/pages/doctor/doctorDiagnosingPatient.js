@@ -62,7 +62,7 @@ function DoctorDiagnosingPatient() {
     return (
         <PageLayout requiredRole="doctor" useGrid={false}>
             {/* Patient Information Card */}
-            <PatientInformationCard />
+            <PatientInformationCard type="outpatient"/>
 
             {/* Patient's Pass Sessions Card */}
             <PatientPassSessions role="doctor" onClickSession={onClickSession} />

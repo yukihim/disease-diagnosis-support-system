@@ -56,7 +56,7 @@ const personalFields = ["Name", "Gender", "Age", "DOB", "Phone Number", "Job", "
 const identificationFields = ["SSN", "Health Insurance Code"];
 const additionalFields = ["Type", "Height (cm)", "Weight (kg)", "Follow-up Date"]; // 'Type' might need a source
 
-function PatientInformationCard() {
+function PatientInformationCard({ type }) {
     const location = useLocation();
     // Get sessionID from location state, similar to ReceptionistPatientInformation
     // Use a more specific key if possible, e.g., patientIdToFetch
@@ -89,7 +89,13 @@ function PatientInformationCard() {
 
             try {
                 // Use the sessionID (which might be ID or name) in the URL
-                const apiUrl = `http://localhost:5001/doctor/diagnosis/patient_information/${sessionID}`;
+                let apiUrl = `http://localhost:5001/doctor/inpatient_monitoring/patient_information/${sessionID}`;
+
+                if (type === "inpatient") {
+                    apiUrl = `http://localhost:5001/doctor/inpatient_monitoring/patient_information/${sessionID}`;
+                } else {
+                    apiUrl = `http://localhost:5001/doctor/diagnosis/patient_information/${sessionID}`;
+                }
                 // console.log("Fetching patient info for card from:", apiUrl);
 
 

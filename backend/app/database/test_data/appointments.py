@@ -29,7 +29,8 @@ def create_appointments():
             appointment_time=appointment['appointment_time'],
             patient_id=appointment['patient_id'],
             doctor_id=appointment['doctor_id'],
-            type=appointment['type']
+            type=appointment['type'],
+            status=appointment['status']
         )
 
         db.session.add(new_appointment)

@@ -18,29 +18,34 @@ def create_patients():
     from ... import db
     import pandas as pd
     # to list of dict
-    df = pd.read_csv(file_path)
-    list_test_data = df.to_dict(orient='records')
+    #divide the csv into 10000 row each to insert
+    df = pd.read_csv(file_path, chunksize=1000, encoding='utf-8')
+    for chunk in df:
+        list_test_data = chunk.to_dict(orient='records')
+        for patient in list_test_data:
+            for key, value in patient.items():
+                if pd.isna(value):
+                    patient[key] = None
+            new_patient = Patients(
+                name=patient["name"],
+                ssn=patient["ssn"],
+                health_insurance_number=patient["health_insurance_number"],
+                street=patient["street"],
+                district=patient["district"],
+                city=patient["city"],
+                phone=patient["phone"],
+                gender=patient["gender"],
+                date_of_birth=patient["date_of_birth"],
+                weight=patient["weight"],
+                height=patient["height"],
+                job=patient["job"],
 
+            )
+            db.session.add(new_patient)
+        db.session.commit()
     # change nanl to None
 
-    for patient in list_test_data:
-        for key, value in patient.items():
-            if pd.isna(value):
-                patient[key] = None
-        new_patient = Patients(
-            name=patient["name"],
-            ssn=patient["ssn"],
-            health_insurance_number=patient["health_insurance_number"],
-            street=patient["street"],
-            district=patient["district"],
-            city=patient["city"],
-            phone=patient["phone"],
-            gender=patient["gender"],
-            date_of_birth=patient["date_of_birth"]
 
-        )
-        db.session.add(new_patient)
-    db.session.commit()
     return True
 
 

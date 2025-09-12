@@ -9,20 +9,25 @@ import RespiratoryRate from './doctorMedicalDevicesMeasurements/respiratoryRate'
 
 // Accept processed data props
 function DoctorMedicalDevicesMeasurements({
-    bloodSugarData,
-    heartRateData,
-    bloodPressureData,
-    bodyTemperatureData,
-    respiratoryRateData
+    deviceMeasurements,
+    selectedDevice,
+    setSelectedDevice,
+    deviceList,
+    deviceStatus
 }) {
+
+    
+
+    
+    
     return (
         <div className="doctorMedicalDevicesMeasurements">
             {/* Pass specific data down to each card */}
-            <BloodSugar data={bloodSugarData} />
-            <HeartRate data={heartRateData} />
-            <BloodPressure data={bloodPressureData} />
-            <BodyTemperature data={bodyTemperatureData} />
-            <RespiratoryRate data={respiratoryRateData} />
+            <BloodSugar deviceStatus={deviceStatus} deviceMeasurements={deviceMeasurements} deviceList={deviceList} selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice}/>
+            <HeartRate deviceStatus={deviceStatus} deviceMeasurements={deviceMeasurements} deviceList={deviceList} selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice}/>
+            <BloodPressure deviceStatus={deviceStatus} deviceMeasurements={deviceMeasurements} deviceList={deviceList} selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice}/>
+            <BodyTemperature deviceStatus={deviceStatus} deviceMeasurements={deviceMeasurements} deviceList={deviceList} selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice}/>
+            <RespiratoryRate deviceStatus={deviceStatus} deviceMeasurements={deviceMeasurements} deviceList={deviceList} selectedDevice={selectedDevice} setSelectedDevice={setSelectedDevice}/>
         </div>
     );
 }

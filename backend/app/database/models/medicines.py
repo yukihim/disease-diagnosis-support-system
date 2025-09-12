@@ -16,18 +16,18 @@ class Medicines(BaseModel):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
 
+    ##############################
+    ##                          ##
+    ##           Data           ##
+    ##                          ##
+    ##############################
     medicine_name = Column(String(50), nullable=False)
-    medicine_code = Column(String(20), nullable=False, unique=True)
+    
+    ##############################
+    ##                          ##
+    ##       Relationship       ##
+    ##                          ##
+    ##############################
+    medicines_is_prescribed_in_session = relationship("MedicinesIsPrescribedInSession", back_populates="medicine")
 
-
-class MedicineContradiction(BaseModel):
-    __tablename__ = "medicine_contradictions"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-
-    medicine_id = Column(Integer, ForeignKey("medicines.id"), nullable=False)
-    contradiction_id = Column(Integer, ForeignKey("medicines.id"), nullable=False)
-
-    medicine = relationship("Medicines", foreign_keys=[medicine_id])
-    contradiction = relationship("Medicines", foreign_keys=[contradiction_id])
 

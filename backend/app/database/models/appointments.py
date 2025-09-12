@@ -27,6 +27,8 @@ class Appointments(BaseModel):
     ##############################
     appointment_time = Column(DateTime, nullable=False)
     type = Column(String(50), nullable=False, default="general")
+    status = Column(String(50), nullable=False, default="Unchecked")
+    department = Column(String(50), nullable=False, default="Cardiology")
     ##############################
     ##                          ##
     ##       Relationship       ##
@@ -47,17 +49,7 @@ class Appointments(BaseModel):
     CheckConstraint("doctor_id IN (SELECT id FROM users WHERE role = 'doctor')", name="check_doctor_id")
     CheckConstraint("type IN ('general', 'follow_up')", name="check_type")
 
-    ##############################
-    ##                          ##
-    ##       Constructor        ##
-    ##                          ##
-    ##############################
-
-    def __init__(self, appointment_time, type, patient_id, doctor_id):
-        self.appointment_time = appointment_time
-        self.type = type
-        self.patient_id = patient_id
-        self.doctor_id = doctor_id
+    
 
 
 

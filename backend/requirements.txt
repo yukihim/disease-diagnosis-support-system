@@ -9,6 +9,7 @@ google-auth-oauthlib
 gunicorn==21.2.0           		# WSGI HTTP server for production
 requests==2.31.0           		# HTTP requests, useful for API calls if needed
 flask-jwt-extended 				# JWT tokens for authentication
-sqlalchemy 				   		# ORM for database
+Flask-SQLAlchemy
 psycopg2-binary					# PostgreSQL database adapter
 werkzeug                        # Password hashing
+pandas

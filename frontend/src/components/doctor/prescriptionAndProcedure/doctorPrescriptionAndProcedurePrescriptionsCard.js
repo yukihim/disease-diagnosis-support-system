@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './style/doctorPrescriptionAndProcedurePrescriptionsCard.css';
 
 import BoxContainer from '../../common/boxContainer';
@@ -23,7 +23,8 @@ const patientPrescriptionTableHeader = [
 
 // Define empty prescription structure
 const emptyPrescription = {
-    medicine: '',
+    medicineId: '',
+    medicineName: '',
     morning: '',
     noon: '',
     afternoon: '',
@@ -39,14 +40,12 @@ function DoctorPrescriptionAndProcedurePrescriptionsCard({ onPrescriptionDataUpd
     // Keep internal state management
     const [prescriptions, setPrescriptions] = useState([
         { ...emptyPrescription },
-        { ...emptyPrescription },
-        { ...emptyPrescription }
     ]);
 
-    // Function to add a new prescription row
-    const handleAddPrescription = () => {
-        setPrescriptions([...prescriptions, { ...emptyPrescription }]);
-    };
+    // Function to add a new prescription row - wrapped in useCallback to prevent infinite loops
+    const handleAddPrescription = useCallback(() => {
+        setPrescriptions(prevPrescriptions => [...prevPrescriptions, { ...emptyPrescription }]);
+    }, []);
 
     // Function to update a prescription row
     const handlePrescriptionChange = (index, field, value) => {
@@ -75,6 +74,21 @@ function DoctorPrescriptionAndProcedurePrescriptionsCard({ onPrescriptionDataUpd
             onPrescriptionDataUpdate(prescriptions);
         }
     }, [prescriptions, onPrescriptionDataUpdate]); // Dependency array includes prescriptions and the callback
+
+    // Add event listener for adding a new prescription via Enter/Tab key
+    useEffect(() => {
+        const handlePrescriptionAddEvent = () => {
+            handleAddPrescription();
+        };
+        
+        // Add event listener
+        document.addEventListener('onPrescriptionAdd', handlePrescriptionAddEvent);
+        
+        // Cleanup function to remove event listener
+        return () => {
+            document.removeEventListener('onPrescriptionAdd', handlePrescriptionAddEvent);
+        };
+    }, [handleAddPrescription]); // Only depend on the stable callback
 
 
     return (

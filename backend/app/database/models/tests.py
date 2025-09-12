@@ -7,7 +7,7 @@ Last Updated: 18/04/2025
 """
 
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, CheckConstraint
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, CheckConstraint, Float
 from sqlalchemy.orm import relationship
 from .base_model import BaseModel
 
@@ -24,9 +24,8 @@ class Tests(BaseModel):
     ##############################
 
     test_date = Column(DateTime, nullable=False)
-    test_result_path = Column(String(50), nullable=True)
-    status = Column(String(50), nullable=False, default="waiting_for_test")
-    note= Column(String, nullable=True)
+    state = Column(Integer, nullable=False, default=4)
+    note = Column(String, nullable=True)
 
 
     ##############################
@@ -42,6 +41,7 @@ class Tests(BaseModel):
     test_name = relationship("Test_names", back_populates="tests")
 
     sessions_have_tests = relationship("SessionsHaveTests", back_populates="test")
+    
 
     ##############################
     ##                          ##
@@ -50,34 +50,35 @@ class Tests(BaseModel):
     ##############################
 
     CheckConstraint("user_id IN (SELECT id FROM users WHERE role = 'paraclinical_technician')", name="check_user_id")
-    CheckConstraint("status IN ('waiting_for_test','on_going','waiting_for_result', 'test_completed')", name="check_status")
+    CheckConstraint("state IN (4,6,7,9)", name="check_status")
 
-    ##############################
-    ##                          ##
-    ##       Constructor        ##
-    ##                          ##
-    ##############################
-    def __init__(self, test_date, test_type, test_name, paraclinical_technician_id, status="waiting_for_test", note=None):
-        self.test_date = test_date
-        self.status = status
-        self.note = note
-        from .. import db
-        from sqlalchemy import select
+    def save_test_result(self, test_result):
+        import os
+        import json
+        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),'file_system','test', str(self.id) + ".json")
+        with open(file_path, 'w') as f:
+            json.dump(test_result, f)
 
-        stmt = select(Test_names.id).join(Test_names.test_type).filter(Test_names.test_name == test_name, Test_types.test_type == test_type)
-        test_name = db.session.execute(stmt).scalar()
-        if not test_name:
-            raise ValueError("test_name not found")
-        self.test_name_id = test_name
+    def get_test_result(self):
+        if(self.state in [7,8]):
+            import os
+            import json
+            file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),'file_system','test', str(self.id) + ".json")
+            import logging
+            logging.getLogger(__name__).error(file_path)
+            logging.getLogger(__name__).error(os.path.exists(file_path))
+            logging.getLogger(__name__).error(os.path.dirname(os.path.dirname(__file__)))
+            if os.path.exists(file_path):
+                with open(file_path, 'r') as f:
+                    return json.load(f)
+            else:
+                return None
+        else:
+            return None
 
-        from ..models import Users
-        # check if paraclinical_technician_id is a paraclinical_technician
-        paraclinical_technician = db.session.query(Users).filter(Users.id == paraclinical_technician_id).first()
-        if not paraclinical_technician:
-            raise ValueError("paraclinical_technician not found")
-        if paraclinical_technician.role != "paraclinical_technician":
-            raise ValueError("paraclinical_technician_id is not a paraclinical_technician")
-        self.paraclinical_technician_id = paraclinical_technician.id
+
+
+
 
 class Test_types(BaseModel):
     __tablename__ = "test_types"
@@ -98,18 +99,7 @@ class Test_types(BaseModel):
     ##############################
 
     test_name = relationship("Test_names", back_populates="test_type")
-    ##############################
-    ##                          ##
-    ##       Constructor        ##
-    ##                          ##
-    ##############################
-    def __init__(self, test_type):
-        self.test_type = test_type
-        from .. import db
-        # check if test_type already exists
-        test_type = db.session.query(Test_types).filter(Test_types.test_type == test_type).first()
-        if test_type:
-            raise ValueError("test_type already exists")
+    
 
 class Test_names(BaseModel):
     __tablename__ = "test_names"
@@ -130,6 +120,8 @@ class Test_names(BaseModel):
     test_type_id = Column(Integer, ForeignKey("test_types.id"), nullable=False)
     test_type = relationship("Test_types", back_populates="test_name")
     tests = relationship("Tests", back_populates="test_name")
+    test_parameters = relationship("Test_parameters", back_populates="test_name")
+
 
 
     ##############################
@@ -139,18 +131,34 @@ class Test_names(BaseModel):
     ##############################
     CheckConstraint("test_format IN ('json','image')", name="check_test_format")
 
-    def __init__(self, test_name, test_type, test_format):
-        self.test_name = test_name
-        # search test_type in test_types table
-
-        from .. import db
-        import logging
-        logging.getLogger(__name__).info(test_type)
-        test_type_1 = db.session.query(Test_types).filter(Test_types.test_type == test_type).first()
+    
 
 
+class Test_parameters(BaseModel):
+    __tablename__ = "test_parameters"
 
-        if not test_type:
-            raise ValueError("test_type not found")
-        self.test_type_id = test_type_1.id
-        self.test_format = test_format
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    ##############################
+    ##                          ##
+    ##           Data           ##
+    ##                          ##
+    ##############################
+
+    parameter_name = Column(String(50), nullable=False)
+    parameter_label = Column(String(50), nullable=False)
+    parameter_unit = Column(String(50), nullable=False)
+    parameter_normal_low = Column(String(50), nullable=True)
+    parameter_normal_high = Column(String(50), nullable=True)
+    
+    ##############################
+    ##                          ##
+    ##       Relationship       ##
+    ##                          ##
+    ##############################
+
+    test_name_id = Column(Integer, ForeignKey("test_names.id"), nullable=False)
+    test_name = relationship("Test_names", back_populates="test_parameters")
+
+    
+
+    

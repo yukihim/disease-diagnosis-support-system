@@ -26,12 +26,8 @@ function DoctorSendPatientForTestCard({ sessionID }) {
     const [submitError, setSubmitError] = useState(null);
 
     // Handler for toggling test selection (passed down)
-    const handleTestTypeToggle = (testValue) => {
-        setSelectedTestValues(prev =>
-            prev.includes(testValue)
-                ? prev.filter(value => value !== testValue)
-                : [...prev, testValue]
-        );
+    const handleTestTypeToggle = (testValues) => {
+        setSelectedTestValues(testValues);
     };
 
     // Handler for note change (passed down)
@@ -57,15 +53,15 @@ function DoctorSendPatientForTestCard({ sessionID }) {
         }
 
         try {
-            console.log(`API Call: Sending tests for session ${sessionID}:`, selectedTestValues);
-            const response = await fetch(`${API_BASE_URL}/send_for_test/test_list/${sessionID}`, {
+            console.log(`API Call: Sending tests for session ${sessionID}:`, selectedTestValues.map(test => test.test_id));
+            const response = await fetch(`${API_BASE_URL}/send_for_test/set_test_list/${sessionID}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 // The backend expects an object with a 'tests' key containing the array of test names (values)
-                body: JSON.stringify({ tests: selectedTestValues }),
+                body: JSON.stringify({ tests: selectedTestValues.map(test => test.test_id) }),
             });
 
             if (!response.ok) {
@@ -99,7 +95,7 @@ function DoctorSendPatientForTestCard({ sessionID }) {
             <BoxContainerContent className='doctorSendPatientForTestCardContent'>
                 {/* Test type - Pass state and handler */}
                 <DoctorSendPatientForTestTestType
-                    selectedTestValues={selectedTestValues}
+                    selectedTest={selectedTestValues}
                     onTestTypeToggle={handleTestTypeToggle}
                 />
 

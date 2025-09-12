@@ -1,0 +1,46 @@
+services:
+  back_end_test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    depends_on:
+      db_test:
+        condition: service_healthy
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - TESTDATA=True
+    volumes:
+      - .:/app
+    networks:
+      - app_network
+
+
+  db_test:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: flask
+      POSTGRES_PASSWORD: jans-ancd=123
+      POSTGRES_DB: ProductionDatabase
+    ports:
+      - "5555:5432"
+    networks:
+        - app_network
+    volumes:
+      - ./init_db:/docker-entrypoint-initdb.d
+      - ./db_data:/var/lib/postgresql/data
+      
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "flask", "-d", "ProductionDatabase"]
+      interval: 2s
+      timeout: 1s
+      retries: 5
+
+
+
+
+networks:
+  app_network:
+    driver: bridge

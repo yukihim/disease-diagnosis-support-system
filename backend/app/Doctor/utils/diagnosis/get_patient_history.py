@@ -26,25 +26,30 @@ def get_patient_history(patient_id: int):
     stmt = select(
         Sessions.date,
         Sessions.type,
-        Users.name
+        Users.name,
+        Users.department,
+        Sessions.final_diagnosis,
+        Sessions.id
     ).join(
-        Patients.sessions
-    ).where(
-        Patients.id == patient_id,
-        Sessions.date < now
-    ).join(
-        Sessions.have_session
+        Patients.have_session
     ).join(
         HaveSession.user
+    ).where(
+        Patients.id == patient_id,
+        Sessions.date < now,
+        Sessions.state == 9
     )
     result = db.session.execute(stmt).all()
     ans = []
 
     for row in result:
         ans.append({
-            'date': row[0],
-            'type': row[1],
-            'doctor_name': row[2]
+            'sessionID': row[5],
+            'sessionDate': row[0].strftime('%d-%m-%Y'),
+            'sessionType': row[1],
+            'personInCharged': row[2],
+            'department': row[3],
+            'result': row[4]
         })
 
     return ans

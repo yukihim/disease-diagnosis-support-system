@@ -1,4 +1,4 @@
-import React from 'react'; // Removed useMemo if not needed elsewhere
+import React, { useState } from 'react'; // Added useState
 import './style/measurementCard.css';
 
 import BoxContainer from '../../../common/boxContainer';
@@ -16,26 +16,70 @@ import LineChartComponent from '../../../common/lineChart';
 // Define safe range (can be moved to constants if used elsewhere)
 const SAFE_RANGE_BS = { low: 70, high: 140 }; // Example range (adjust as needed)
 
-// Accept data prop
-function BloodSugar({ data = [] }) { // Default to empty array
+// Accept data prop and deviceList prop
+function BloodSugar({ 
+    deviceList = [], 
+    deviceStatus,
+    deviceMeasurements, 
+    selectedDevice,
+    setSelectedDevice
+}) { // Added deviceList prop
+    
+    
+    
     // Use the data prop instead of mockData
-    const chartData = data; // Use prop directly
+    const chartData = deviceMeasurements['blood_sugar']; // Use prop directly
 
-    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].sugarLevel : 'N/A';
+    console.log("chartData:", chartData)
+
+    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].value : 'N/A';
     let latestStatus = 'N/A';
     let statusColor = '#818181'; // Grey for N/A
+
+    
 
     if (latestMeasurement !== 'N/A') {
         latestStatus = latestMeasurement >= SAFE_RANGE_BS.low && latestMeasurement <= SAFE_RANGE_BS.high ? 'Normal' : (latestMeasurement < SAFE_RANGE_BS.low ? 'Low' : 'High');
         statusColor = latestStatus === 'Normal' ? '#4CAF50' : '#F44336';
     }
+    
+
+    const handleDeviceChange = (event) => {
+        const device = deviceList['blood_sugar'].find(device => device.id === parseInt(event.target.value));
+        setSelectedDevice({ ...selectedDevice, blood_sugar: device });
+    };
 
     return (
         <BoxContainer className='cardBox bloodSugar'>
             <BoxContainerTitle className='cardTitle'>
-                <img src={BloodSugarIcon} alt="Blood Sugar Icon" className='cardIcon' />
-                Blood Sugar
+                <div className='cardTitleContent'>
+                    <img src={BloodSugarIcon} alt="Blood Sugar Icon" className='cardIcon' />
+                    <span>Blood Sugar</span>
+                </div>
+                <div className='cardTitleDeviceStatus'>
+                    <select 
+                        value={selectedDevice.blood_sugar.id}
+                        onChange={handleDeviceChange}
+                        className='selectDevice'
+                    >
+                        {deviceList['blood_sugar'].map((device) => (
+                            <option key={device.id} value={device.id}>
+                                {device.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className='deviceStatus'>
+                        <div className='deviceStatusIcon'
+                        style={{
+                            backgroundColor: deviceStatus.blood_sugar ? '#4CAF50' : '#F44336'
+                        }}></div>
+                        <span className='deviceStatusText'>
+                            {deviceStatus.blood_sugar ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                </div>
             </BoxContainerTitle>
+            
 
             <BoxContainerContent className='cardContent'>
                 {/* Display Latest Stats */}
@@ -54,7 +98,7 @@ function BloodSugar({ data = [] }) { // Default to empty array
                     {chartData.length > 0 ? (
                         <LineChartComponent
                             data={chartData} // Use data from props
-                            dataKeys={['sugarLevel']}
+                            dataKeys={['value']}
                             unit="mg/dL"
                             safeRange={SAFE_RANGE_BS}
                             chartName="Blood Sugar"

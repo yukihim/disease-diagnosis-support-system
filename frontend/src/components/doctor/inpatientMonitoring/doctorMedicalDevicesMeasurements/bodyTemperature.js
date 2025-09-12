@@ -16,11 +16,18 @@ import LineChartComponent from '../../../common/lineChart';
 const SAFE_RANGE_TEMP = { low: 36.5, high: 37.3 }; // Example safe range in Celsius
 
 // Accept data prop
-function BodyTemperature({ data = [] }) { // Default to empty array
+function BodyTemperature({ 
+    
+    deviceList = [], 
+    deviceMeasurements, 
+    deviceStatus,
+    selectedDevice,
+    setSelectedDevice
+}) { // Default to empty array
     // Use the data prop instead of mockData
-    const chartData = data;
+    const chartData = deviceMeasurements['temperature'];
 
-    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].temp : 'N/A';
+    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].value : 'N/A';
     let latestStatus = 'N/A';
     let statusColor = '#818181'; // Grey for N/A
 
@@ -29,11 +36,40 @@ function BodyTemperature({ data = [] }) { // Default to empty array
         statusColor = latestStatus === 'Normal' ? '#4CAF50' : '#F44336';
     }
 
+    const handleDeviceChange = (event) => {
+        const device = deviceList['temperature'].find(device => device.id === parseInt(event.target.value));
+        setSelectedDevice({ ...selectedDevice, temperature: device });
+    };
+
     return (
         <BoxContainer className='cardBox bodyTemperature'>
             <BoxContainerTitle className='cardTitle'>
-                <img src={BodyTemperatureIcon} alt="Body Temperature Icon" className='cardIcon' />
-                Body Temperature
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <img src={BodyTemperatureIcon} alt="Body Temperature Icon" className='cardIcon' />
+                    <span>Body Temperature</span>
+                </div>
+                <div className='cardTitleDeviceStatus'>
+                    <select 
+                        value={selectedDevice.temperature.id}
+                        onChange={handleDeviceChange}
+                        className='selectDevice'
+                    >
+                        {deviceList['temperature'].map((device) => (
+                            <option key={device.id} value={device.id}>
+                                {device.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className='deviceStatus'>
+                        <div className='deviceStatusIcon'
+                        style={{
+                            backgroundColor: deviceStatus.temperature ? '#4CAF50' : '#F44336'
+                        }}></div>
+                        <span className='deviceStatusText'>
+                            {deviceStatus.temperature ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                </div>
             </BoxContainerTitle>
 
             <BoxContainerContent className='cardContent'>
@@ -53,7 +89,7 @@ function BodyTemperature({ data = [] }) { // Default to empty array
                     {chartData.length > 0 ? (
                         <LineChartComponent
                             data={chartData} // Use data from props
-                            dataKeys={['temp']}
+                            dataKeys={['value']}
                             unit="°C"
                             safeRange={SAFE_RANGE_TEMP}
                             chartName="Temperature"

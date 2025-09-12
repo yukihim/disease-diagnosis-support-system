@@ -31,6 +31,30 @@
     box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
+/* Style for the autocomplete input inside prescription row */
+.tableContentCellNoPadding .autocomplete-container {
+    width: 100%;
+}
+
+.tableContentCellNoPadding .autocomplete-input.prescriptionInput {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.tableContentCellNoPadding .autocomplete-input.prescriptionInput:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.tableContentCellNoPadding .autocomplete-suggestions {
+    z-index: 1001; /* Make sure it appears above other elements */
+}
+
 .removeCell {
     width: 30px;
     min-width: 30px;

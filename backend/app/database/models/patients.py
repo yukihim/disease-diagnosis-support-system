@@ -22,7 +22,7 @@ class Patients(BaseModel):
     ##                          ##
     ##############################
     name = Column(String(50), nullable=False)
-    ssn = Column(String(11), nullable=True)
+    ssn = Column(String(11), nullable=True, unique=True)
     health_insurance_number = Column(String(20), nullable=False, unique=True)
 
     street = Column(String(100), nullable=False)
@@ -49,21 +49,7 @@ class Patients(BaseModel):
     # One to Many relationship with Inpatient
     inpatient_session = relationship("Inpatient_session", back_populates="patient")
     appointments = relationship("Appointments", back_populates="patient")
-    ##############################
-    ##                          ##
-    ##       Constructor        ##
-    ##                          ##
-    ##############################
-    def __init__(self, name, ssn, health_insurance_number, street, district, city, phone, gender, date_of_birth):
-        self.name = name
-        self.ssn = ssn
-        self.health_insurance_number = health_insurance_number
-        self.street = street
-        self.district = district
-        self.city = city
-        self.phone = phone
-        self.gender = gender
-        self.date_of_birth = date_of_birth
+    
 
 
     def send_for_test(self,test_types,room):

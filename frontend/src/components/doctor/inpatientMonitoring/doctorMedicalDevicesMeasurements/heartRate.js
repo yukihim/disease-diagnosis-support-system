@@ -16,13 +16,20 @@ import LineChartComponent from '../../../common/lineChart';
 const SAFE_RANGE_HR = { low: 60, high: 100 };
 
 // Accept data prop
-function HeartRate({ data = [] }) { // Default to empty array
+function HeartRate({ 
+    
+    deviceMeasurements, 
+    deviceStatus,
+    deviceList = [], 
+    selectedDevice,
+    setSelectedDevice
+}) { // Default to empty array
     // console.log(`[${new Date().toLocaleTimeString()}] HeartRate component received data:`, JSON.stringify(data));
 
     // Use the data prop instead of mockData
-    const chartData = data;
+    const chartData = deviceMeasurements['heart_rate'];
 
-    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].rate : 'N/A';
+    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].value : 'N/A';
     let latestStatus = 'N/A';
     let statusColor = '#818181'; // Grey for N/A
 
@@ -31,12 +38,46 @@ function HeartRate({ data = [] }) { // Default to empty array
         statusColor = latestStatus === 'Normal' ? '#4CAF50' : '#F44336'; // Green for normal, Red for abnormal
     }
 
+    const handleDeviceChange = (event) => {
+        const device = deviceList['heart_rate'].find(device => device.id === parseInt(event.target.value));
+        setSelectedDevice({ ...selectedDevice, heart_rate: device });
+    };
+
+    
+
     return (
         <BoxContainer className='cardBox heartRate'>
             <BoxContainerTitle className='cardTitle'>
-                <img src={HeartRateIcon} alt="Heart Rate Icon" className='cardIcon' />
-                Heart Rate
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <img src={HeartRateIcon} alt="Heart Rate Icon" className='cardIcon' />
+                    <span>Heart Rate</span>
+                </div>
+                <div className='cardTitleDeviceStatus'>
+                    <select 
+                        value={selectedDevice.heart_rate.id}
+                        onChange={handleDeviceChange}
+                        className='selectDevice'
+                    >
+                        {deviceList['heart_rate'].map((device) => (
+                            <option key={device.id} value={device.id}>
+                                {device.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className='deviceStatus'>
+                        <div className='deviceStatusIcon'
+                        style={{
+                            backgroundColor: deviceStatus.heart_rate ? '#4CAF50' : '#F44336'
+                        }}></div>
+                        <span className='deviceStatusText'>
+                            {deviceStatus.heart_rate ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                </div>
+
             </BoxContainerTitle>
+
+            
 
             <BoxContainerContent className='cardContent'>
                 {/* Display Latest Stats */}
@@ -55,7 +96,7 @@ function HeartRate({ data = [] }) { // Default to empty array
                     {chartData.length > 0 ? (
                         <LineChartComponent
                             data={chartData} // Use data from props
-                            dataKeys={['rate']}
+                            dataKeys={['value']}
                             unit="bpm"
                             safeRange={SAFE_RANGE_HR}
                             chartName="Heart Rate"

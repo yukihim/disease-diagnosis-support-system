@@ -1,45 +1,59 @@
 services:
-  db: # Starts first (no dependencies)
-    image: postgres:13
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+    depends_on:
+      db_test:
+        condition: service_healthy
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - TESTDATA=True
+    volumes:
+      - ./backend:/app
+    networks:
+      - app_network
+
+
+  db_test:
+    image: postgres:15
     environment:
       POSTGRES_USER: flask
       POSTGRES_PASSWORD: jans-ancd=123
       POSTGRES_DB: ProductionDatabase
+    ports:
+      - "5555:5432"
     networks:
-        - my-bridge-network
+        - app_network
     volumes:
+      - ./backend/init_db:/docker-entrypoint-initdb.d
       - my-db-data:/var/lib/postgresql/data
+      
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "flask", "-d", "ProductionDatabase"]
-      interval: 5s
-      timeout: 5s
+      interval: 2s
+      timeout: 1s
       retries: 5
 
-  # pgadmin: # Waits for db
-  #   image: dpage/pgadmin4
-  #   ports:
-  #     - "5050:80"
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #   networks:
-  #       - my-bridge-network
-  #   depends_on:
-  #     - db # Ensures db is started before pgadmin
 
-  # ai: # Waits for db (pgadmin can start concurrently or after db)
-  #   build:
-  #     context: ./ai
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "5002:5002" # AI runs on host port 5002, container port 5002
-  #   networks:
-  #     - my-bridge-network
-  #   environment:
-  #     - GEMINI_API_KEY=AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY # Or use Docker secrets
-  #     - GEMINI_MODEL=gemini-2.0-flash
-  #   depends_on:
-  #     - db # Ensures db is started before ai
+  ai: # Waits for db (pgadmin can start concurrently or after db)
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002" # AI runs on host port 5002, container port 5002
+    networks:
+      - app_network
+    environment:
+      - GEMINI_API_KEY=AIzaSyC5bXfXbB5RRUr3RfKC-tGTALhT-7k0grY # Or use Docker secrets
+      - GEMINI_MODEL=gemini-2.0-flash
+    volumes:
+      - ./ai:/app
+    # depends_on:
+      # - db # Ensures db is started before ai
   frontend: # No dependencies
     build:
       context: ./frontend
@@ -47,29 +61,29 @@ services:
     ports:
       - "3000:3000" # Frontend runs on host port 3000, container port 3000
     networks:
-      - my-bridge-network
+      - app_network
     volumes:
       - ./frontend:/app
       - node_modules:/app/node_modules
-  app: # Waits for db and ai
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "5002:5000"
-    environment:
-      - FLASK_APP=app.py # Corrected based on previous context
-      - FLASK_ENV=development
-      # Add DATABASE_URL if your app needs it
-      # - DATABASE_URL=postgresql://flask:jans-ancd=123@db:5432/ProductionDatabase
-    volumes:
-      - ./backend:/app
-    networks:
-      - my-bridge-network
-    depends_on:
-      db:
-        condition: service_healthy # Wait for db to be healthy
-      # ai:
+  # app: # Waits for db and ai
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5002:5000"
+  #   environment:
+  #     - FLASK_APP=app.py # Corrected based on previous context
+  #     - FLASK_ENV=development
+  #     # Add DATABASE_URL if your app needs it
+  #     # - DATABASE_URL=postgresql://flask:jans-ancd=123@db:5432/ProductionDatabase
+  #   volumes:
+  #     - ./backend:/app
+  #   networks:
+  #     - my-bridge-network
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy # Wait for db to be healthy
+  #     # ai:
       #   condition: service_healthy # Wait for ai to be healthy
         
       
@@ -78,5 +92,5 @@ volumes:
     my-db-data:
     node_modules:
 networks:
-  my-bridge-network:
+  app_network:
     driver: bridge

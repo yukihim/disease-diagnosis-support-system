@@ -1,4 +1,4 @@
-appointment_time,patient_id,doctor_id,type
-2025-04-26 10:00:00,10,2,general
-2025-04-26 11:00:00,11,2,follow_up
-2025-04-26 12:00:00,12,2,follow_up
+appointment_time,patient_id,doctor_id,type,status
+2025-04-26 10:00:00,10,2,general,Checked
+2025-05-08 11:00:00,11,2,follow_up,Checked
+2025-05-08 12:00:00,12,2,follow_up,Unchecked

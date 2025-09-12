@@ -10,7 +10,7 @@ import DoctorMedicalDevicesMeasurements from '../../components/doctor/inpatientM
 import PatientPassSessions from '../../components/common/patientPassSessions/patientPassSessions';
 import DoctorEventsCapturing from '../../components/doctor/inpatientMonitoring/doctorEventsCapturing';
 import DoctorGoBackAndBeginDiagnosisSession from '../../components/doctor/inpatientMonitoring/doctorGoBackAndBeginDiagnosisSession';
-
+import API_BASE_URL from '../../config';
 
 const POLLING_INTERVAL = 5000; // Fetch data every 5000ms (5 seconds)
 
@@ -20,25 +20,181 @@ function DoctorInpatientMonitoring() {
 
     const patientData = location.state || {};
     const userRole = location.state?.userRole || "doctor";
-    const patientIDForMeasurements = patientData.patientID;
+    const patientIDForMeasurements = 1;
     const sessionID = patientData.sessionID;
+
+    const [loadedDeviceList, setLoadedDeviceList] = useState(false);
 
     // State for device measurements
     const [deviceMeasurements, setDeviceMeasurements] = useState({
-        bloodSugarData: [],
-        heartRateData: [],
-        bloodPressureData: [],
-        bodyTemperatureData: [],
-        respiratoryRateData: []
+        blood_sugar: [],
+        heart_rate: [],
+        blood_pressure: [],
+        temperature: [],
+        respiratory_rate: []
     });
+
+
+    const [deviceList, setDeviceList] = useState({
+        blood_sugar: [{id:0, name:'No Device'}],
+        heart_rate: [{id:0, name:'No Device'}],
+        blood_pressure: [{id:0, name:'No Device'}],
+        temperature: [{id:0, name:'No Device'}],
+        respiratory_rate: [{id:0, name:'No Device'}]
+    });
+
+    const [deviceStatus, setDeviceStatus] = useState({
+        blood_sugar: false,
+        heart_rate: false,
+        blood_pressure: false,
+        temperature: false,
+        respiratory_rate: false
+    });
+
+    const [selectedDevice, setSelectedDevice] = useState({
+        blood_sugar: {id:0, name:'No Device'},
+        heart_rate: {id:0, name:'No Device'},
+        blood_pressure: {id:0, name:'No Device'},
+        temperature: {id:0, name:'No Device'},
+        respiratory_rate: {id:0, name:'No Device'}
+    });
+
     const [isLoadingMeasurements, setIsLoadingMeasurements] = useState(false);
     const [measurementError, setMeasurementError] = useState(null);
 
     // Fetch device measurements periodically
 
+    async function fetchDeviceList() {
+        const token = Cookies.get('token');
+        if (!token) {
+            setMeasurementError("Authentication token not found.");
+            setIsLoadingMeasurements(false);
+        }
+
+        const response = await fetch(`${API_BASE_URL}/doctor/inpatient_monitoring/device_list`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json()
+        
+        
+        
+
+        setDeviceList(data)
+        
+        
+
+        console.log("Device List:", data)
+
+        
+        
+    }
+
+    async function fetchDeviceStatus() {
+        const token = Cookies.get('token');
+        if (!token) {
+            setMeasurementError("Authentication token not found.");
+            setIsLoadingMeasurements(false);
+        }
+
+        const response = await fetch(`${API_BASE_URL}/doctor/inpatient_monitoring/get_device_status`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                blood_sugar: selectedDevice.blood_sugar.id,
+                heart_rate: selectedDevice.heart_rate.id,
+                blood_pressure: selectedDevice.blood_pressure.id,
+                temperature: selectedDevice.temperature.id,
+                respiratory_rate: selectedDevice.respiratory_rate.id
+            })
+        })
+        const data = await response.json();
+        console.log("Device Status:", data)
+
+        setDeviceStatus(data)
+        console.log("Device Status:", deviceStatus)
+    }
+
+    async function fetchSelectedDeviceList() {
+        const token = Cookies.get('token');
+        if (!token) {
+            setMeasurementError("Authentication token not found.");
+            setIsLoadingMeasurements(false);
+        }
+
+        console.log("Fetching selected device list")
+
+        const response = await fetch(`${API_BASE_URL}/doctor/inpatient_monitoring/${sessionID}/get_selected_device_list`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        const data = await response.json();
+        console.log("Fetching selected device list:", data)
+
+
+        setSelectedDevice(data)
+        setLoadedDeviceList(true)
+    }
+
     useEffect(() => {
+        fetchDeviceList();
+        fetchSelectedDeviceList();
+        fetchDeviceStatus();
+    }, []);
+
+    useEffect(() => {
+        if(loadedDeviceList){
+            
+            const setSelectedDeviceList = async () => {
+                const token = Cookies.get('token');
+                if (!token) {
+                    setMeasurementError("Authentication token not found.");
+                    setIsLoadingMeasurements(false);
+                }
+                console.log("Setting selected device list")
+                console.log("Selected device:", selectedDevice)
+
+                const response = await fetch(`${API_BASE_URL}/doctor/inpatient_monitoring/${sessionID}/set_selected_device_list`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({selectedDevice})
+                })
+                
+                
+            }
+            setSelectedDeviceList()
+            console.log("Selected Device after setting:", selectedDevice)
+        }
+        
+    },[selectedDevice]);
+    
+    
+
+
+    
+    useEffect(() => {
+        fetchDeviceStatus();
+        
         let isMounted = true;
         let intervalId = null;
+
+        // Only start polling if devices are loaded
+        if (!loadedDeviceList) {
+            return;
+        }
+        
 
         const fetchMeasurements = async (isInitialLoad = false) => {
             if (!patientIDForMeasurements) {
@@ -57,96 +213,86 @@ function DoctorInpatientMonitoring() {
                 return;
             }
 
-            // Don't set loading to true on subsequent polls
-            if (isInitialLoad) {
-                setIsLoadingMeasurements(true);
-            }
+            
+            
 
+
+            
             try {
-                const response = await fetch(`http://localhost:5001/doctor/inpatient_monitoring/medical_device_measurement/${patientIDForMeasurements}`, {
-                    method: 'GET',
+                console.log("get measurements")
+                console.log("selectedDevice:", selectedDevice)
+                
+                const response = await fetch(`${API_BASE_URL}/doctor/inpatient_monitoring/medical_device_measurement`, {
+                    method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        blood_sugar: selectedDevice.blood_sugar.id,
+                        heart_rate: selectedDevice.heart_rate.id,
+                        blood_pressure: selectedDevice.blood_pressure.id,
+                        temperature: selectedDevice.temperature.id,
+                        respiratory_rate: selectedDevice.respiratory_rate.id
+                    })
+                })   
+                
+                const dataMeasured = await response.json();
+                console.log("Data measured:", dataMeasured)
+                    
+                
 
+                
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
                     throw new Error(errorData.message || `Failed to fetch measurements for inpatient '${patientIDForMeasurements}': ${response.statusText}`);
                 }
 
-                const data = await response.json();
-                const results = data.testResults || [];
-                // console.log(`[${new Date().toLocaleTimeString()}] Raw fetched results:`, JSON.stringify(results)); // Log raw fetched data
+                
+                
 
-                // console.log("testResults:", results); // Log testResults
+                // // // --- Process New Data ---
+                // const newProcessedData = {
+                //     bloodSugarData: [],
+                //     heartRateData: [],
+                //     bloodPressureData: [],
+                //     bodyTemperatureData: [],
+                //     respiratoryRateData: []
+                // };
 
-                // --- Process New Data ---
-                const newProcessedData = {
-                    bloodSugarData: [],
-                    heartRateData: [],
-                    bloodPressureData: [],
-                    bodyTemperatureData: [],
-                    respiratoryRateData: []
-                };
 
-                results.forEach(m => {
-                    const measurementTime = new Date(m.timeMeasured);
-                    const time = !isNaN(measurementTime) ? measurementTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }) : 'Invalid Time';
-                    const value = m.value;
-                    const name = m.name?.toLowerCase() || '';
 
-                    if (time === 'Invalid Time') {
-                        console.warn("Skipping measurement due to invalid time:", m);
-                        return;
-                    }
-
-                    if (name.includes('glucose') || name.includes('blood sugar')) {
-                        newProcessedData.bloodSugarData.push({ time, sugarLevel: parseFloat(value) });
-                    } else if (name.includes('heart rate')) {
-                        newProcessedData.heartRateData.push({ time, rate: parseInt(value) });
-                    } else if (name.includes('blood pressure')) {
-                        const parts = value?.match(/(\d+)\/(\d+)/);
-                        if (parts) {
-                            newProcessedData.bloodPressureData.push({ time, systolic: parseInt(parts[1]), diastolic: parseInt(parts[2]) });
-                        }
-                    } else if (name.includes('temperature')) {
-                        newProcessedData.bodyTemperatureData.push({ time, temp: parseFloat(value) });
-                    } else if (name.includes('respiratory') || name.includes('breathing')) {
-                        newProcessedData.respiratoryRateData.push({ time, respRate: parseInt(value) });
-                    }
-                });
+                setDeviceMeasurements(dataMeasured)
 
                 // *** Accumulate Data ***
-                if (isMounted) {
-                    setDeviceMeasurements(prevMeasurements => {
-                        const updatedMeasurements = { ...prevMeasurements };
+                // if (isMounted) {
+                //     setDeviceMeasurements(prevMeasurements => {
+                //         const updatedMeasurements = { ...prevMeasurements };
 
-                        // Append new data and sort each category
-                        Object.keys(newProcessedData).forEach(key => {
-                            // Combine previous and new data
-                            updatedMeasurements[key] = [...prevMeasurements[key], ...newProcessedData[key]];
+                //         // Append new data and sort each category
+                //         Object.keys(newProcessedData).forEach(key => {
+                //             // Combine previous and new data
+                //             updatedMeasurements[key] = [...prevMeasurements[key], ...newProcessedData[key]];
 
-                            // Sort the combined array by time
-                            updatedMeasurements[key].sort((a, b) => {
-                                const timeA = a.time.split(':').map(Number);
-                                const timeB = b.time.split(':').map(Number);
-                                return (timeA[0] * 60 + timeA[1]) - (timeB[0] * 60 + timeB[1]);
-                            });
+                //             // Sort the combined array by time
+                //             updatedMeasurements[key].sort((a, b) => {
+                //                 const timeA = a.time.split(':').map(Number);
+                //                 const timeB = b.time.split(':').map(Number);
+                //                 return (timeA[0] * 60 + timeA[1]) - (timeB[0] * 60 + timeB[1]);
+                //             });
 
-                            // Optional: Limit history size to prevent excessive memory usage
-                            const MAX_HISTORY = 500; // Example limit
-                            if (updatedMeasurements[key].length > MAX_HISTORY) {
-                                updatedMeasurements[key] = updatedMeasurements[key].slice(-MAX_HISTORY);
-                            }
-                        });
+                //             // Optional: Limit history size to prevent excessive memory usage
+                //             const MAX_HISTORY = 500; // Example limit
+                //             if (updatedMeasurements[key].length > MAX_HISTORY) {
+                //                 updatedMeasurements[key] = updatedMeasurements[key].slice(-MAX_HISTORY);
+                //             }
+                //         });
 
-                        // console.log(`[${new Date().toLocaleTimeString()}] Accumulated deviceMeasurements state:`, JSON.stringify(updatedMeasurements)); // Log accumulated state
-                        return updatedMeasurements;
-                    });
-                    setMeasurementError(null); // Clear error on successful fetch/update
-                }
+                //         // console.log(`[${new Date().toLocaleTimeString()}] Accumulated deviceMeasurements state:`, JSON.stringify(updatedMeasurements)); // Log accumulated state
+                //         return updatedMeasurements;
+                //     });
+                //     setMeasurementError(null); // Clear error on successful fetch/update
+                // }
 
             } catch (error) {
                 console.error("Failed to fetch or process measurements:", error);
@@ -166,6 +312,7 @@ function DoctorInpatientMonitoring() {
         // Set up interval for subsequent fetches
         intervalId = setInterval(() => {
             fetchMeasurements(false); // Pass false for subsequent polls
+            fetchDeviceStatus();
         }, POLLING_INTERVAL);
 
         // Cleanup function
@@ -175,7 +322,7 @@ function DoctorInpatientMonitoring() {
                 clearInterval(intervalId); // Clear interval on unmount
             }
         };
-    }, [patientIDForMeasurements]); // Re-run effect if patientID changes
+    }, [patientIDForMeasurements, selectedDevice]); // Add dependencies
 
     function onClickSession(session) {
         // ... (onClickSession logic remains the same) ...
@@ -191,7 +338,7 @@ function DoctorInpatientMonitoring() {
     return (
         <PageLayout requiredRole={["doctor", "nurse"]} useGrid={false}>
             {/* Patient Information Card */}
-            <PatientInformationCard role={userRole} patientName={patientData.name} sex={patientData.sex} age={patientData.age} />
+            <PatientInformationCard  type="inpatient"/>
 
             {/* Medical device measurements Card */}
             {/* Show loading only on initial load */}
@@ -199,11 +346,11 @@ function DoctorInpatientMonitoring() {
             {measurementError && !isLoadingMeasurements && <div style={{ color: 'red', margin: '10px 0' }}>Error: {measurementError}</div>}
             {!isLoadingMeasurements && (
                 <DoctorMedicalDevicesMeasurements
-                    bloodSugarData={deviceMeasurements.bloodSugarData}
-                    heartRateData={deviceMeasurements.heartRateData}
-                    bloodPressureData={deviceMeasurements.bloodPressureData}
-                    bodyTemperatureData={deviceMeasurements.bodyTemperatureData}
-                    respiratoryRateData={deviceMeasurements.respiratoryRateData}
+                    deviceMeasurements={deviceMeasurements}
+                    deviceStatus={deviceStatus}
+                    selectedDevice={selectedDevice}
+                    setSelectedDevice={setSelectedDevice}
+                    deviceList={deviceList}
                 />
             )}
 

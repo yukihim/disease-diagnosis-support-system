@@ -6,7 +6,7 @@ Date Created: 27/03/2023
 Last Updated: 27/03/2023
 """
 from werkzeug.security import check_password_hash
-from ..exceptions import *
+from ..exception import *
 from ...database.models import Users
 
 
@@ -45,7 +45,7 @@ def check_password_and_get_role(username, password):
     system_password, role, id = get_password_and_role(username)
 
     if check_password_hash(system_password, password):
-        return True, role,id
+        return role,id
     else:
         raise WrongPassword()
 

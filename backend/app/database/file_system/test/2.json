@@ -1,0 +1,8 @@
+{
+  "parameters": [
+    {"name": "Protein", "value": "10"},
+    {"name": "Glucose", "value": "0"},
+    {"name": "Ketones", "value": "0"},
+    {"name": "Blood", "value": "Negative"}
+  ]
+}

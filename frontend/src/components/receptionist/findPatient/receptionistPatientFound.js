@@ -21,11 +21,14 @@ function ReceptionistPatientFound({ patientFoundTableData, isVisible }) {
 
     function onClickPatient(patient) {
         console.log("Patient clicked:", patient);
+
+
+
         // Navigate to the next page with patient information
         history.push({
             pathname: '/receptionist/patient_checkin',
             state: {
-                sessionID: patient.sessionID
+                sessionID: patient.patientID
             }
         });
     }

@@ -12,12 +12,17 @@ from .users import Users
 from .patients import Patients
 from .sessions import Sessions
 from .have_session import HaveSession
-from .tests import Tests, Test_names, Test_types
+from .tests import Tests, Test_names, Test_types, Test_parameters
 from .sessions_have_tests import SessionsHaveTests
 from .inpatient_session import Inpatient_session
 from .appointments import Appointments
-
-
+from .vital_signs import Vital_signs
+from .medicines import Medicines
+from .medicines_isPrescribedIn_Session import MedicinesIsPrescribedInSession
+from .emergencies import Emergencies
+from .procedures import Procedures
+from .procedure_is_perfomed_in_session import ProceduresIsPerformedInSession
+from .devices import Monitoring_Devices, Device_values
 
 # from .diseases import Diseases
 

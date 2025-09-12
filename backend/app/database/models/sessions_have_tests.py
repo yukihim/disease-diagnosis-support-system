@@ -28,6 +28,3 @@ class SessionsHaveTests(BaseModel):
     test = relationship("Tests", back_populates="sessions_have_tests")
     test_id = Column(Integer, ForeignKey("tests.id"), nullable=False)
 
-    def __init__(self, session_id, test_id):
-        self.session_id = session_id
-        self.test_id = test_id

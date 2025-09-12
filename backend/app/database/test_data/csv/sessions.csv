@@ -1,8 +1,8 @@
-status,follow_up_date,blood_pressure,heart_rate,temperature,breathing_rate,oxygen_saturation
-incoming,2025-04-01,120/80,72,98.6,16,98
-incoming,2025-04-01,130/85,75,99.1,18,97
-on_test,,140/90,80,98.7,20,96
-on_test,,150/95,82,100.2,22,95
-on_test,2025-04-01,160/100,85,101.5,24,94
-coming_back_from_test,2025-04-01,170/105,88,102.0,26,93
-completed,,180/110,90,103.0,28,92
+state,follow_up_date,from_room,note,preliminary_diagnosis,final_diagnosis,department
+2,2025-04-01,A4-401,No note,,,Internal Medicine
+2,2025-04-01,A4-401,No note,,,Cardiology
+5,,B4-511,No note,influenza,,Cardiology
+1,,Receptionist,No note,,,Cardiology
+5,2025-04-01,B4-601,No note,influenza,Cardiology
+8,2025-04-01,C6-202,No note,dengue fever,Cardiology
+9,,A4-101,No note,Cold,Cold,Internal Medicine

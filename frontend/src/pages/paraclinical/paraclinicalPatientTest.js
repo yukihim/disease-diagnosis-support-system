@@ -22,7 +22,7 @@ function ParaclinicalPatientTest() {
             <ParaclinicalPatientTestAdditionalInformation />
 
             {/* Paraclinical Patient Test Testing Card */}
-            <ParaclinicalPatientTestTestingCard />
+            <ParaclinicalPatientTestTestingCard patientState={patientState} setPatientState={setPatientState}/>
 
             {/* Finish Testing Button */}
             <ParaclinicalPatientTestFinishTestingButton patientState={patientState} />

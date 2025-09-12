@@ -26,31 +26,19 @@ class HaveSession(BaseModel):
     ##############################
     session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
     patient_id = Column(Integer, ForeignKey("patients.id"), nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    nurse_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     # disease_id = Column(Integer, ForeignKey("diseases.id"), nullable=False)
 
     session = relationship("Sessions", back_populates="have_session")
     patient = relationship("Patients", back_populates="have_session")
-    user = relationship("Users", back_populates="have_session")
+    user = relationship("Users", back_populates="have_session",foreign_keys="HaveSession.user_id")
+    nurse = relationship("Users", back_populates="nurse_have_session",foreign_keys="HaveSession.nurse_id")
     # disease = relationship("Diseases", back_populates="have_session")
 
 
 
     CheckConstraint("user_id IN (SELECT id FROM users WHERE role = 'doctor')", name="check_user_id")
-    ##############################
-    ##                          ##
-    ##       Constructor        ##
-    ##                          ##
-    ##############################
-    def __init__(self, health_insurance_number, session_id, user_id):
-        self.session_id = session_id
-        self.user_id = user_id
-        from .patients import Patients
-
-        # get patient_id from health_insurance_number
-        patient = Patients.query.filter_by(health_insurance_number=health_insurance_number).first()
-        if patient is None:
-            raise ValueError("Patient not found")
-        self.patient_id = patient.id
+    
 
 

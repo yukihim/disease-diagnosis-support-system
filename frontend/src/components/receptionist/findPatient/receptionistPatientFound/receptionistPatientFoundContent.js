@@ -26,7 +26,7 @@ function ReceptionistPatientFoundContent({ patientFoundTableHeader, patientFound
             ) : (
                 <div className="tableContent">
                     <div className="tableContentCell">
-                        No data
+                        No Patient Found
                     </div>
                 </div>
             )}

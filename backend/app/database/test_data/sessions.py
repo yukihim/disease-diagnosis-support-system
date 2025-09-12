@@ -11,33 +11,6 @@ from ..models import Sessions
 
 collumn = ['status', 'follow_up_date']
 
-# list_test_data = [
-#     {
-#         'status': 'incoming',
-#         'follow_up_date': '2025-04-01',
-#     },
-#     {
-#         'status': 'incoming',
-#         'follow_up_date': '2025-04-01',
-#     },
-#     {
-#         'status': 'on_test',
-#         'follow_up_date': None,
-#     },
-#     {
-#         'status': 'on_test',
-#         'follow_up_date': None,
-#     },
-#     {
-#         'status': 'on_test',
-#         'follow_up_date': '2025-04-01',
-#     },
-#     {
-#         'status': 'coming_back_from_test',
-#         'follow_up_date': '2025-04-01',
-#     },
-#
-# ]
 
 import os
 file_path = os.path.join(os.path.dirname(__file__), 'csv', 'sessions.csv')
@@ -46,33 +19,44 @@ def create_session():
     from ... import db
     import pandas as pd
     # to list of dict
-    df = pd.read_csv(file_path)
-    list_test_data = df.to_dict(orient='records')
+    df = pd.read_csv(file_path, chunksize=1000, encoding='utf-8')
+    for chunk in df:
+        list_test_data = chunk.to_dict(orient='records')
+        # change nanl to None
+        for session in list_test_data:
+            for key, value in session.items():
+                if pd.isna(value):
+                    session[key] = None
+        # change state to int
+        for session in list_test_data:
+            for key, value in session.items():
+                if pd.isna(value):
+                    session[key] = None
+            current_session = Sessions(
+                state=session['state'],
+                follow_up_date=session['follow_up_date'],
+                preliminary_diagnosis=session['preliminary_diagnosis'] if session['preliminary_diagnosis'] else '',
+                final_diagnosis=session['final_diagnosis'] if session['final_diagnosis'] else '',
+                note=session['note'],
+                from_room=session['from_room'],
+                department=session['department'] if session['department'] else 'Cardiology',
+            )
+            db.session.add(current_session)
+        db.session.commit()
+
     # change nanl to None
 
-    for session in list_test_data:
-        for key, value in session.items():
-            if pd.isna(value):
-                session[key] = None
-        current_session = Sessions(
-            status=session['status'],
-            follow_up_date=session['follow_up_date'],
-        )
 
-        db.session.add(current_session)
-    db.session.commit()
+
+
+
     return True
 
 
 def create_test_data():
-    try:
-        create_session()
+    create_session()
 
-    except Exception as e:
-        import logging
-        logging.getLogger(__name__).error("Error creating test data")
-        logging.getLogger(__name__).error(e)
-        return False
+
 
 from .test_data_generator import list_function
 

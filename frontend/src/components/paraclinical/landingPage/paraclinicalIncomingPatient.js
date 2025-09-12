@@ -27,7 +27,7 @@ const incomingPatientTableHeader = [
 // Define states consistent with backend/frontend
 const PATIENT_STATES = {
     ALL: 'all',
-    RESULT_READY: 'Test Result Ready',
+    RESULT_READY: 'Result Ready',
     WAITING_RESULT: 'Waiting For Result',
     WAITING_TEST: 'Waiting For Test' // Ensure this matches backend value if different
 };

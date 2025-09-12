@@ -12,8 +12,7 @@ class Users(BaseModel):
 
 	user_name = Column(String, nullable=False)
 	password = Column(String, nullable=False)
-	first_name = Column(String, nullable=False)
-	last_name = Column(String, nullable=False)
+	name = Column(String, nullable=False)
 	date_of_birth = Column(DateTime, nullable=False)
 	phone = Column(String, nullable=False)
 	gender = Column(String, nullable=False)
@@ -21,7 +20,7 @@ class Users(BaseModel):
 	district = Column(String, nullable=False)
 	city = Column(String, nullable=False)
 	department = Column(String, nullable=False)
-
+	specialization = Column(String, nullable=True)
 	role = Column(String, nullable=False)
 
 	is_active = Column(String, nullable=False, default='true')
@@ -35,10 +34,12 @@ class Users(BaseModel):
 	##       Relationship       ##
 	##                          ##
 	##############################
-	have_session = relationship("HaveSession", back_populates="user")
+	have_session = relationship("HaveSession", back_populates="user",foreign_keys="HaveSession.user_id")
+	nurse_have_session = relationship("HaveSession", back_populates="nurse",foreign_keys="HaveSession.nurse_id")
 	tests = relationship("Tests", back_populates="paraclinical_technician")
 	inpatient_session = relationship("Inpatient_session", back_populates="doctor")
 	appointments = relationship("Appointments", back_populates="doctor")
+	vital_signs = relationship("Vital_signs", back_populates="record_by_user")
 
 	##############################
 	##                          ##

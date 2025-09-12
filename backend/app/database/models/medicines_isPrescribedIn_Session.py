@@ -16,17 +16,24 @@ from .sessions import Sessions
 class MedicinesIsPrescribedInSession(BaseModel):
     __tablename__ = "medicines_is_prescribed_in_session"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
-    medicine_id = Column(Integer, ForeignKey("medicines.id"), nullable=False)
-
-
+    ##############################
+    ##                          ##
+    ##           Data           ##
+    ##                          ##
+    ##############################
     morning = Column(Integer, nullable=False, default=0)
     noon = Column(Integer, nullable=False, default=0)
     evening = Column(Integer, nullable=False, default=0)
     night = Column(Integer, nullable=False, default=0)
     duration = Column(Integer, nullable=False, default=0)
+    note = Column(String, nullable=True)
 
-
+    ##############################
+    ##                          ##
+    ##       Relationship       ##
+    ##                          ##
+    ##############################
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False)
+    medicine_id = Column(Integer, ForeignKey("medicines.id"), nullable=False)
     session = relationship("Sessions", back_populates="medicines_is_prescribed_in_session")
     medicine = relationship("Medicines", back_populates="medicines_is_prescribed_in_session")

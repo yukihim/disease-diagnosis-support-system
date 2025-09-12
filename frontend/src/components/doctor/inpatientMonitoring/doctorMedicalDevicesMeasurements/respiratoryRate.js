@@ -16,11 +16,17 @@ import LineChartComponent from '../../../common/lineChart';
 const SAFE_RANGE_RESP = { low: 12, high: 18 }; // Example safe range
 
 // Accept data prop
-function RespiratoryRate({ data = [] }) { // Default to empty array
+function RespiratoryRate({ 
+    deviceList = [], 
+    deviceMeasurements, 
+    deviceStatus,
+    selectedDevice,
+    setSelectedDevice
+}) { // Default to empty array
     // Use the data prop instead of mockData
-    const chartData = data;
+    const chartData = deviceMeasurements['respiratory_rate'];
 
-    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].respRate : 'N/A';
+    const latestMeasurement = chartData.length > 0 ? chartData[chartData.length - 1].value : 'N/A';
     let latestStatus = 'N/A';
     let statusColor = '#818181'; // Grey for N/A
 
@@ -29,11 +35,42 @@ function RespiratoryRate({ data = [] }) { // Default to empty array
         statusColor = latestStatus === 'Normal' ? '#4CAF50' : '#F44336';
     }
 
+    const handleDeviceChange = (event) => {
+        const device = deviceList['respiratory_rate'].find(device => device.id === parseInt(event.target.value));
+        setSelectedDevice({ ...selectedDevice, respiratory_rate: device });
+    };
+
+    
+
     return (
         <BoxContainer className='cardBox respiratoryRate'>
             <BoxContainerTitle className='cardTitle'>
-                <img src={RespiratoryRateIcon} alt="Respiratory Rate Icon" className='cardIcon' />
-                Respiratory Rate
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <img src={RespiratoryRateIcon} alt="Respiratory Rate Icon" className='cardIcon' />
+                    <span>Respiratory Rate</span>
+                </div>
+                <div className='cardTitleDeviceStatus'>
+                    <select 
+                        value={selectedDevice.respiratory_rate.id}
+                        onChange={handleDeviceChange}
+                        className='selectDevice'
+                    >
+                        {deviceList['respiratory_rate'].map((device) => (
+                            <option key={device.id} value={device.id}>
+                                {device.name}
+                            </option>
+                        ))}
+                    </select>
+                    <div className='deviceStatus'>
+                        <div className='deviceStatusIcon'
+                        style={{
+                            backgroundColor: deviceStatus.respiratory_rate ? '#4CAF50' : '#F44336'
+                        }}></div>
+                        <span className='deviceStatusText'>
+                            {deviceStatus.respiratory_rate ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                </div>
             </BoxContainerTitle>
 
             <BoxContainerContent className='cardContent'>
@@ -53,7 +90,7 @@ function RespiratoryRate({ data = [] }) { // Default to empty array
                     {chartData.length > 0 ? (
                         <LineChartComponent
                             data={chartData} // Use data from props
-                            dataKeys={['respRate']}
+                            dataKeys={['value']}
                             unit="rpm"
                             safeRange={SAFE_RANGE_RESP}
                             chartName="Resp. Rate"

@@ -1,0 +1,4 @@
+from .get_incomming_patient import get_incomming_patient
+from .get_patient_test import get_patient_test
+from .get_test_measurement import get_test_measurement
+from .end_test import end_test

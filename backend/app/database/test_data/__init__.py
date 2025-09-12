@@ -16,7 +16,10 @@ from .tests import *
 from .sessions_have_tests import *
 from .inpatient_sessions import *
 from .appointments import *
-
+from .vital_signs import *
+from .emergencies import *  
+from .medicines import *
+from .procedures import *
 from .test_data_generator import create_test_data as create_test_data_generator
 
 

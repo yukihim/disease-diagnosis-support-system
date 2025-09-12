@@ -25,7 +25,8 @@ def get_patient_general_information(session_id: int):
         Patients.health_insurance_number,
         Patients.job,
         Patients.date_of_birth,
-        Sessions.follow_up_date
+        Sessions.follow_up_date,
+        Sessions.type
     ).join(
         Sessions.have_session
     ).join(
@@ -36,15 +37,16 @@ def get_patient_general_information(session_id: int):
 
     from ....database import db
     result = db.session.execute(stmt).all()
-    ans = []
+    ans = None
     import logging
     _logger = logging.getLogger(__name__)
     _logger.info(stmt)
     _logger.info(result)
     from datetime import datetime
 
+
     for row in result:
-        ans.append({
+        ans= {
             'name': row[0],
             'gender': row[1],
             'phone': row[2],
@@ -52,11 +54,12 @@ def get_patient_general_information(session_id: int):
             'height': row[4],
             'weight': row[5],
             'address': f"{row[6]}, {row[7]}, {row[8]}",
-            'health_insurance_number': row[9],
+            'hic': row[9],
             'job': row[10],
-            'date_of_birth': row[11],
+            'dob': row[11].strftime('%Y-%m-%d'),
             'age': datetime.today().year - row[11].year - ((datetime.today().month, datetime.today().day) < (row[11].month, row[11].day)),
-            'follow_up_date': row[12] if row[12] else None,
-        })
+            'followUpDate': row[12] if row[12] else None,
+            'type': row[13]
+        }
     return ans
 
