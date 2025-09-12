@@ -9,7 +9,8 @@
 
     /* border: 20px solid rgba(0, 153, 91, 1); */
     border: 20px solid transparent;
-    border-image: conic-gradient(from 60deg, rgba(0, 153, 91, 1), rgba(0, 128, 128, 1), #009951);
+    /* border-image: conic-gradient(from 60deg, rgba(0, 153, 91, 1), rgba(0, 128, 128, 1), #009951); */
+    border-image: conic-gradient(from 60deg, rgba(0, 128, 128, 1), rgba(0, 128, 128, 1));
     border-image-slice: 1;
 
 

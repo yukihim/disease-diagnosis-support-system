@@ -7,7 +7,8 @@ import SystemRecommendationTableHeader from './systemRecommendation/systemRecomm
 import SystemRecommendationTableContent from './systemRecommendation/systemRecommendationTableContent';
 
 const systemRecommendationDiseaseTableHeader = [
-    { name: 'Disease', width: 'auto' },
+    { name: 'Disease', width: '150px' },
+    { name: 'ICD10', width: '70px' },
     { name: 'Probabilities', width: '150px' }
 ];
 

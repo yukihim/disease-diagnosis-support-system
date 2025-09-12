@@ -3,7 +3,6 @@ import './style/doctorSendPatientForTestCancelOrConfirmButton.css';
 import Button from '../../../common/button';
 import ButtonText from '../../../common/buttonText';
 
-// Accept props: onClickCancelSendForTest, onClickConfirmSendForTest, isSubmitting, submitError
 function DoctorSendPatientForTestCancelOrConfirmButton({
     onClickCancelSendForTest,
     onClickConfirmSendForTest,

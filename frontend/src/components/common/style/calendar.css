@@ -108,7 +108,8 @@ li {
 
 .calendar-dates li.selected::before {
     color: #fff;
-    background: #009951;
+    /* background: #009951; */
+    background: rgba(0, 128, 128, 1);
 
     position: absolute;
     content: "";
